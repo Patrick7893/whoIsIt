@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name">Who is it?</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- App -->
+    <string name="checkConnection">Отсутствует подключение к интернету</string>
+    <string name="serverError">Ошибка сервера</string>
+
+    <!--Fonts-->
+    <string name="robotoMedium">Roboto-Medium.ttf</string>
+    <string name="roboroRegular">Roboto-Regular.ttf</string>
+    <string name="bebas">bebas_neue.ttf</string>
+    <string name="robotoLight">Roboto-Light.ttf</string>
+
+    <!--Splash-->
+    <string name="app_name_caps">WHO IS IT?</string>
+    <string name="nowYouKnow">Теперь вы всегда знаете, кто \nвам звонит - больше никаких \nнежелательных вызовов и спама</string>
+    <string name="letsGo">ПОЕХАЛИ</string>
+    <string name="conditions">Нажимая "Поехали", вы солглашаетесь \nс <u>условиями использования</u></string>
+    
+    <!--tutorial-->
+    <string name="caller">Определитель номера</string>
+    <string name="tutorial1">При каждом звонке вы \nбудете видеть личную \nкарточку звонящего.</string>
+    <string name="tutorial1_number">1/3</string>
+    <string name="userStatus">Статусы пользователя</string>
+    <string name="tutorial2_a">Теперь вы знаете, когда \nпользователь </string>
+    <string name="tutorial2_b"> доступен</string>
+    <string name="tutorial2_c">,</string>
+    <string name="tutorial2_d">\nразговаривает</string>
+    <string name="tutorial2_e"> или его телефон в</string>
+    <string name="tutorial2_f"> беззвучном режиме</string>
+    <string name="tutorial2_g">.</string>
+    <string name="tutorial2_number">2/3</string>
+    <string name="smartJournal">Умный журнал вызовов</string>
+    <string name="tutorial3">Посмотрите на фото \nнеизвестных абонентов, \nкоторые вам звонили. \nВозможно, вы их узнаете!</string>
+    <string name="tutorial3_number">3/3</string>
+    <string name="next">ДАЛЕЕ</string>
+    <string name="ready">ПРИСТУПИМ!</string>
+
+
+    <!--DateConverter-->
+    <string name="min.">мин.</string>
+    <string name="h.">ч.</string>
+    <string name="yesturday">Вчера</string>
+    <string name="twodayssago">Позавчера</string>
+
+    <!--MainScreen-->
+    <string name="calls">ЗВОНКИ</string>
+    <string name="spam">СПАМ</string>
+    <string name="find">Поиск</string>
+    <string name="home">домашний</string>
+    <string name="mobile">мобильный</string>
+    <string name="work">рабочий</string>
+    <string name="other">другой</string>
+
+    <string name="contacts">Контакты</string>
+    <string name="favorites">Избранные</string>
+    <string name="arrow">←</string>
+
+    <!--sidebar-->
+    <string name="buypro">Купить Про-аккуант</string>
+    <string name="help">Помощь</string>
+    <string name="invite">Пригласить друзей</string>
+    <string name="settings">Настройки</string>
+
+    <!--saerch screen-->
+    <string name="search">Введите имя или номер</string>
+    <string name="numbersInBase">номеров в базе</string>
+
+    <!--User Profile screen-->
+    <string name="callStory">История вызовов</string>
+    <string name="saveConatcs">Сохранить в контакты</string>
+    <string name="block">Блокировать</string>
+    <string name="listIsEmpty">Список пуст</string>
+    
+    <!--Dialog activity -->
+    <string name="call">ВЫЗВАТЬ</string>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="block_caps">БЛОКИРОВАТЬ</string>
+
+</resources>

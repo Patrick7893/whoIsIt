@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF7F51</color>
+    <color name="colorPrimaryDark">#5D4037</color>
+    <color name="colorAccent">#5D4037</color>
+    <color name="outgoingcall">#37474f</color>
+    <color name="incomingCall">#00c853</color>
+    <color name="missedCall">#f0382a</color>
+    <color name="background">#ebe9e9</color>
+    <color name="greytext">#9f9f9f</color>
+    <color name="numbersCollor">#2a373e</color>
+    <color name="navigationdrawerColor">#f39451</color>
+    <color name="sidebarNumberColor">#f8dfd1</color>
+    <color name="sidebardimen">#ec7f42</color>
+    <color name="searchTextColor">#939092</color>
+    <color name="saveConatcsColor">#485dcb</color>
+    <color name="splashTextColor">#ffc7a9</color>
+    <color name="splashButtonColor">#555f98</color>
+    <color name="userActiveColor">#4bb1f2</color>
+    <color name="userSpeaksColor">#fe5177</color>
+    <color name="userNoSoundColor">#fe8f67</color>
+    <color name="nextColor">#f76f33</color>
+</resources>

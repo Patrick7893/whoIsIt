@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/primary_color_gradient"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:background="@drawable/primary_color_gradient"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_centerVertical="true"
+                android:padding="15dp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/backButton"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Михаил Жванецкий"
+                    android:textSize="20sp"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/white"
+                    android:layout_centerVertical="true"
+                    android:tag="@string/roboroRegular"/>
+
+                <TextView
+                    android:id="@+id/cityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Киев, Украина"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/titleTextView"
+                    android:tag="@string/robotoMedium"/>
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/likeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/favorite"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:padding="15dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginRight="5dp" />
+
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_margin="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="360px"
+            android:layout_height="360px"
+            android:src="@drawable/user_noavatar"
+            android:background="@drawable/shape_background"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/greytext"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/phoneNumbersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/callStoryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/callStory"
+            android:textColor="@color/greytext"
+            android:tag="@string/robotoMedium"
+            android:drawableRight="@drawable/forward"
+            android:paddingLeft="45dp"
+            android:drawablePadding="20dp"
+            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingRight="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/saveToContatcsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/add_to_contatcs"
+            android:text="@string/saveConatcs"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawablePadding="10dp"
+            android:textColor="@color/saveConatcsColor"
+            android:textSize="16sp"
+            android:tag="@string/roboroRegular"
+            android:padding="15dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/greytext"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/blockButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/block_user"
+            android:text="@string/block"
+            android:drawablePadding="10dp"
+            android:padding="16dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/missedCall"
+            android:textSize="15sp"
+            android:tag="@string/roboroRegular"/>
+
+    </LinearLayout>
+
+</LinearLayout>

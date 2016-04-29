@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:windowBackground="@android:color/transparent"
+    android:gravity="center"
+    android:windowIsTranslucent="true"
+    android:background="@drawable/primary_color_gradient"
+    android:windowAnimationStyle="@android:style/Animation.Translucent">
+
+    <RelativeLayout
+        android:id="@+id/userInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="145px"
+            android:layout_height="145px"
+            android:background="@drawable/shape_background"
+            android:src="@drawable/user_noavatar"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/closeButton" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/closeButton"
+            android:layout_toRightOf="@+id/avatarImageView"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Михаил Лесников"
+                android:textSize="20sp"
+                android:tag="@string/roboroRegular"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/phoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="095 817 79 78 - Украина"
+                android:layout_centerInParent="true"
+                android:textSize="14sp"
+                android:tag="@string/roboroRegular"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/tagTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Юридические услуги"
+                android:layout_centerInParent="true"
+                android:textSize="12sp"
+                android:background="@drawable/tag_textview"
+                android:tag="@string/roboroRegular"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="5dp"
+                android:padding="5dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close_dialog"
+            android:layout_alignParentRight="true"
+            android:padding="10dp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/sidebardimen"
+        android:layout_below="@+id/userInfoContainer"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:id="@+id/contactsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_below="@+id/userInfoContainer"
+        android:layout_marginTop="15dp">
+
+
+        <TextView
+            android:id="@+id/callTextVIew"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/call"
+            android:textColor="@android:color/white"
+            android:drawableTop="@drawable/phone_75"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawablePadding="10dp"
+            android:clickable="true"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="fitStart" />
+
+        <TextView
+            android:id="@+id/saveTextView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textColor="@android:color/white"
+            android:drawableTop="@drawable/add_user_75"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawablePadding="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="fitStart" />
+
+
+        <TextView
+            android:id="@+id/blockTextView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/block_caps"
+            android:textColor="@android:color/white"
+            android:drawableTop="@drawable/block_user_white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawablePadding="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="fitStart" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

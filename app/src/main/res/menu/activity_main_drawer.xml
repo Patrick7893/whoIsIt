@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/buypro_sidebar"
+            android:icon="@drawable/buypro"
+            android:title="@string/buypro"/>
+
+        <item
+            android:id="@+id/help_sidebar"
+            android:icon="@drawable/help"
+            android:title="@string/help"/>
+
+        <item
+            android:id="@+id/invite_sidebar"
+            android:icon="@drawable/invite"
+            android:title="@string/invite"/>
+
+        <item
+            android:id="@+id/settings_sidebar"
+            android:icon="@drawable/settings"
+            android:title="@string/settings"/>
+
+    </group>
+
+
+</menu>

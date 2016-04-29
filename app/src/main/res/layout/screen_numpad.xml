@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10px"
+        android:background="@drawable/grey_color_fradient"/>
+
+    <RelativeLayout
+        android:id="@+id/numberContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/numberTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/black"
+            android:padding="15dp"
+            android:layout_toLeftOf="@+id/backspaceButton" />
+
+        <ImageView
+            android:id="@+id/backspaceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:padding="15dp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/greytext"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <RelativeLayout
+            android:id="@+id/number1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="1"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="@color/numbersCollor"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="2"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num2"
+                android:text="ABC"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="3"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num3"
+                android:text="DEF"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <RelativeLayout
+            android:id="@+id/number4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:tag="4"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num4"
+                android:text="GHI"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="?android:attr/selectableItemBackground"
+            android:tag="5"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num5"
+                android:text="JKL"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="?android:attr/selectableItemBackground"
+            android:tag="6"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num6"
+                android:text="MNO"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <RelativeLayout
+            android:id="@+id/number7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="7"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num7"
+                android:text="PORS"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:tag="8"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8"
+                android:layout_centerInParent="true"
+                android:textColor="@color/numbersCollor"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num8"
+                android:text="TUV"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="?android:attr/selectableItemBackground"
+            android:tag="9"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9"
+                android:layout_centerInParent="true"
+                android:textColor="@color/numbersCollor"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/numPadButtonStyle"
+                android:layout_toRightOf="@+id/num9"
+                android:text="WXYZ"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+        <RelativeLayout
+            android:id="@+id/numberAst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="*"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:layout_centerInParent="true"
+                android:textColor="@color/greytext"
+                android:layout_gravity="center"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/number0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="0"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/num0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textColor="@color/numbersCollor"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/numPadButtonStyle"
+                android:text="+"
+                android:layout_toRightOf="@+id/num0"
+                android:tag="@string/roboroRegular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/numberDiez"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:tag="#"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="#"
+                style="@style/numPadButtonStyle"
+                android:textColor="@color/greytext"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:tag="@string/robotoLight"/>
+
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

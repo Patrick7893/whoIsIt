@@ -1,7 +1,9 @@
 package com.unteleported.truecaller.screens.calls;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
 import com.unteleported.truecaller.R;
@@ -13,6 +15,7 @@ import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.conatctslist.ContactslistFragment;
 import com.unteleported.truecaller.screens.numpad.NumpadFragment;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
+import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
 import java.util.ArrayList;
@@ -40,6 +43,13 @@ public class CallsPresenter {
         ArrayList<Phone> phones = new ArrayList<>();
         Phone phone = new Phone(call.getNumber(), call.getType());
         phone.setTypeDescription(call.getTypeOfNumber());
+         if (call.getNumber().startsWith("+")) {
+             phone.setCountryIso(CountryManager.getIsoFromPhone(call.getNumber()));
+         }
+         else {
+             TelephonyManager tMgr = (TelephonyManager)view.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+             phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+         }
         phones.add(phone);
         contact.setPhones(phones);
         Gson gson = new Gson();
@@ -48,7 +58,7 @@ public class CallsPresenter {
         bundle.putString(view.CONTACTINFO, contactString);
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
-        ((MainActivityMethods)view.getActivity()).switchFragment(userProfileFragment);
+        view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
     }
 
     Observable<ArrayList<Call>> getCalls = Observable.create(new Observable.OnSubscribe<ArrayList<Call>>() {

@@ -16,8 +16,8 @@
     <string name="app_name_caps">WHO IS IT?</string>
     <string name="nowYouKnow">Теперь вы всегда знаете, кто \nвам звонит - больше никаких \nнежелательных вызовов и спама</string>
     <string name="letsGo">ПОЕХАЛИ</string>
-    <string name="conditions">Нажимая "Поехали", вы солглашаетесь \nс <u>условиями использования</u></string>
-    
+    <string name="conditions">Нажимая "Поехали", вы солглашаетесь с <u>условиями использования</u></string>
+
     <!--tutorial-->
     <string name="caller">Определитель номера</string>
     <string name="tutorial1">При каждом звонке вы \nбудете видеть личную \nкарточку звонящего.</string>
@@ -70,12 +70,46 @@
     <!--User Profile screen-->
     <string name="callStory">История вызовов</string>
     <string name="saveConatcs">Сохранить в контакты</string>
+    <string name="changeContact">Изменить контакт</string>
     <string name="block">Блокировать</string>
+    <string name="removeFromBlackList">Удалить из спама</string>
     <string name="listIsEmpty">Список пуст</string>
-    
+    <string name="userAddedToBlackList">Пользователь заблокирован!</string>
+    <string name="userRemovedFromBlackList">Пользователь разблокирован</string>
+
     <!--Dialog activity -->
     <string name="call">ВЫЗВАТЬ</string>
     <string name="save">СОХРАНИТЬ</string>
     <string name="block_caps">БЛОКИРОВАТЬ</string>
+    <string name="unknown_user">Неизвестный номер</string>
+
+    <!--Spam screen-->
+    <string name="myBlackList">Мой черный список</string>
+    <string name="spammers">Основные спамеры</string>
+    <string name="userInBlackList">Номер у вас в черном списке</string>
+    <string name="usersCheckNumberAsSpam">пользователей отметили это номер как спам</string>
+
+    <!--Login -->
+
+    <string name="smsconfirm">На ваш номер был отправлен \nкод подтверждения</string>
+    <string name="confirm">ПОДТВЕРДИТЬ</string>
+    <string name="welcome">Добро пожаловать!\nЗаполните свой профиль:</string>
+    <string name="firstname">Имя</string>
+    <string name="firstname_example">Иван</string>
+    <string name="surname">Фамилия</string>
+    <string name="surname_example">Петров</string>
+    <string name="email">E-mail</string>
+    <string name="email_example">johnny@apple.com</string>
+    <string name="begin">НАЧАТЬ ПОЛЬЗОВАТЬСЯ</string>
+    <string name="wrongSms">Неверный код подтверждения!</string>
+    <string name="pleaseInputName">Пожалуйста, введите имя и фамилию</string>
+
+
+    <!--countries-->
+    <string-array name="countryList">
+        <item>Украина</item>
+        <item>Россия</item>
+        <item>Казахстан</item>
+    </string-array>
 
 </resources>

@@ -16,6 +16,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/spamTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/userInBlackList"
+            android:textSize="12sp"
+            android:tag="@string/roboroRegular"
+            android:textColor="@android:color/white"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatarImageView"
             android:layout_width="145px"
@@ -38,7 +50,7 @@
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Михаил Лесников"
+                android:text="@string/unknown_user"
                 android:textSize="20sp"
                 android:tag="@string/roboroRegular"
                 android:textColor="@android:color/white"/>
@@ -65,7 +77,8 @@
                 android:tag="@string/roboroRegular"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="5dp"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

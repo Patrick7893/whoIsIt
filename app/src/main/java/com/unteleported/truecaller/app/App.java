@@ -3,7 +3,9 @@ package com.unteleported.truecaller.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.orm.SugarContext;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by stasenkopavel on 4/4/16.
@@ -16,7 +18,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         App.context = super.getApplicationContext();
-        SugarContext.init(this);
+        FlowManager.init(this);
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
     }
 
     public static Context getContext() {
@@ -26,6 +30,5 @@ public class App extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        SugarContext.terminate();
     }
 }

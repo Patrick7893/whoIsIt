@@ -27,15 +27,16 @@ public class DateConverter {
                 stringDate = String.valueOf(Math.abs(calendareDate.get(Calendar.HOUR_OF_DAY) - curTime.get(Calendar.HOUR_OF_DAY)) + " " + context.getString(R.string.h_));
             }
         }
-        else if (Math.abs(calendareDate.get(Calendar.DAY_OF_MONTH) - curTime.get(Calendar.DAY_OF_MONTH))==1) {
+        else if ((Math.abs(calendareDate.get(Calendar.DAY_OF_MONTH) - curTime.get(Calendar.DAY_OF_MONTH))==1) && (calendareDate.get(Calendar.MONTH) == curTime.get(Calendar.MONTH)))  {
             stringDate = context.getString(R.string.yesturday);
         }
-        else if (Math.abs(calendareDate.get(Calendar.DAY_OF_MONTH) - curTime.get(Calendar.DAY_OF_MONTH))==2) {
+        else if ((Math.abs(calendareDate.get(Calendar.DAY_OF_MONTH) - curTime.get(Calendar.DAY_OF_MONTH))==2) && (calendareDate.get(Calendar.MONTH) == curTime.get(Calendar.MONTH))) {
             stringDate = context.getString(R.string.twodayssago);
         }
         else {
             stringDate =new SimpleDateFormat("dd/MM/yyyy").format(date);
         }
         return stringDate;
+
     }
 }

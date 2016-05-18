@@ -1,6 +1,10 @@
 package com.unteleported.truecaller.model;
 
 
+import android.text.TextUtils;
+
+import com.unteleported.truecaller.api.ApiInterface;
+
 import java.util.ArrayList;
 
 
@@ -9,14 +13,14 @@ import java.util.ArrayList;
  */
 public class Contact {
 
-    private int id;
+    private long id;
     private String name;
     private ArrayList<Phone> phones = new ArrayList<>();
     private String title;
-    private String photo;
+    private String avatar;
     private boolean isLiked;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -52,12 +56,12 @@ public class Contact {
         this.title = title;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public boolean isLiked() {
@@ -67,4 +71,18 @@ public class Contact {
     public void setIsLiked(boolean isLiked) {
         this.isLiked = isLiked;
     }
+
+    public Contact phoneToContact(Phone phone) {
+        this.setName(phone.getName());
+        ArrayList<Phone> phones = new ArrayList<>();
+        phones.add(phone);
+        this.id = phone.getServerId();
+        this.setPhones(phones);
+        if (!TextUtils.isEmpty(phone.getAvatar().getUrl())) {
+            this.setAvatar(ApiInterface.SERVICE_ENDPOINT + phone.getAvatar().getUrl());
+        }
+        return this;
+    }
+
+
 }

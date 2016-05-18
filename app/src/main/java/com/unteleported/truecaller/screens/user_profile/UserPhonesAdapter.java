@@ -1,7 +1,9 @@
 package com.unteleported.truecaller.screens.user_profile;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +67,6 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-
         @Bind(R.id.numberTextView) TextView numberTextView;
         @Bind(R.id.numberTypeTextView) TextView numberTypeTextView;
         @Bind(R.id.callContainer) RelativeLayout callContainer;
@@ -78,6 +79,7 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
 
         public void bind(Context ctx, final Phone phone, final OnPhoneClickListener onPhoneClickListener) {
             numberTextView.setText(phone.getNumber());
+            phone.setTypeDescriptionFromType(ctx, phone.getTypeOfNumber());
             numberTypeTextView.setText(phone.getTypeDescription());
 
             callContainer.setOnClickListener(new View.OnClickListener() {

@@ -16,7 +16,8 @@ public class FindPhoneResponse {
         return error;
     }
 
-    public ArrayList<Phone> getPhone() {
+    public ArrayList<Phone> getData() {
         return data;
     }
+    
 }

@@ -46,30 +46,5 @@ public class ContactListPresenter {
         return filteredModelList;
     }
 
-    public void initSearchView(final ArrayList<Contact> contacts, final ContactsAdapter contactsAdapter) {
-        view.searchView.setFocusable(true);
-        view.searchView.setIconified(false);
-        view.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                final List<Contact> filteredModelList = filter(contacts, newText);
-                contactsAdapter.setFilter(filteredModelList);
-                return true;
-            }
-        });
-        view.searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                view.searchView.setVisibility(View.GONE);
-                view.searchButton.setVisibility(View.VISIBLE);
-                view.titleTextView.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-    }
 }

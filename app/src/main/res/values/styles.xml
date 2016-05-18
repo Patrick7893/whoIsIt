@@ -30,4 +30,8 @@
 
     </style>
 
+    <style name="spinner_style">
+        <item name="android:background">@drawable/country_spinner_bg</item>
+    </style>
+
 </resources>

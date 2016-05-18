@@ -17,4 +17,6 @@ public interface MainActivityMethods {
     void openDrawer();
     //проверка подключение к интернету
     void checkConnection();
+    void enableDrawer();
+    void setUserInfo();
 }

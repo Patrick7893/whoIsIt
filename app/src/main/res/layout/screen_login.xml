@@ -1,41 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:background="@drawable/bg_login">
 
-    <EditText
-        android:id="@+id/nameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Имя"
-        android:layout_margin="30dp"
-        android:imeOptions="actionNext"/>
-
-    <EditText
-        android:id="@+id/phoneEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Телефон"
-        android:layout_margin="30dp"
-        android:inputType="number"
-        android:imeOptions="actionNext"/>
-
-
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:layout_margin="30dp"
-        android:inputType="textEmailAddress"
-        android:imeOptions="actionDone"/>
-
-    <Button
-        android:id="@+id/okButton"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OK" />
+        android:src="@drawable/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <Spinner
+                android:id="@+id/countrySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:tag="@string/robotoMedium"
+                android:textSize="18sp"
+                android:padding="15dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+            </Spinner>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/phoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="+380"
+            android:background="@android:color/white"
+            android:tag="@string/roboroRegular"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:padding="15dp"
+            android:inputType="phone"
+            android:imeOptions="actionDone"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/primary_color_gradient"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/okButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/letsGo"
+                android:background="?android:attr/selectableItemBackground"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:tag="@string/robotoMedium"
+                android:textSize="16sp"
+                android:focusable="true"
+                android:padding="15dp" />
+
+        </LinearLayout>
 
 
-</LinearLayout>
+
+        <TextView
+            android:id="@+id/conditionsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/conditions"
+            android:textColor="#c2c2c2"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:tag="@string/roboroRegular"
+            android:layout_marginBottom="20dp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

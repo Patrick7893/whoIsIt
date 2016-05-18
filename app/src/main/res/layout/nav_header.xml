@@ -8,14 +8,12 @@
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/photoImageView"
+        android:id="@+id/avatarImageView"
         android:layout_width="252px"
         android:layout_height="252px"
         android:src="@drawable/user_noavatar"
         android:layout_centerInParent="true"
         android:background="@drawable/shape_background"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp" />
 

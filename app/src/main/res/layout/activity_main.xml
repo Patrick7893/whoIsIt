@@ -59,31 +59,6 @@
             app:menu="@menu/activity_main_drawer"
             app:itemIconTint="@android:color/white">
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/empty_spacer"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:text="Footer Item 1"
-                    android:visibility="invisible"/>
-                <TextView
-                    android:id="@+id/footer_item_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:textColor="@android:color/white"
-                    android:text="Статус: доступен"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="40dp" />
-
-            </LinearLayout>
-
         </android.support.design.widget.NavigationView>
 
 

@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +50,12 @@ public class SplashFragment extends Fragment {
 
     @OnClick(R.id.letsGoButton)
     public void goToLoginScreen() {
+        Log.d("Token", SharedPreferencesSaver.get().getToken());
         if (TextUtils.isEmpty(SharedPreferencesSaver.get().getToken())) {
-            ((MainActivityMethods)getActivity()).switchFragment(new LoginFragment());
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new LoginFragment()).commit();
         }
         else {
-            ((MainActivityMethods)getActivity()).switchFragment(new TabFragment());
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).commit();
         }
         //((MainActivityMethods)getActivity()).switchFragment(new TabFragment());
     }

@@ -22,6 +22,7 @@ import com.unteleported.truecaller.utils.UserContactsManager;
 import com.unteleported.truecaller.view.FastScroller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -77,6 +78,33 @@ public class ContactslistFragment extends Fragment {
         }
     });
 
+    public void initSearchView(final ArrayList<Contact> contacts, final ContactsAdapter contactsAdapter) {
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                final List<Contact> filteredModelList = presenter.filter(contacts, newText);
+                contactsAdapter.setFilter(filteredModelList);
+                return true;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                searchView.setVisibility(View.GONE);
+                searchButton.setVisibility(View.VISIBLE);
+                titleTextView.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
+    }
+
     public void initiallizeScreenAllContacts() {
         getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
             @Override
@@ -120,7 +148,7 @@ public class ContactslistFragment extends Fragment {
                 });
                 fastScroller.setRecyclerView(contactsRecyclerView);
                 fastScroller.setViewsToUse(R.layout.view_fastscroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
-                presenter.initSearchView(contacts, contactsAdapter);
+                initSearchView(contacts, contactsAdapter);
                 searchView.clearFocus();
             }
         });

@@ -1,6 +1,5 @@
 package com.unteleported.truecaller.screens.mainscreen;
 
-import android.app.SharedElementCallback;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,22 +10,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivityMethods;
-import com.unteleported.truecaller.api.ApiInterface;
-import com.unteleported.truecaller.api.LoadContactsRequest;
-import com.unteleported.truecaller.api.RegistrationResponse;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.calls.CallFragment;
 import com.unteleported.truecaller.screens.findcontact.FindContactsFragment;
 import com.unteleported.truecaller.screens.spam.SpamFragment;
 import com.unteleported.truecaller.screens.tutorial.TutorialDialog;
+import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
@@ -36,9 +31,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,9 +53,43 @@ public class TabFragment extends Fragment {
         ButterKnife.bind(this, view);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        final TabFragmentPresenter presenter = new TabFragmentPresenter();
+        ((MainActivityMethods)getActivity()).enableDrawer();
+        ((MainActivityMethods)getActivity()).setUserInfo();
+        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<Contact>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ArrayList<Contact> contacts) {
+                ArrayList<Phone> phones = new ArrayList<Phone>();
+                TelephonyManager tMgr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+                for (Contact contact : contacts) {
+                    for (Phone phone : contact.getPhones()) {
+                        phone.setNumber(phone.getNumber().replaceAll("[^0-9+]", ""));
+                        phones.add(phone);
+                        if (!phone.getNumber().contains("+")) {
+                            phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+                        }
+                        else {
+                            phone.setCountryIso(CountryManager.getIsoFromPhone(phone.getNumber()));
+                        }
+                    }
+                }
+                presenter.loadContatcs(phones);
+            }
+        });
 
         if (!SharedPreferencesSaver.get().getTutorialDone()) {
             TutorialDialog tutorialDialog = new TutorialDialog();
+            tutorialDialog.setCancelable(false);
             tutorialDialog.show(getActivity().getSupportFragmentManager(), "tutorial");
         }
 
@@ -109,7 +135,7 @@ public class TabFragment extends Fragment {
 
     @OnClick(R.id.searchButton)
     public void goToSearchScreen() {
-        ((MainActivityMethods)getActivity()).switchFragment(new FindContactsFragment());
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new FindContactsFragment()).addToBackStack(null).commit();
     }
 
     @Override

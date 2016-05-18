@@ -2,16 +2,19 @@ package com.unteleported.truecaller.screens.findcontact;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -20,8 +23,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivityMethods;
+import com.unteleported.truecaller.api.FindPhoneResponse;
 import com.unteleported.truecaller.model.Call;
 import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.calls.CallFragment;
 import com.unteleported.truecaller.screens.conatctslist.ContactsAdapter;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
@@ -50,9 +55,13 @@ public class FindContactsFragment extends Fragment {
     @Bind(R.id.findList) RecyclerView findConatctsRecyclerView;
 
     public static final String CONTACTINFO = "CONTACTINFO";
+    public static final String ADAPTERSTATE = "ADAPTERSTATE";
 
     private static FindContactsPresenter presenter;
 
+    FindContactsAutocompliteAdapter autocompleteAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private Parcelable adapterState;
 
     @Nullable
     @Override
@@ -70,13 +79,13 @@ public class FindContactsFragment extends Fragment {
         presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
             @Override
             public void call(final ArrayList<Contact> contacts) {
-                final FindContactsAutocompliteAdapter autocompleteAdapter = new FindContactsAutocompliteAdapter(getActivity(), contacts, new FindContactsAutocompliteAdapter.OnContactsClickListener() {
+                autocompleteAdapter = new FindContactsAutocompliteAdapter(getActivity(), contacts, new FindContactsAutocompliteAdapter.OnContactsClickListener() {
                     @Override
                     public void infoClick(Contact item) {
                         presenter.goToUserProfileScreen(item);
                     }
                 });
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                layoutManager = new LinearLayoutManager(getActivity());
                 autocompleteAdapter.setEmptyAdapter();
                 findConatctsRecyclerView.setLayoutManager(layoutManager);
                 findConatctsRecyclerView.setAdapter(autocompleteAdapter);
@@ -103,10 +112,30 @@ public class FindContactsFragment extends Fragment {
                         }
                     }
                 });
+                findContactsEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            presenter.find(findContactsEditText.getText().toString());
+                            return true;
+                        }
+                        return false;
+                    }
+                });
             }
+
         });
 
     }
+
+    public void displayPhones(FindPhoneResponse findPhoneResponse) {
+        ArrayList<Contact> contacts = new ArrayList<Contact>();
+        for (Phone phone : findPhoneResponse.getData()) {
+            contacts.add(new Contact().phoneToContact(phone));
+        }
+        autocompleteAdapter.addContactsFromServer(contacts);
+    }
+
 
     @OnClick(R.id.menuButton)
     public void openDrawer() {

@@ -1,36 +1,79 @@
 package com.unteleported.truecaller.model;
 
-import com.orm.SugarRecord;
-import com.orm.dsl.Table;
+
+import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.data.Blob;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import java.io.File;
 
 /**
  * Created by stasenkopavel on 4/26/16.
  */
-public class User extends SugarRecord {
+@Table(database = Database.class)
+public class User extends BaseModel {
 
-    private String name;
+    @Column
+    @PrimaryKey
+    @SerializedName("id")
+    private int serverId;
+    @Column
+    private String firstname;
+    @Column
+    private String surname;
+    @Column
     private String number;
+    @Column
     private String email;
     private int type;
-    private String countryIso;
+    private File avatar;
+    @Column
+    private String countyIso;
+    @Column
+    private String avatarPath;
 
     public User() {
 
     }
 
-    public User(String name, String phone, String email, String countryIso) {
-        this.name = name;
+    public User(int serverId, String firstName, String surname, String phone, String email, File avatar) {
+        this.serverId = serverId;
+        this.firstname = firstName;
+        this.surname = surname;
         this.number = phone;
         this.email = email;
-        this.countryIso = countryIso;
+        this.avatar = avatar;
     }
 
-    public String getName() {
-        return name;
+    public int getServerId() {
+        return serverId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setServerId(int serverId) {
+        this.serverId = serverId;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String name) {
+        this.firstname = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public File getAvatar() {
+        return avatar;
     }
 
     public String getNumber() {
@@ -49,5 +92,24 @@ public class User extends SugarRecord {
         this.email = email;
     }
 
+    public void setAvatar(File avatar) {
+        this.avatar = avatar;
+    }
 
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+
+    public String getCountyIso() {
+        return countyIso;
+    }
+
+    public void setCountyIso(String countyIso) {
+        this.countyIso = countyIso;
+    }
 }

@@ -1,8 +1,7 @@
 package com.unteleported.truecaller.api;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+
+import retrofit.RestAdapter;
 
 /**
  * Created by stasenkopavel on 4/29/16.
@@ -10,7 +9,7 @@ import retrofit.RxJavaCallAdapterFactory;
 public class ApiFactory {
 
     public static ApiInterface createRetrofitService() {
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(ApiInterface.SERVICE_ENDPOINT).addCallAdapterFactory(RxJavaCallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create()).build();
+        final RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(ApiInterface.SERVICE_ENDPOINT).build();
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
         return apiInterface;

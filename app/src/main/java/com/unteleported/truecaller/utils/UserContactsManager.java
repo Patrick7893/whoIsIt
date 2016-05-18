@@ -6,16 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
-import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.model.Call;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by stasenkopavel on 4/4/16.
@@ -32,6 +28,7 @@ public class UserContactsManager {
 
     public static ArrayList<Contact> readContacts(Context ctx, boolean favourite) {
         ArrayList<Contact> contacts = new ArrayList<>();
+        TelephonyManager tMgr = (TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE);
         ContentResolver cr = ctx.getContentResolver();
         Cursor cur;
         if (!favourite) {
@@ -53,7 +50,7 @@ public class UserContactsManager {
                     contact.setId(Integer.parseInt(id));
                     contact.setName(name);
                     if (!TextUtils.isEmpty(photo)) {
-                        contact.setPhoto(photo);
+                        contact.setAvatar(photo);
                     }
 
                     // get the phone number
@@ -66,8 +63,11 @@ public class UserContactsManager {
                         Phone phone = new Phone(number, type);
                         phone.setTypeDescriptionFromType(ctx, type);
                         phone.setName(contact.getName());
-                        if (!TextUtils.isEmpty(contact.getPhoto())) {
-                            phone.setAvatar(new File(contact.getPhoto()));
+                        if (number.startsWith("+")) {
+                            phone.setCountryIso(CountryManager.getIsoFromPhone(number));
+                        }
+                        else {
+                            phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
                         }
                         contact.addPhone(phone);
                     }

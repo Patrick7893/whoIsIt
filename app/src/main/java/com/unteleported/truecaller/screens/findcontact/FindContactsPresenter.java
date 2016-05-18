@@ -10,6 +10,7 @@ import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.FindPhoneResponse;
 import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
 import com.unteleported.truecaller.utils.UserContactsManager;
@@ -46,8 +47,7 @@ public class FindContactsPresenter {
         query = query.toLowerCase();
         final List<Contact> filteredModelList = new ArrayList<>();
         for (Contact contact : models) {
-            final String text = contact.getName().toLowerCase();
-            if (text.startsWith(query)) {
+            if (contact.getName().toLowerCase().startsWith(query) || contact.getPhones().get(0).getNumber().replaceAll("[^0-9+]", "").contains(query)) {
                 filteredModelList.add(contact);
             }
         }
@@ -80,8 +80,8 @@ public class FindContactsPresenter {
 
             @Override
             public void onNext(FindPhoneResponse findPhoneResponse) {
-                Log.d("Success", String.valueOf(findPhoneResponse.getError()));
-                Log.d("Success", String.valueOf(findPhoneResponse.getPhone().size()));
+                Log.d("FINDPHONE", String.valueOf(findPhoneResponse.getError()));
+                view.displayPhones(findPhoneResponse);
             }
         });
     }

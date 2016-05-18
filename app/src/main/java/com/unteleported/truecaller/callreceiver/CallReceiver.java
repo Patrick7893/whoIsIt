@@ -51,8 +51,11 @@ public class CallReceiver extends PhonecallReceiver {
     @Override
     protected void onMissedCall(Context ctx, String number, Date start) {
         Log.d("MISSED CALL", number);
+        Intent callEndedIntent = new Intent("CallEnd");
+        ctx.sendBroadcast(callEndedIntent);
         showDialogActivity(ctx, "com.unteleported.truecaller.activity.MissedCallActivity", number);
     }
+
 
     private void showDialogActivity(final Context ctx, final String activity, final String number) {
 

@@ -5,12 +5,26 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/spamList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:layout_above="@+id/contactsContainer"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="visible"/>
+
     <TextView
+        android:id="@+id/emptyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="СПАМ"
         android:textColor="@color/searchTextColor"
         android:textSize="20sp"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_gravity="center" />
 
 </RelativeLayout>

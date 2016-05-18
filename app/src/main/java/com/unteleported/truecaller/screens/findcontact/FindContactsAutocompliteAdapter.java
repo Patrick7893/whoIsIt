@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.utils.CountryManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,11 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
         notifyDataSetChanged();
     }
 
+    public void addContactsFromServer(List<Contact> contacts) {
+        this.items.addAll(contacts);
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder  {
         // each data item is just a string in this case
         @Bind(R.id.nameTextView) TextView nameTextView;
@@ -86,7 +92,7 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
 
         public void bind(Context ctx, final Contact contact, final OnContactsClickListener onContactsClickListener) {
             nameTextView.setText(contact.getName());
-            Picasso.with(ctx).load(contact.getPhoto()).into(photoImageView);
+            Picasso.with(ctx).load(contact.getAvatar()).into(photoImageView);
 
             findContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,6 +100,7 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
                     onContactsClickListener.infoClick(contact);
                 }
             });
+            countryTextView.setText(CountryManager.getCountryNameFromIso(contact.getPhones().get(0).getCountryIso()));
 
         }
 

@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -18,7 +16,6 @@ import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.view.FastScroller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -100,7 +97,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             else {
                 categoryTextView.setVisibility(View.GONE);
             }
-            Picasso.with(ctx).load(contact.getPhoto()).into(photoImageView);
+            Picasso.with(ctx).load(contact.getAvatar()).into(photoImageView);
 
             nameContainer.setOnClickListener(new View.OnClickListener() {
                 @Override

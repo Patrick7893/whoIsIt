@@ -6,6 +6,7 @@ import android.content.Context;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
+import com.unteleported.truecaller.model.Database;
 
 /**
  * Created by stasenkopavel on 4/4/16.

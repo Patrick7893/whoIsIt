@@ -17,6 +17,7 @@ import com.raizlabs.android.dbflow.sql.language.Select;
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.api.FindPhoneResponse;
 import com.unteleported.truecaller.model.Phone;
+import com.unteleported.truecaller.model.Phone_Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class SpamFragment extends Fragment {
     }
 
     private void initiallizeScreen() {
-        List<Phone> spamPhones = new Select().from(Phone.class).queryList();
+        List<Phone> spamPhones = new Select().from(Phone.class).where(Phone_Table.isBlocked.is(true)).queryList();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         spamRecyclerView.setLayoutManager(layoutManager);
         adapter = new SpamAdapter(new ArrayList<Phone>(spamPhones));

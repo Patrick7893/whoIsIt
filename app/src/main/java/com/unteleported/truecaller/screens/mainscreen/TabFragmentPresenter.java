@@ -1,17 +1,23 @@
 package com.unteleported.truecaller.screens.mainscreen;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.LoadContactsRequest;
 import com.unteleported.truecaller.api.RegistrationResponse;
 import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
+import com.unteleported.truecaller.model.Phone_Table;
+import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -23,30 +29,78 @@ import rx.schedulers.Schedulers;
  */
 public class TabFragmentPresenter {
 
-    Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
+    private TabFragment view;
+
+    public TabFragmentPresenter (TabFragment view) {
+        this.view = view;
+    }
+
+    Observable<ArrayList<Phone>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Phone>>() {
         @Override
-        public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
+        public void call(Subscriber<? super ArrayList<Phone>> subscriber) {
             ArrayList<Contact> contacts = UserContactsManager.readContacts(App.getContext(), false);
-            subscriber.onNext(contacts);
+            ArrayList<Phone> phones = new ArrayList<Phone>();
+            ArrayList<Phone> phonesToLoad = new ArrayList<>();
+            TelephonyManager tMgr = (TelephonyManager) view.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+            List<Phone> db = new Select().from(Phone.class).queryList();
+            for (Contact contact : contacts) {
+                for (Phone phone : contact.getPhones()) {
+                    phone.setNumber(phone.getNumber().replaceAll("[^0-9+]", ""));
+                    phones.add(phone);
+                    if (!phone.getNumber().contains("+")) {
+                        phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+                    }
+                    else {
+                        phone.setCountryIso(CountryManager.getIsoFromPhone(phone.getNumber()));
+                    }
+                }
+            }
+            for (Phone phone : phones) {
+                Phone phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(phone.getNumber())).querySingle();
+                if (phoneFromDb == null) {
+                    phonesToLoad.add(phone);
+                    phone.save();
+                }
+            }
+            db = new Select().from(Phone.class).queryList();
+            subscriber.onNext(phonesToLoad);
             subscriber.onCompleted();
         }
     });
 
-    public void loadContatcs(ArrayList<Phone> phones) {
-        ApiFactory.createRetrofitService().loadContacts(new LoadContactsRequest(SharedPreferencesSaver.get().getToken(), phones)).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+    public void loadContatcs() {
+        getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<Phone>>() {
             @Override
             public void onCompleted() {
+
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("loadContacts", e.getMessage());
+
             }
 
             @Override
-            public void onNext(RegistrationResponse registrationResponse) {
-                Log.d("LoadContacts", String.valueOf(registrationResponse.getError()));
+            public void onNext(ArrayList<Phone> phones) {
+                if (phones.size() > 0) {
+                    ApiFactory.createRetrofitService().loadContacts(new LoadContactsRequest(SharedPreferencesSaver.get().getToken(), phones)).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+                        @Override
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("loadContacts", e.getMessage());
+                        }
+
+                        @Override
+                        public void onNext(RegistrationResponse registrationResponse) {
+                            Log.d("LoadContacts", String.valueOf(registrationResponse.getError()));
+                        }
+                    });
+                }
             }
         });
+
     }
 }

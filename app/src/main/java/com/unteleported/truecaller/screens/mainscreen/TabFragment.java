@@ -53,39 +53,10 @@ public class TabFragment extends Fragment {
         ButterKnife.bind(this, view);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-        final TabFragmentPresenter presenter = new TabFragmentPresenter();
+        final TabFragmentPresenter presenter = new TabFragmentPresenter(this);
         ((MainActivityMethods)getActivity()).enableDrawer();
         ((MainActivityMethods)getActivity()).setUserInfo();
-        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<Contact>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(ArrayList<Contact> contacts) {
-                ArrayList<Phone> phones = new ArrayList<Phone>();
-                TelephonyManager tMgr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-                for (Contact contact : contacts) {
-                    for (Phone phone : contact.getPhones()) {
-                        phone.setNumber(phone.getNumber().replaceAll("[^0-9+]", ""));
-                        phones.add(phone);
-                        if (!phone.getNumber().contains("+")) {
-                            phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
-                        }
-                        else {
-                            phone.setCountryIso(CountryManager.getIsoFromPhone(phone.getNumber()));
-                        }
-                    }
-                }
-                presenter.loadContatcs(phones);
-            }
-        });
+        presenter.loadContatcs();
 
         if (!SharedPreferencesSaver.get().getTutorialDone()) {
             TutorialDialog tutorialDialog = new TutorialDialog();

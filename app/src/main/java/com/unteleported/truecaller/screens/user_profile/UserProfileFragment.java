@@ -105,19 +105,10 @@ public class UserProfileFragment extends Fragment {
         phoneNumbersRecyclerView.setAdapter(userPhonesAdapter);
         if (!TextUtils.isEmpty(contact.getAvatar()))
             Picasso.with(getContext()).load(contact.getAvatar()).into(avatarImageView);
-        isContactPresent = UserContactsManager.checkNumberInContacts(getActivity(), contact.getPhones().get(0).getNumber());
-        if (isContactPresent)
-            saveToContactsButton.setText(getString(R.string.changeContact));
-
-        if (new Select().from(Phone.class).where(Phone_Table.number.is(contact.getPhones().get(0).getNumber())).querySingle()==null) {
-            isBlocked = false;
-        }
-        else {
-            isBlocked = true;
-            blockButton.setText(getString(R.string.removeFromBlackList));
-        }
 
 
+        checkUserInContacts();
+        checkUserIsBlocked();
     }
 
     public void displayUserInfo(FindPhoneResponse findPhoneResponse) {
@@ -131,6 +122,24 @@ public class UserProfileFragment extends Fragment {
 
     public void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void checkUserInContacts() {
+        isContactPresent = UserContactsManager.checkNumberInContacts(getActivity(), contact.getPhones().get(0).getNumber());
+        if (isContactPresent)
+            saveToContactsButton.setText(getString(R.string.changeContact));
+    }
+
+    private void checkUserIsBlocked () {
+        Phone phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(contact.getPhones().get(0).getNumber())).querySingle();
+        if (phoneFromDb != null) {
+            if (!phoneFromDb.isBlocked()) {
+                isBlocked = false;
+            } else {
+                isBlocked = true;
+                blockButton.setText(getString(R.string.removeFromBlackList));
+            }
+        }
     }
 
     @OnClick(R.id.backButton)

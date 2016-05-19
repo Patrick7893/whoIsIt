@@ -24,6 +24,7 @@ import com.unteleported.truecaller.api.ApiInterface;
 import com.unteleported.truecaller.api.FindPhoneResponse;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
+import com.unteleported.truecaller.model.Phone_Table;
 import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
 
@@ -122,9 +123,13 @@ public class IcomingCallActivity extends AppCompatActivity {
         String number = b.getString("phone");
         find(number);
         phoneTextView.setText(PhoneNumberUtils.formatNumber(number, CountryManager.getIsoFromPhone(number)) + " - " + CountryManager.getCountryNameFromIso(CountryManager.getIsoFromPhone(number)));
-        List<Phone> spamPhones = new Select().from(Phone.class).queryList();
-        for (Phone phone : spamPhones) {
-            if (phone.getNumber().contains(number)) {
+        checkNumberIsSpam(number);
+    }
+
+    private void checkNumberIsSpam(String number) {
+        Phone phone = new Select().from(Phone.class).where(Phone_Table.number.is(number)).querySingle();
+        if (phone!=null) {
+            if (phone.isBlocked()) {
                 container.setBackgroundColor(getResources().getColor(R.color.missedCall));
                 spamTextView.setVisibility(View.VISIBLE);
             }

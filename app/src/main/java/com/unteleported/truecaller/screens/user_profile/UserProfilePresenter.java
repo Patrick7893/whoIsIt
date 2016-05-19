@@ -83,7 +83,8 @@ public class UserProfilePresenter {
 
     public void unblockUser() {
         Phone spamPhone = new Select().from(Phone.class).where(Phone_Table.number.is(contact.getPhones().get(0).getNumber())).querySingle();
-        spamPhone.delete();
+        spamPhone.setIsBlocked(false);
+        spamPhone.save();
         Toaster.toast(view.getContext(), view.getString(R.string.userRemovedFromBlackList));
         if (contact.getId()!=0) {
             ApiFactory.createRetrofitService().unblockUser(contact.getId(), contact.getId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {

@@ -3,6 +3,7 @@ package com.unteleported.truecaller.model;
 
 import android.text.TextUtils;
 
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.unteleported.truecaller.api.ApiInterface;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Contact {
     private long id;
     private String name;
     private ArrayList<Phone> phones = new ArrayList<>();
+    private ArrayList<Number> numbers = new ArrayList<>();
     private String title;
     private String avatar;
     private boolean isLiked;
@@ -72,6 +74,14 @@ public class Contact {
         this.isLiked = isLiked;
     }
 
+    public ArrayList<Number> getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(ArrayList<Number> numbers) {
+        this.numbers = numbers;
+    }
+
     public Contact phoneToContact(Phone phone) {
         this.setName(phone.getName());
         ArrayList<Phone> phones = new ArrayList<>();
@@ -82,6 +92,14 @@ public class Contact {
             this.setAvatar(ApiInterface.SERVICE_ENDPOINT + phone.getAvatar().getUrl());
         }
         return this;
+    }
+
+    class Number {
+
+        private String number;
+        private int typeOfNumber;
+
+
     }
 
 

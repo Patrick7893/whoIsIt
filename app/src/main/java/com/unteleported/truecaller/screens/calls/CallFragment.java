@@ -8,19 +8,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.activity.MainActivity;
 import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.model.Call;
-import com.unteleported.truecaller.screens.call_story.CallStoryPresenter;
 import com.unteleported.truecaller.screens.conatctslist.ContactslistFragment;
 
 import com.unteleported.truecaller.screens.numpad.NumpadFragment;
@@ -54,6 +53,8 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
     private CallsAdapter callsAdapter;
     private boolean keyBoardPresent = false, canCall = false, contatcsPresent = false;
     private String number;
+    private NumpadFragment numpadFragment;
+    private ContactslistFragment contactslistFragment;
 
 
     @Nullable
@@ -67,7 +68,6 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
         presenter = new CallsPresenter(this);
         initiallizeScreen();
         getActivity().registerReceiver(callEndedBroadcastReceiver, new IntentFilter("CallEnd"));
-
         return view;
     }
 
@@ -82,7 +82,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
                     public void callCLick(Call item) {
                         if (keyBoardPresent) {
                             numPadImageView.setImageDrawable(getResources().getDrawable(R.drawable.keypad_icon));
-                            presenter.hideKeyBoard();
+                            hideKeyBoard();
                             keyBoardPresent = false;
                         }
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
@@ -96,6 +96,16 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
                     }
                 });
                 callsRecyclerView.setAdapter(callsAdapter);
+                callsRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        if (keyBoardPresent) {
+                            hideKeyBoard();
+                            keyBoardPresent = false;
+                        }
+                    }
+                });
             }
         });
     }
@@ -106,7 +116,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
             int id = v.getId();
             if (id == R.id.contactsImageView) {
                 if (!contatcsPresent) {
-                    presenter.goToContatcs(false);
+                    goToContatcs(false);
                     contatcsPresent = true;
                 }
                 else {
@@ -117,7 +127,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
             }
             if (id == R.id.favouiteContacts) {
                 if (!contatcsPresent) {
-                    presenter.goToContatcs(true);
+                    goToContatcs(true);
                     contatcsPresent = true;
                 }
                 else {
@@ -128,7 +138,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
             }
             if (id == R.id.numpadImageView) {
                 if (!keyBoardPresent) {
-                    presenter.showKeyBoard();
+                    showKeyBoard();
                 }
                 else {
                     if (canCall) {
@@ -137,7 +147,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
                     }
                     else {
                         numPadImageView.setImageDrawable(getResources().getDrawable(R.drawable.keypad_icon));
-                        presenter.hideKeyBoard();
+                        hideKeyBoard();
                         keyBoardPresent = false;
                     }
                 }
@@ -193,6 +203,40 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
         else {
             contactsImageView.setImageDrawable(getResources().getDrawable(R.drawable.contacts_icon));
         }
+    }
+
+    void showKeyBoard() {
+        numPadImageView.setImageDrawable(getResources().getDrawable(R.drawable.keypad_filled));
+        if (isContatcsPresent()) {
+            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top, R.anim.slide_in_from_bottom, R.anim.slide_out_to_top).remove(contactslistFragment).commit();
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        numpadFragment = new NumpadFragment();
+        numpadFragment.setOnPhonePresentListener(this);
+        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top, R.anim.slide_in_from_bottom, R.anim.slide_out_to_top).add(R.id.numPadContainer, numpadFragment).addToBackStack(null).commit();
+        setKeyBoardPresent(true);
+    }
+
+    void hideKeyBoard() {
+        ((MainActivity)getActivity()).back();
+    }
+
+    void goToContatcs(boolean isFavourite) {
+        if (isKeyBoardPresent()) {
+            hideKeyBoard();
+        }
+        contactslistFragment = new ContactslistFragment();
+        contactslistFragment.setOnContatcsDetachListener(this);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ISFAVOURITECONTACTS, isFavourite);
+        contactslistFragment.setArguments(bundle);
+        if (isFavourite) {
+            favouriteContactsImageView.setImageDrawable(getResources().getDrawable(R.drawable.like_filled));
+        }
+        else {
+            contactsImageView.setImageDrawable(getResources().getDrawable(R.drawable.contact_filled));
+        }
+        ((MainActivity) getActivity()).swithConatcsFragment(contactslistFragment);
     }
 
     public boolean isKeyBoardPresent() {

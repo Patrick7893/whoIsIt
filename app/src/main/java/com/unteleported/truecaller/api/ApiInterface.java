@@ -1,13 +1,6 @@
 package com.unteleported.truecaller.api;
 
 
-import android.support.annotation.Nullable;
-
-import com.unteleported.truecaller.model.Phone;
-import com.unteleported.truecaller.model.User;
-
-import java.util.ArrayList;
-
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
@@ -24,7 +17,8 @@ import rx.Observable;
  */
 public interface ApiInterface {
 
-    String SERVICE_ENDPOINT = "http://10.0.1.6:3000";
+   // String SERVICE_ENDPOINT = "http://10.0.1.6:3000";
+    String SERVICE_ENDPOINT = "http://truecaller.unteleported.com";
 
 
     @Multipart
@@ -50,15 +44,15 @@ public interface ApiInterface {
     Observable<FindPhoneResponse> findPhone(@Query("token") String token, @Query("query") String number);
 
     @GET("/phones/getSpammers")
-    Observable<FindPhoneResponse> getSpammers(@Query("token") String token);
+    Observable<GetSpammersResponse> getSpammers(@Query("token") String token);
 
     @Multipart
     @PUT("/phones/{id}/block")
-    Observable<BaseResponse> blockUser(@Path("id") long id, @Part("userId") long userId);
+    Observable<BaseResponse> blockUser(@Path("id") long id, @Part("token") String token,  @Part("userId") long userId);
 
     @Multipart
     @PUT("/phones/{id}/unblock")
-    Observable<BaseResponse> unblockUser(@Path("id") long id, @Part("userId") long userId);
+    Observable<BaseResponse> unblockUser(@Path("id") long id, @Part("token") String token, @Part("userId") long userId);
 
 
 }

@@ -66,6 +66,7 @@
     <!--saerch screen-->
     <string name="search">Введите имя или номер</string>
     <string name="numbersInBase">номеров в базе</string>
+    <string name="firndNothind">Ничего не найдено</string>
 
     <!--User Profile screen-->
     <string name="callStory">История вызовов</string>
@@ -82,6 +83,7 @@
     <string name="save">СОХРАНИТЬ</string>
     <string name="block_caps">БЛОКИРОВАТЬ</string>
     <string name="unknown_user">Неизвестный номер</string>
+    <string name="unblock">РАЗБЛОКИРОВАТЬ</string>
 
     <!--Spam screen-->
     <string name="myBlackList">Мой черный список</string>
@@ -103,6 +105,10 @@
     <string name="begin">НАЧАТЬ ПОЛЬЗОВАТЬСЯ</string>
     <string name="wrongSms">Неверный код подтверждения!</string>
     <string name="pleaseInputName">Пожалуйста, введите имя и фамилию</string>
+    <string name="takePhoto">Сделать фото</string>
+    <string name="takeFromGallery">Выбрать из галереи</string>
+    <string name="enter">Вход...</string>
+    <string name="loadingData">Загрузка данных...</string>
 
 
     <!--countries-->

@@ -3,6 +3,7 @@ package com.unteleported.truecaller.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
@@ -19,7 +20,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         App.context = super.getApplicationContext();
-        FlowManager.init(this);
+        FlowManager.init(new FlowConfig.Builder(this).build());
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
     }

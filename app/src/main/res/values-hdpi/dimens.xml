@@ -7,6 +7,9 @@
     <dimen name="tab_padding_bottom">16dp</dimen>
     <dimen name="tab_label">14sp</dimen>
     <dimen name="custom_tab_layout_height">72dp</dimen>
-    <dimen name="logoTopMargin">70dp</dimen>
+    <dimen name="logoTopMargin">30dp</dimen>
+    <dimen name="loginBottomMargin">20dp</dimen>
+    <dimen name="loginTextSize">13sp</dimen>
+    <dimen name="imageViewSize">60dp</dimen>
 
 </resources>

@@ -13,7 +13,7 @@ import com.unteleported.truecaller.R;
 /**
  * Created by stasenkopavel on 4/15/16.
  */
-@Table(database = Database.class)
+@Table(database = Database.class, cachingEnabled = true)
 public class Phone extends BaseModel {
 
     @Column
@@ -24,8 +24,7 @@ public class Phone extends BaseModel {
     private String number;
     @Column
     private int typeOfNumber;
-    @Column
-    private String typeDescription;
+
     @Column
     private String name;
     @Column
@@ -35,6 +34,8 @@ public class Phone extends BaseModel {
     private int numberOfSettedSpam;
     @Column
     private boolean isBlocked;
+    @Column
+    private boolean isLiked;
 
     public Phone() {}
 
@@ -58,31 +59,6 @@ public class Phone extends BaseModel {
 
     public int getTypeOfNumber() {
         return typeOfNumber;
-    }
-
-    public void setTypeDescriptionFromType(Context ctx, int type) {
-        switch (type) {
-            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                this.setTypeDescription(ctx.getString(R.string.mobile));
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                this.setTypeDescription(ctx.getString(R.string.home));
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                this.setTypeDescription(ctx.getString(R.string.work));
-                break;
-            default:
-                this.setTypeDescription(ctx.getString(R.string.other));
-                break;
-        }
-    }
-
-    public String getTypeDescription() {
-        return typeDescription;
-    }
-
-    public void setTypeDescription(String typeDescription) {
-        this.typeDescription = typeDescription;
     }
 
     public String getName() {
@@ -146,4 +122,11 @@ public class Phone extends BaseModel {
         return isBlocked;
     }
 
+    public boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(boolean liked) {
+        isLiked = liked;
+    }
 }

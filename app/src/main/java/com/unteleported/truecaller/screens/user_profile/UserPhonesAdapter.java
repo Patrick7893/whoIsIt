@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.model.Phone;
 
 import java.util.ArrayList;
@@ -24,16 +26,16 @@ import butterknife.ButterKnife;
  */
 public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.ViewHolder> {
 
-    private ArrayList<Phone> phones;
+    private ArrayList<ContactNumber> phones;
     private Context ctx;
     private final OnPhoneClickListener listener;
 
     public interface OnPhoneClickListener {
-        void callCLick(Phone item);
-        void messageClick(Phone item);
+        void callCLick(ContactNumber item);
+        void messageClick(ContactNumber item);
     }
 
-    public UserPhonesAdapter(Context ctx, ArrayList<Phone> phones, OnPhoneClickListener onItemClickListener) {
+    public UserPhonesAdapter(Context ctx, ArrayList<ContactNumber> phones, OnPhoneClickListener onItemClickListener) {
         this.phones = phones;
         this.ctx = ctx;
         this.listener = onItemClickListener;
@@ -54,7 +56,7 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Phone phone = phones.get(position);
+        ContactNumber phone = phones.get(position);
         holder.bind(ctx, phone, listener);
     }
 
@@ -77,7 +79,7 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
             ButterKnife.bind(this, v);
         }
 
-        public void bind(Context ctx, final Phone phone, final OnPhoneClickListener onPhoneClickListener) {
+        public void bind(Context ctx, final ContactNumber phone, final OnPhoneClickListener onPhoneClickListener) {
             numberTextView.setText(phone.getNumber());
             phone.setTypeDescriptionFromType(ctx, phone.getTypeOfNumber());
             numberTypeTextView.setText(phone.getTypeDescription());

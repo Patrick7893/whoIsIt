@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
-        android:id="@+id/nameContainer"
+        android:id="@+id/spamContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -34,7 +34,6 @@
             android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:text="Валентин Николавевич"
             android:maxLines="1"
             android:tag="@string/roboroRegular"
@@ -65,10 +64,10 @@
         android:layout_height="1px"
         android:background="@color/greytext"
         android:layout_alignParentBottom="false"
-        android:layout_below="@+id/nameContainer"
+        android:layout_below="@+id/spamContainer"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 
 

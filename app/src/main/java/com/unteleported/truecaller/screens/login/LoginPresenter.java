@@ -1,5 +1,6 @@
 package com.unteleported.truecaller.screens.login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.ApiInterface;
 import com.unteleported.truecaller.api.RegistrationResponse;
+import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.User;
 import com.unteleported.truecaller.screens.mainscreen.TabFragment;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
@@ -42,6 +44,9 @@ public class LoginPresenter {
 
 
     public void login(final String number, final String countryIso) {
+        final ProgressDialog pd = new ProgressDialog(view.getActivity());
+        pd.setMessage(App.getContext().getString(R.string.enter));
+        pd.show();
         ApiFactory.createRetrofitService().login(number, countryIso).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
             @Override
             public void onCompleted() {
@@ -51,10 +56,13 @@ public class LoginPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d("ERROR", e.getMessage());
+                ApiFactory.checkConnection();
+                pd.dismiss();
             }
 
             @Override
             public void onNext(RegistrationResponse s) {
+                pd.dismiss();
                 Log.d("ONNEXT", String.valueOf(s.getError()));
                 Log.d("TOKEN", s.getToken() + "      " +  String.valueOf(s.getSms()));
                 if (s.getError() == 0) {

@@ -100,7 +100,7 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
                     onContactsClickListener.infoClick(contact);
                 }
             });
-            countryTextView.setText(CountryManager.getCountryNameFromIso(contact.getPhones().get(0).getCountryIso()));
+            countryTextView.setText(CountryManager.getCountryNameFromIso(contact.getNumbers().get(0).getCountryIso()));
 
         }
 

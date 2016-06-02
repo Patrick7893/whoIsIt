@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,14 +28,21 @@ import butterknife.ButterKnife;
  */
 public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
 
+    public static int numberOfUserSpam;
+
     private ArrayList<Phone> phones;
     private Context context;
     private ViewHolder holder;
-    public static int numberOfUserSpam;
+    private OnSpamClickListener listener;
 
-    public SpamAdapter(ArrayList<Phone> phones) {
+    public interface OnSpamClickListener {
+        void spamClick(Phone item);
+    }
+
+    public SpamAdapter(ArrayList<Phone> phones, OnSpamClickListener onSpamClickLisner) {
         this.phones = phones;
         this.numberOfUserSpam = phones.size();
+        this.listener = onSpamClickLisner;
     }
 
 
@@ -56,7 +64,7 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Phone phone = phones.get(position);
-        holder.bind(phone, context, position);
+        holder.bind(phone, context, position, listener);
     }
 
     @Override
@@ -66,8 +74,13 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
 
     public void addSpammersFromServer(ArrayList<Phone> spammers) {
         this.phones.addAll(spammers);
+        numberOfUserSpam = this.phones.size();
         notifyDataSetChanged();
+    }
 
+    public void addGlobalSpammers(ArrayList<Phone> globalSpammers) {
+        this.phones.addAll(globalSpammers);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,6 +88,7 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
         @Bind(R.id.nameTextView) TextView nameTextView;
         @Bind(R.id.phoneTextView) TextView phoneTextView;
         @Bind(R.id.titleTextView) TextView titleTextView;
+        @Bind(R.id.spamContainer) LinearLayout spamContainer;
 
         public ViewHolder(View v) {
             super(v);
@@ -82,7 +96,7 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
             FontManager.overrideFonts(v);
         }
 
-        public void bind(final Phone phone, Context ctx, int position) {
+        public void bind(final Phone phone, Context ctx, int position, final OnSpamClickListener listener) {
             phoneTextView.setText(phone.getNumber());
             if (!TextUtils.isEmpty(phone.getName())) {
                 nameTextView.setText(phone.getName());
@@ -90,13 +104,27 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
             else {
                 nameTextView.setText(ctx.getString(R.string.unknown_user));
             }
-            if (position == 0) {
+            if (position == numberOfUserSpam || position == 0) {
+                if (position != 0)
+                    titleTextView.setText(ctx.getString(R.string.spammers));
+                else {
+                    if (numberOfUserSpam != 0)
+                        titleTextView.setText(ctx.getString(R.string.myBlackList));
+                    else
+                        titleTextView.setText(R.string.spammers);
+                }
                 titleTextView.setVisibility(View.VISIBLE);
             }
-            if (position == numberOfUserSpam) {
-                titleTextView.setVisibility(View.VISIBLE);
-                titleTextView.setText(ctx.getString(R.string.spammers));
+            else {
+                titleTextView.setVisibility(View.GONE);
             }
+
+            spamContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.spamClick(phone);
+                }
+            });
 
         }
     }

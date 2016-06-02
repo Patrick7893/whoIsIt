@@ -2,17 +2,13 @@ package com.unteleported.truecaller.screens.calls;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
 import com.unteleported.truecaller.R;
-import com.unteleported.truecaller.activity.MainActivity;
-import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.model.Call;
 import com.unteleported.truecaller.model.Contact;
-import com.unteleported.truecaller.model.Phone;
-import com.unteleported.truecaller.screens.conatctslist.ContactslistFragment;
+import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.screens.numpad.NumpadFragment;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
 import com.unteleported.truecaller.utils.CountryManager;
@@ -31,7 +27,7 @@ public class CallsPresenter {
     private CallFragment view;
 
     private NumpadFragment numpadFragment;
-    private ContactslistFragment contactslistFragment;
+
 
     public CallsPresenter(CallFragment view) {
         this.view = view;
@@ -40,25 +36,25 @@ public class CallsPresenter {
      void goToUserProfileScreen(Call call) {
         Contact contact = new Contact();
         contact.setName(call.getName());
-        ArrayList<Phone> phones = new ArrayList<>();
-        Phone phone = new Phone(call.getNumber(), call.getType());
-        phone.setTypeDescription(call.getTypeOfNumber());
+        ArrayList<ContactNumber> phones = new ArrayList<>();
+        ContactNumber contactNumber = new ContactNumber(call.getNumber(), call.getType());
+         contactNumber.setTypeDescription(call.getTypeOfNumber());
          if (call.getNumber().startsWith("+")) {
-             phone.setCountryIso(CountryManager.getIsoFromPhone(call.getNumber()));
+             contactNumber.setCountryIso(CountryManager.getIsoFromPhone(call.getNumber()));
          }
          else {
              TelephonyManager tMgr = (TelephonyManager)view.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-             phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+             contactNumber.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
          }
-        phones.add(phone);
-        contact.setPhones(phones);
+        phones.add(contactNumber);
+        contact.setNumbers(phones);
         Gson gson = new Gson();
         String contactString = gson.toJson(contact);
         Bundle bundle = new Bundle();
         bundle.putString(view.CONTACTINFO, contactString);
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
-        view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+        view.getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
     }
 
     Observable<ArrayList<Call>> getCalls = Observable.create(new Observable.OnSubscribe<ArrayList<Call>>() {
@@ -70,39 +66,5 @@ public class CallsPresenter {
         }
     });
 
-     void showKeyBoard() {
-        view.numPadImageView.setImageDrawable(view.getResources().getDrawable(R.drawable.keypad_filled));
-        if (view.isContatcsPresent()) {
-            view.getActivity().getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).remove(contactslistFragment).commit();
-            view.getActivity().getSupportFragmentManager().popBackStack();
-        }
-        numpadFragment = new NumpadFragment();
-        numpadFragment.setOnPhonePresentListener(view);
-        view.getActivity().getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.numPadContainer, numpadFragment).addToBackStack(null).commit();
-        view.setKeyBoardPresent(true);
-    }
-
-     void hideKeyBoard() {
-        view.getActivity().getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).remove(numpadFragment).commit();
-        view.getActivity().getSupportFragmentManager().popBackStack();
-    }
-
-     void goToContatcs(boolean isFavourite) {
-        if (view.isKeyBoardPresent()) {
-            hideKeyBoard();
-        }
-        contactslistFragment = new ContactslistFragment();
-        contactslistFragment.setOnContatcsDetachListener(view);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(view.ISFAVOURITECONTACTS, isFavourite);
-        contactslistFragment.setArguments(bundle);
-        if (isFavourite) {
-            view.favouriteContactsImageView.setImageDrawable(view.getResources().getDrawable(R.drawable.like_filled));
-        }
-        else {
-            view.contactsImageView.setImageDrawable(view.getResources().getDrawable(R.drawable.contact_filled));
-        }
-        ((MainActivity) view.getActivity()).swithConatcsFragment(contactslistFragment);
-    }
 }
 

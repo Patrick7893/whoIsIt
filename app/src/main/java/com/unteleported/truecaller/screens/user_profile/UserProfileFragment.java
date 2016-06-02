@@ -26,12 +26,14 @@ import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.api.ApiInterface;
 import com.unteleported.truecaller.api.FindPhoneResponse;
 import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.model.Phone_Table;
 import com.unteleported.truecaller.screens.call_story.CallStoryFragment;
 import com.unteleported.truecaller.screens.conatctslist.ContactslistFragment;
 import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.FontManager;
+import com.unteleported.truecaller.utils.PhoneFormatter;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
 import org.w3c.dom.Text;
@@ -64,7 +66,8 @@ public class UserProfileFragment extends Fragment {
     private UserProfilePresenter presenter;
 
     private Contact contact;
-    private boolean isContactPresent, isBlocked  = false;
+    private Phone phoneFromDb;
+    private boolean isContactPresent, isBlocked, isLiked  = false;
     public static final String CONTACTINFO = "CONTACTINFOTOSTORY";
 
 
@@ -85,19 +88,19 @@ public class UserProfileFragment extends Fragment {
         Gson gson = new Gson();
         contact = gson.fromJson(contatcString, Contact.class);
         presenter = new UserProfilePresenter(this, contact);
-        presenter.find(contact.getPhones().get(0).getNumber().replaceAll("[^0-9+]", ""));
+        presenter.find(contact.getNumbers().get(0).getNumber().replaceAll("[^0-9+]", ""));
         if (!TextUtils.isEmpty(contact.getName()))
             titleTextView.setText(contact.getName());
-        addressTextView.setText(CountryManager.getCountryNameFromIso(contact.getPhones().get(0).getCountryIso()));
-        UserPhonesAdapter userPhonesAdapter = new UserPhonesAdapter(getActivity(), contact.getPhones(), new UserPhonesAdapter.OnPhoneClickListener() {
+        addressTextView.setText(CountryManager.getCountryNameFromIso(contact.getNumbers().get(0).getCountryIso()));
+        UserPhonesAdapter userPhonesAdapter = new UserPhonesAdapter(getActivity(), contact.getNumbers(), new UserPhonesAdapter.OnPhoneClickListener() {
             @Override
-            public void callCLick(Phone item) {
+            public void callCLick(ContactNumber item) {
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
                 startActivity(intent);
             }
 
             @Override
-            public void messageClick(Phone item) {
+            public void messageClick(ContactNumber item) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", item.getNumber(), null)));
             }
         });
@@ -109,6 +112,7 @@ public class UserProfileFragment extends Fragment {
 
         checkUserInContacts();
         checkUserIsBlocked();
+        checkUserIsLiked();
     }
 
     public void displayUserInfo(FindPhoneResponse findPhoneResponse) {
@@ -125,19 +129,31 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void checkUserInContacts() {
-        isContactPresent = UserContactsManager.checkNumberInContacts(getActivity(), contact.getPhones().get(0).getNumber());
+        isContactPresent = UserContactsManager.checkNumberInContacts(getActivity(), contact.getNumbers().get(0).getNumber());
         if (isContactPresent)
             saveToContactsButton.setText(getString(R.string.changeContact));
     }
 
     private void checkUserIsBlocked () {
-        Phone phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(contact.getPhones().get(0).getNumber())).querySingle();
+        phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(PhoneFormatter.removeAllNonNumeric(contact.getNumbers().get(0).getNumber()))).querySingle();
         if (phoneFromDb != null) {
             if (!phoneFromDb.isBlocked()) {
                 isBlocked = false;
             } else {
                 isBlocked = true;
                 blockButton.setText(getString(R.string.removeFromBlackList));
+            }
+        }
+    }
+
+    private void checkUserIsLiked() {
+        phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(PhoneFormatter.removeAllNonNumeric(contact.getNumbers().get(0).getNumber()))).querySingle();
+        if (phoneFromDb != null) {
+            if (!phoneFromDb.getIsLiked()) {
+                isLiked = false;
+            } else {
+                isLiked = true;
+                likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorites_filled));
             }
         }
     }
@@ -164,7 +180,7 @@ public class UserProfileFragment extends Fragment {
     @OnClick(R.id.saveToContatcsButton)
     public void saveToContatcs() {
         if (isContactPresent) {
-            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contact.getPhones().get(0).getNumber()));
+            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contact.getNumbers().get(0).getNumber()));
             String[] mPhoneNumberProjection = { ContactsContract.PhoneLookup._ID};
             Cursor cur = getActivity().getContentResolver().query(uri, mPhoneNumberProjection, null, null, null);
             long idContact = 0;
@@ -182,21 +198,24 @@ public class UserProfileFragment extends Fragment {
         }
         else {
             Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
-            intent.setType(ContactsContract.RawContacts.CONTENT_TYPE).putExtra(ContactsContract.Intents.Insert.PHONE, contact.getPhones().get(0).getNumber());
+            intent.setType(ContactsContract.RawContacts.CONTENT_TYPE).putExtra(ContactsContract.Intents.Insert.PHONE, contact.getNumbers().get(0).getNumber());
             startActivity(intent);
         }
     }
 
     @OnClick(R.id.likeButton)
     public void setLike() {
-        if (!contact.isLiked()) {
+        if (!isLiked) {
             likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorites_filled));
             contact.setIsLiked(true);
+            isLiked = true;
         }
         else {
             likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorite));
             contact.setIsLiked(false);
+            isLiked = false;
         }
+        setUserLike(isLiked);
     }
 
     @OnClick(R.id.blockButton)
@@ -211,5 +230,17 @@ public class UserProfileFragment extends Fragment {
             presenter.unblockUser();
             blockButton.setText(getString(R.string.block));
         }
+
+    }
+
+    private void setUserLike(boolean like) {
+        if (phoneFromDb == null) {
+            phoneFromDb = new Phone(contact.getNumbers().get(0).getNumber(), contact.getNumbers().get(0).getTypeOfNumber());
+            phoneFromDb.setName(titleTextView.getText().toString());
+        }
+        else {
+            phoneFromDb.setIsLiked(like);
+        }
+        phoneFromDb.save();
     }
 }

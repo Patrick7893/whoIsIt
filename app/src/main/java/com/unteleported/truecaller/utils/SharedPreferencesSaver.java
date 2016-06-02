@@ -2,6 +2,8 @@ package com.unteleported.truecaller.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 
 import com.unteleported.truecaller.app.App;
@@ -17,12 +19,14 @@ public class SharedPreferencesSaver {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
 
+    private static final String PREFSNAME = "truecallerPrefs";
+
     private static final String COORDINATES = "COORDNATES";
     private static final String TUTORIAL = "TUTORIAL";
     private static final String TOKEN = "TOKEN";
 
     private SharedPreferencesSaver(Context context) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        sharedPreferences = context.getSharedPreferences(PREFSNAME, Context.MODE_PRIVATE);
         ed = sharedPreferences.edit();
     }
 
@@ -52,7 +56,7 @@ public class SharedPreferencesSaver {
     }
 
     public void saveToken(String token) {
-        ed.putString(TOKEN, token);
+        ed.putString(TOKEN, token).commit();
     }
 
     public String getToken() {

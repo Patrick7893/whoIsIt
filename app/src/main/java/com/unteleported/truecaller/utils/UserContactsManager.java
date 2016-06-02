@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.model.Call;
 import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.model.Phone;
 
 import java.io.File;
@@ -60,17 +61,16 @@ public class UserContactsManager {
                     while (pCur.moveToNext()) {
                         String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         Integer type = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                        Phone phone = new Phone(number, type);
-                        phone.setTypeDescriptionFromType(ctx, type);
-                        phone.setName(contact.getName());
+                        ContactNumber contactNumber = new ContactNumber(number, type);
                         if (number.startsWith("+")) {
-                            phone.setCountryIso(CountryManager.getIsoFromPhone(number));
+                            contactNumber.setCountryIso(CountryManager.getIsoFromPhone(number));
                         }
                         else {
-                            phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+                            contactNumber.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
                         }
-                        contact.addPhone(phone);
+                        contact.addNumber(contactNumber);
                     }
+                    contacts.add(contact);
                     pCur.close();
 
                 }

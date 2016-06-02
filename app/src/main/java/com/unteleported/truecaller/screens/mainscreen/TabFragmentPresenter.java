@@ -1,15 +1,19 @@
 package com.unteleported.truecaller.screens.mainscreen;
 
+import android.app.SharedElementCallback;
 import android.content.Context;
+import android.print.PrintJob;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
 import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.LoadContactsRequest;
 import com.unteleported.truecaller.api.RegistrationResponse;
 import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
+import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.model.Phone_Table;
 import com.unteleported.truecaller.utils.CountryManager;
@@ -42,16 +46,19 @@ public class TabFragmentPresenter {
             ArrayList<Phone> phones = new ArrayList<Phone>();
             ArrayList<Phone> phonesToLoad = new ArrayList<>();
             TelephonyManager tMgr = (TelephonyManager) view.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-            List<Phone> db = new Select().from(Phone.class).queryList();
             for (Contact contact : contacts) {
-                for (Phone phone : contact.getPhones()) {
-                    phone.setNumber(phone.getNumber().replaceAll("[^0-9+]", ""));
+                for (ContactNumber number : contact.getNumbers()) {
+                    Phone phone = new Phone(number.getNumber(), number.getTypeOfNumber());
+                    phone.setNumber(number.getNumber().replaceAll("[^0-9+]", ""));
+                    phone.setName(contact.getName());
                     phones.add(phone);
                     if (!phone.getNumber().contains("+")) {
                         phone.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+                        number.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
                     }
                     else {
                         phone.setCountryIso(CountryManager.getIsoFromPhone(phone.getNumber()));
+                        number.setCountryIso(CountryManager.getCountryIsoFromName(phone.getNumber()));
                     }
                 }
             }
@@ -62,7 +69,6 @@ public class TabFragmentPresenter {
                     phone.save();
                 }
             }
-            db = new Select().from(Phone.class).queryList();
             subscriber.onNext(phonesToLoad);
             subscriber.onCompleted();
         }

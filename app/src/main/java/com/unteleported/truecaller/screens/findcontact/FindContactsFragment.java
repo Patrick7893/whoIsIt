@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.activity.MainActivity;
 import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.api.FindPhoneResponse;
 import com.unteleported.truecaller.model.Call;
@@ -140,6 +141,11 @@ public class FindContactsFragment extends Fragment {
     @OnClick(R.id.menuButton)
     public void openDrawer() {
         ((MainActivityMethods)getActivity()).openDrawer();
+    }
+
+    @OnClick(R.id.searchButton)
+    public void back() {
+        ((MainActivityMethods)getActivity()).back();
     }
 
 }

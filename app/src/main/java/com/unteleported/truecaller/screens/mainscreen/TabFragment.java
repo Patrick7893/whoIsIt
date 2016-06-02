@@ -1,5 +1,6 @@
 package com.unteleported.truecaller.screens.mainscreen;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,9 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivityMethods;
@@ -56,6 +59,8 @@ public class TabFragment extends Fragment {
         final TabFragmentPresenter presenter = new TabFragmentPresenter(this);
         ((MainActivityMethods)getActivity()).enableDrawer();
         ((MainActivityMethods)getActivity()).setUserInfo();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         presenter.loadContatcs();
 
         if (!SharedPreferencesSaver.get().getTutorialDone()) {
@@ -106,7 +111,7 @@ public class TabFragment extends Fragment {
 
     @OnClick(R.id.searchButton)
     public void goToSearchScreen() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new FindContactsFragment()).addToBackStack(null).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.flContent, new FindContactsFragment()).addToBackStack(null).commit();
     }
 
     @Override
@@ -118,14 +123,5 @@ public class TabFragment extends Fragment {
     public void openDrawer() {
         ((MainActivityMethods)getActivity()).openDrawer();
     }
-
-    Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
-        @Override
-        public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
-            ArrayList<Contact> contacts = UserContactsManager.readContacts(getActivity(), false);
-            subscriber.onNext(contacts);
-            subscriber.onCompleted();
-        }
-    });
 
 }

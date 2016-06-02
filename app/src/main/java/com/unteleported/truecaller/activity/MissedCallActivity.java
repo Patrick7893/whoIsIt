@@ -46,15 +46,19 @@ import rx.schedulers.Schedulers;
  */
 public class MissedCallActivity extends AppCompatActivity {
 
-    private WindowManager.LayoutParams wlp;
-    private int scrennHeight;
-    private String number;
+    private MissedCallPresenter presenter;
 
     @Bind(R.id.phoneTextView) TextView phoneTextView;
     @Bind(R.id.nameTextView) TextView nameTextView;
     @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
     @Bind(R.id.spamTextView) TextView spamTextView;
     @Bind(R.id.container) RelativeLayout container;
+    @Bind(R.id.blockTextView) TextView blockTextView;
+
+    private WindowManager.LayoutParams wlp;
+    private int scrennHeight;
+    private String number;
+    private boolean isBlocked;
 
 
     @Override
@@ -63,6 +67,7 @@ public class MissedCallActivity extends AppCompatActivity {
         setContentView(R.layout.activity_missed_call);
         ButterKnife.bind(this);
         scrennHeight = getDisplayHeight();
+        presenter = new MissedCallPresenter(this);
         initiallizeScreen();
 
     }
@@ -90,19 +95,33 @@ public class MissedCallActivity extends AppCompatActivity {
         window.setAttributes(wlp);
         Bundle b = getIntent().getExtras();
         number = b.getString("phone");
-        find(number);
+        presenter.find(number);
         phoneTextView.setText(PhoneNumberUtils.formatNumber(number, CountryManager.getIsoFromPhone(number)) + " - " + CountryManager.getCountryNameFromIso(CountryManager.getIsoFromPhone(number)));
-        checkNumberIsSpam(number);
+        isBlocked = checkNumberIsSpam(number);
     }
 
-    private void checkNumberIsSpam(String number) {
+    private boolean checkNumberIsSpam(String number) {
         Phone phone = new Select().from(Phone.class).where(Phone_Table.number.is(number)).querySingle();
         if (phone!=null) {
             if (phone.isBlocked()) {
                 container.setBackgroundColor(getResources().getColor(R.color.missedCall));
                 spamTextView.setVisibility(View.VISIBLE);
+                blockTextView.setText(getString(R.string.unblock));
+                return true;
             }
         }
+        return false;
+    }
+
+    public void displayPhoneInfo(FindPhoneResponse findPhoneResponse) {
+        nameTextView.setText(findPhoneResponse.getData().get(0).getName());
+        if (findPhoneResponse.getData().get(0).getNumberOfSettedSpam() > 3) {
+            container.setBackgroundColor(getResources().getColor(R.color.missedCall));
+            spamTextView.setVisibility(View.VISIBLE);
+            spamTextView.setText(findPhoneResponse.getData().get(0).getNumberOfSettedSpam() + " " + getString(R.string.usersCheckNumberAsSpam));
+        }
+        if (!TextUtils.isEmpty(findPhoneResponse.getData().get(0).getAvatar().getUrl()))
+            Picasso.with(getApplicationContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().get(0).getAvatar().getUrl()).into(avatarImageView);
     }
 
     public int getDisplayHeight() {
@@ -140,32 +159,19 @@ public class MissedCallActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void find(String number) {
-       ApiFactory.createRetrofitService().findPhone(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<FindPhoneResponse>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d("ERROR", e.getMessage());
-            }
-
-            @Override
-            public void onNext(FindPhoneResponse findPhoneResponse) {
-                Log.d("Success", String.valueOf(findPhoneResponse.getError()));
-                if (findPhoneResponse.getError() == 0) {
-                    nameTextView.setText(findPhoneResponse.getData().get(0).getName());
-                    if (findPhoneResponse.getData().get(0).getNumberOfSettedSpam() > 3) {
-                        container.setBackgroundColor(getResources().getColor(R.color.missedCall));
-                        spamTextView.setVisibility(View.VISIBLE);
-                        spamTextView.setText(findPhoneResponse.getData().get(0).getNumberOfSettedSpam() + " " + getString(R.string.usersCheckNumberAsSpam));
-                    }
-                    if (!TextUtils.isEmpty(findPhoneResponse.getData().get(0).getAvatar().getUrl()))
-                        Picasso.with(getApplicationContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().get(0).getAvatar().getUrl()).into(avatarImageView);
-                }
-            }
-        });
+    @OnClick(R.id.blockTextView)
+    public void block() {
+        if (isBlocked) {
+            presenter.unblockUser(number);
+            isBlocked = false;
+            blockTextView.setText(getString(R.string.block_caps));
+        }
+        else {
+            presenter.blockUser(number);
+            isBlocked = true;
+            blockTextView.setText(getString(R.string.unblock));
+        }
     }
+
+
 }

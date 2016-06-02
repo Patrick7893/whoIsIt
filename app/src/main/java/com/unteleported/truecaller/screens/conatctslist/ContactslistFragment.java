@@ -1,5 +1,6 @@
 package com.unteleported.truecaller.screens.conatctslist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,13 +65,47 @@ public class ContactslistFragment extends Fragment {
         View view = inflater.inflate(R.layout.screen_contact_list, container, false);
         ButterKnife.bind(this, view);
         presenter = new ContactListPresenter(this);
-        if (!this.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS)) {
-            initiallizeScreenAllContacts();
-        } else {
-            initiallizeScreenFavouriteContacts();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        if (getIsFavourite()) {
+            titleTextView.setText(getString(R.string.favorites));
+            searchButton.setVisibility(View.GONE);
         }
 
         return view;
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+                // additional functionality
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                if (!getIsFavourite()) {
+                    initiallizeScreenAllContacts();
+                } else {
+                    initiallizeScreenFavouriteContacts();
+                }
+            }
+        });
+
+        return anim;
+    }
+
+    private boolean getIsFavourite() {
+        return this.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS);
     }
 
     Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
@@ -103,6 +142,17 @@ public class ContactslistFragment extends Fragment {
                 return false;
             }
         });
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(v, 0);
+                    }
+                }
+            }
+        });
     }
 
     public void initiallizeScreenAllContacts() {
@@ -112,8 +162,8 @@ public class ContactslistFragment extends Fragment {
                 final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
                     @Override
                     public void callClick(Contact item) {
-                        if (item.getPhones().size() < 2) {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getPhones().get(0).getNumber()));
+                        if (item.getNumbers().size() < 2) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
                             startActivity(intent);
                         } else {
                             presenter.goToUserProfileScreen(item);
@@ -165,7 +215,7 @@ public class ContactslistFragment extends Fragment {
                 final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
                     @Override
                     public void callClick(Contact item) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getPhones().get(0).getNumber()));
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
                         startActivity(intent);
                     }
 
@@ -197,7 +247,9 @@ public class ContactslistFragment extends Fragment {
         searchButton.setVisibility(View.GONE);
         titleTextView.setVisibility(View.GONE);
         searchView.setVisibility(View.VISIBLE);
+        searchView.setIconified(false);
         searchView.requestFocusFromTouch();
+        searchView.requestFocus();
     }
 
     @Override

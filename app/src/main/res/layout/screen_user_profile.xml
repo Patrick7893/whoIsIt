@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:clickable="true">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -86,6 +87,7 @@
         android:orientation="vertical"
         android:background="@android:color/white"
         android:layout_margin="10dp"
+        android:clickable="true"
         android:visibility="visible">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -98,19 +100,20 @@
             <com.github.rahatarmanahmed.cpv.CircularProgressView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/progressBar"
-                android:layout_width="148dp"
-                android:layout_height="148dp"
+                android:layout_width="138dp"
+                android:layout_height="138dp"
                 app:cpv_animAutostart="true"
                 app:cpv_indeterminate="true"
                 android:layout_centerInParent="true"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/avatarImageView"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:src="@drawable/user_noavatar"
                 android:background="@drawable/shape_background"
                 app:civ_border_width="1dp"
+                android:clickable="true"
                 app:civ_border_color="@color/greytext"
                 android:layout_centerInParent="true" />
 
@@ -150,6 +153,7 @@
         android:orientation="vertical"
         android:layout_margin="10dp"
         android:visibility="visible"
+        android:clickable="true"
         android:background="@android:color/white">
 
         <TextView

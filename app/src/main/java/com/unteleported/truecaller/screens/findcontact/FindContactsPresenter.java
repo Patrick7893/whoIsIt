@@ -6,13 +6,16 @@ import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
+import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.FindPhoneResponse;
+import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
+import com.unteleported.truecaller.utils.Toaster;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class FindContactsPresenter {
         query = query.toLowerCase();
         final List<Contact> filteredModelList = new ArrayList<>();
         for (Contact contact : models) {
-            if (contact.getName().toLowerCase().startsWith(query) || contact.getPhones().get(0).getNumber().replaceAll("[^0-9+]", "").contains(query)) {
+            if (contact.getName().toLowerCase().startsWith(query) || contact.getNumbers().get(0).getNumber().replaceAll("[^0-9+]", "").contains(query)) {
                 filteredModelList.add(contact);
             }
         }
@@ -63,7 +66,7 @@ public class FindContactsPresenter {
         bundle.putString(view.CONTACTINFO, contactString);
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
-        ((MainActivityMethods)view.getActivity()).switchFragment(userProfileFragment);
+        view.getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
     }
 
     public void find(String number) {
@@ -76,12 +79,16 @@ public class FindContactsPresenter {
             @Override
             public void onError(Throwable e) {
                 Log.d("ERROR", e.getMessage());
+                ApiFactory.checkConnection();
             }
 
             @Override
             public void onNext(FindPhoneResponse findPhoneResponse) {
                 Log.d("FINDPHONE", String.valueOf(findPhoneResponse.getError()));
-                view.displayPhones(findPhoneResponse);
+                if (findPhoneResponse.getError() == 0)
+                    view.displayPhones(findPhoneResponse);
+                else
+                    Toaster.toast(App.getContext(), R.string.firndNothind);
             }
         });
     }

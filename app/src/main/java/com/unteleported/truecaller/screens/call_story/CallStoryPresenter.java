@@ -1,6 +1,7 @@
 package com.unteleported.truecaller.screens.call_story;
 
 import com.unteleported.truecaller.model.Call;
+import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
@@ -26,8 +27,8 @@ public class CallStoryPresenter {
         @Override
         public void call(Subscriber<? super ArrayList<Call>> subscriber) {
             ArrayList<Call> calls = new ArrayList<Call>();
-            for (Phone phone : view.getContact().getPhones()) {
-                calls.addAll(UserContactsManager.getCallListOfContact(view.getActivity(), phone.getNumber()));
+            for (ContactNumber number : view.getContact().getNumbers()) {
+                calls.addAll(UserContactsManager.getCallListOfContact(view.getActivity(), number.getNumber()));
             }
             Collections.sort(calls, new Comparator<Call>() {
                 @Override

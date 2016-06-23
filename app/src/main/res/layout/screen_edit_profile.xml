@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:clickable="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/primary_color_gradient"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:clickable="true">
+
+        <RelativeLayout
+            android:id="@+id/actionBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:background="@drawable/primary_color_gradient"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_centerVertical="true"
+                android:padding="15dp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/backButton"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile"
+                    android:tag="@string/roboroRegular"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/menuButton"
+                    android:layout_marginLeft="15dp" />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/doneButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/check"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginRight="5dp"
+                android:padding="3dp"/>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_marginTop="30dp">
+
+        <LinearLayout
+            android:id="@+id/changeAvatarButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/loginBottomMargin"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:background="?android:attr/selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/avatarImageView"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/camera"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape_background"
+                    app:civ_border_color="@color/greytext"
+                    app:civ_border_width="1px"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/changePhoto"
+                android:textColor="@android:color/black"
+                android:layout_weight="1"
+                android:textSize="@dimen/loginTextSize"
+                android:tag="@string/roboroRegular"
+                android:padding="15dp"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/firstname"
+                android:textColor="@android:color/black"
+                android:tag="@string/roboroRegular"
+                android:layout_weight="2"
+                android:textSize="@dimen/loginTextSize"
+                android:padding="15dp"/>
+
+            <EditText
+                android:id="@+id/firstnameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/firstname_example"
+                android:layout_weight="1"
+                android:tag="@string/roboroRegular"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords|text"
+                android:textSize="@dimen/loginTextSize"
+                android:padding="15dp"
+                android:nextFocusUp="@id/actionBar"
+                android:nextFocusLeft="@id/actionBar"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/surname"
+                android:textColor="@android:color/black"
+                android:layout_weight="2"
+                android:tag="@string/roboroRegular"
+                android:textSize="@dimen/loginTextSize"
+                android:padding="15dp"/>
+
+            <EditText
+                android:id="@+id/surnameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/surname_example"
+                android:layout_weight="1"
+                android:tag="@string/roboroRegular"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords|text"
+                android:textSize="@dimen/loginTextSize"
+                android:padding="15dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/email"
+                android:textColor="@android:color/black"
+                android:layout_weight="2"
+                android:tag="@string/roboroRegular"
+                android:textSize="@dimen/loginTextSize"
+                android:padding="15dp"/>
+
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="@dimen/loginTextSize"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:tag="@string/roboroRegular"
+                android:padding="15dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/primary_color_gradient"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/exitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/exit"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:tag="@string/robotoMedium"
+            android:textSize="13sp"
+            android:focusable="true"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="30dp"
+            android:paddingTop="10dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="10dp" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

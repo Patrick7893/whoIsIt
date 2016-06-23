@@ -19,7 +19,7 @@ public class CountryManager {
                 return entry.getKey();
             }
         }
-        return null;
+        return "UA";
     }
 
     public static String getCodeFromIso(String iso) {

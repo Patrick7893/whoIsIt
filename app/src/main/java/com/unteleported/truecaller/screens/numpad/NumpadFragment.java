@@ -1,12 +1,17 @@
 package com.unteleported.truecaller.screens.numpad;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.FontManager;
+import com.unteleported.truecaller.utils.PhoneFormatter;
 
 import java.util.List;
 
@@ -32,11 +39,11 @@ public class NumpadFragment extends Fragment {
     @Bind(R.id.numberTextView) TextView numberTextView;
     @Bind(R.id.backspaceButton) ImageView backSpaceImageView;
 
-    private static NumPadPresenter presenter;
 
-    Vibrator vibe;
-    OnPhonePrsesentListener phonePrsesentListener;
+    private Vibrator vibe;
+    private OnPhonePrsesentListener phonePrsesentListener;
     private Handler backSpaceHandler = new Handler();
+    private TelephonyManager tMgr;
 
     public interface OnPhonePrsesentListener {
         public void canCall(String number);
@@ -49,9 +56,9 @@ public class NumpadFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.screen_numpad, container, false);
         ButterKnife.bind(this, view);
-        presenter = new NumPadPresenter(this);
         for (RelativeLayout number : numbers) {
             number.setOnClickListener(onClickListener);
+            number.setOnLongClickListener(onLongClickListener);
         }
         backSpaceImageView.setOnClickListener(onClickListener);
         backSpaceImageView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -62,7 +69,9 @@ public class NumpadFragment extends Fragment {
 
             }
         });
+        tMgr = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        numberTextView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         FontManager.overrideFonts(view);
         return view;
     }
@@ -82,8 +91,53 @@ public class NumpadFragment extends Fragment {
                 }
             }
             else {
-                presenter.setNumberText((String) v.getTag());
+                setNumberText((String) v.getTag());
             }
+        }
+    };
+
+    public void setNumberText(String number) {
+        if (TextUtils.isEmpty(numberTextView.getText())) {
+            numberContainer.setVisibility(View.VISIBLE);
+            numberTextView.setText(number);
+            phonePrsesentListener.canCall(number);
+        }
+        else {
+            String text = numberTextView.getText().toString();
+            numberTextView.setText(text+number);
+            phonePrsesentListener.canCall(text+number);
+        }
+        vibe.vibrate(30);
+    }
+
+    public String formatNumber(String number) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (number.startsWith("+")) {
+                String formattedNumber = PhoneNumberUtils.formatNumber(number, CountryManager.getIsoFromPhone(number));
+                if (!TextUtils.isEmpty(formattedNumber)) {
+                    return formattedNumber;
+                }
+                else {
+                    return number;
+                }
+            }
+            else {
+                return PhoneNumberUtils.formatNumber(number, tMgr.getSimCountryIso().toUpperCase());
+            }
+
+        }
+        else {
+            return number;
+        }
+    }
+
+    View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            if (v.getId() == R.id.number0) {
+                setNumberText("+");
+            }
+            return true;
         }
     };
 
@@ -111,7 +165,7 @@ public class NumpadFragment extends Fragment {
                 if (numberTextView.length() == 0) {
                     phonePrsesentListener.numberAbsent();
                 }
-                backSpaceImageView.postDelayed(new BackspaceRunnable(), 150);
+                backSpaceImageView.postDelayed(new BackspaceRunnable(), 120);
             }
         }
     }

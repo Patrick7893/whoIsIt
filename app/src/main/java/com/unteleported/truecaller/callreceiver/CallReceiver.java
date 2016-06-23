@@ -6,9 +6,13 @@ import android.content.SyncAdapterType;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager;
 
+import com.unteleported.truecaller.activity.IcomingCallActivity;
+import com.unteleported.truecaller.activity.MissedCallActivity;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
+import java.security.PublicKey;
 import java.util.Date;
 
 /**
@@ -16,10 +20,12 @@ import java.util.Date;
  */
 public class CallReceiver extends PhonecallReceiver {
 
+    public static final String incomingCallActivity = "com.unteleported.truecaller.activity.IcomingCallActivity";
+
 
     @Override
     protected void onIncomingCallReceived(final Context ctx, final String number, Date start) {
-        showDialogActivity(ctx, "com.unteleported.truecaller.activity.IcomingCallActivity", number);
+        showDialogActivity(ctx, IcomingCallActivity.class, number);
         Log.d("IncomingCall", number);
     }
 
@@ -53,11 +59,11 @@ public class CallReceiver extends PhonecallReceiver {
         Log.d("MISSED CALL", number);
         Intent callEndedIntent = new Intent("CallEnd");
         ctx.sendBroadcast(callEndedIntent);
-        showDialogActivity(ctx, "com.unteleported.truecaller.activity.MissedCallActivity", number);
+        showDialogActivity(ctx, MissedCallActivity.class, number);
     }
 
 
-    private void showDialogActivity(final Context ctx, final String activity, final String number) {
+    private void showDialogActivity(final Context ctx, final Class activityClass, final String number) {
 
         if (!UserContactsManager.checkNumberInContacts(ctx, number)) {
 
@@ -65,17 +71,17 @@ public class CallReceiver extends PhonecallReceiver {
 
                 @Override
                 public void run() {
-                    // TODO Auto-generated method stub
-                    Intent i = new Intent();
-                    i.setClassName("com.unteleported.truecaller", activity);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    // TODO Auto-generated method stub   Intent i = new Intent(ctx, activityClass);
+                    Intent i = new Intent(ctx, activityClass);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     Bundle b = new Bundle();
                     b.putString("phone", number);
                     i.putExtras(b); //P
                     ctx.startActivity(i);
                 }
-            }, 500);
+            }, 1000);
+
+
         }
     }
 

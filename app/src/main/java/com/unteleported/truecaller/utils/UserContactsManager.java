@@ -1,11 +1,14 @@
 package com.unteleported.truecaller.utils;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -29,16 +32,15 @@ public class UserContactsManager {
 
     public static ArrayList<Contact> readContacts(Context ctx, boolean favourite) {
         ArrayList<Contact> contacts = new ArrayList<>();
-        TelephonyManager tMgr = (TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tMgr = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
         ContentResolver cr = ctx.getContentResolver();
         Cursor cur;
         if (!favourite) {
             cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                     null, null, null, null);
-        }
-        else {
+        } else {
             cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                    null, "starred=?", new String[] {"1"}, null);
+                    null, "starred=?", new String[]{"1"}, null);
         }
 
         if (cur.getCount() > 0) {
@@ -55,8 +57,8 @@ public class UserContactsManager {
                     }
 
                     // get the phone number
-                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{id}, null);
                     while (pCur.moveToNext()) {
                         String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -64,8 +66,7 @@ public class UserContactsManager {
                         ContactNumber contactNumber = new ContactNumber(number, type);
                         if (number.startsWith("+")) {
                             contactNumber.setCountryIso(CountryManager.getIsoFromPhone(number));
-                        }
-                        else {
+                        } else {
                             contactNumber.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
                         }
                         contact.addNumber(contactNumber);
@@ -97,7 +98,7 @@ public class UserContactsManager {
 
     public static Boolean checkNumberInContacts(Context ctx, String number) {
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-        String[] mPhoneNumberProjection = { ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME };
+        String[] mPhoneNumberProjection = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME};
         Cursor cur = ctx.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
             if (cur.moveToFirst()) {

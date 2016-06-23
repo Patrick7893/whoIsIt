@@ -1,7 +1,14 @@
 package com.unteleported.truecaller.activity;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.KeyguardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
@@ -10,6 +17,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -22,6 +30,8 @@ import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.ApiInterface;
 import com.unteleported.truecaller.api.FindPhoneResponse;
+import com.unteleported.truecaller.api.GetRecordByNumberResponse;
+import com.unteleported.truecaller.callreceiver.CallReceiver;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.model.Phone_Table;
@@ -44,7 +54,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by stasenkopavel on 4/4/16.
  */
-public class IcomingCallActivity extends AppCompatActivity {
+public class IcomingCallActivity extends Activity {
 
     WindowManager.LayoutParams wlp;
     private int scrennHeight;
@@ -52,19 +62,45 @@ public class IcomingCallActivity extends AppCompatActivity {
     @Bind(R.id.nameTextView) TextView nameTextView;
     @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
     @Bind(R.id.spamTextView) TextView spamTextView;
-    @Bind(R.id.container) RelativeLayout container;
+    @Bind(R.id.container) FrameLayout container;
+
+    private ActivityManager mActivityManager;
+    private boolean mDismissed = false;
+
+    private static final int MSG_ID_CHECK_TOP_ACTIVITY = 1;
+    private static final long DELAY_INTERVAL = 100;
+
+    private String number;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
         setContentView(R.layout.activity_incoming_call);
+        //getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         ButterKnife.bind(this);
 
         scrennHeight = getDisplayHeight();
         initiallizeScreen();
 
         final View view = getWindow().getDecorView().findViewById(R.id.container);
+
+//        KeyguardManager kgm = (KeyguardManager)getSystemService(Context.KEYGUARD_SERVICE);
+//        boolean isKeyguardUp = kgm.inKeyguardRestrictedInputMode();
+//        KeyguardManager.KeyguardLock kgl = kgm.newKeyguardLock("Your Activity/Service name");
+//
+//        if(isKeyguardUp){
+//            kgl.disableKeyguard();
+//            isKeyguardUp = false;
+//        }
+
+//        mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+//        mHandler.sendEmptyMessageDelayed(MSG_ID_CHECK_TOP_ACTIVITY,
+//                DELAY_INTERVAL);
+
 
         view.setOnTouchListener(new View.OnTouchListener() {
 
@@ -90,20 +126,57 @@ public class IcomingCallActivity extends AppCompatActivity {
 
     }
 
+    private Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == MSG_ID_CHECK_TOP_ACTIVITY && !mDismissed) {
+                List<ActivityManager.RunningTaskInfo> tasks = mActivityManager
+                        .getRunningTasks(3);
+
+                Log.d("TASK", tasks.get(0).topActivity.getClassName());
+
+                String topActivityName = tasks.get(0).topActivity
+                        .getClassName();
+
+//                if (!topActivityName.equals(CallReceiver.incomingCallActivity)) {
+//                    // Try to show on top until user dismiss this activity
+//                    Intent i = new Intent();
+//                    i.setClassName("com.unteleported.truecaller", CallReceiver.incomingCallActivity);
+//                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    i.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+//                    Bundle b = new Bundle();
+//                    b.putString("phone", number);
+//                    i.putExtras(b); //P
+//                    startActivity(i);
+//                }
+                sendEmptyMessageDelayed(MSG_ID_CHECK_TOP_ACTIVITY,
+                        DELAY_INTERVAL);
+            }
+        };
+    };
+
 
     @Override
     public void onAttachedToWindow() {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("PAUSER", "");
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.d("DETACHE", "");
+    }
+    
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //mHandler.removeMessages(MSG_ID_CHECK_TOP_ACTIVITY);
     }
 
     public void initiallizeScreen() {
@@ -120,7 +193,7 @@ public class IcomingCallActivity extends AppCompatActivity {
         }
         window.setAttributes(wlp);
         Bundle b = getIntent().getExtras();
-        String number = b.getString("phone");
+        number = b.getString("phone");
         find(number);
         phoneTextView.setText(PhoneNumberUtils.formatNumber(number, CountryManager.getIsoFromPhone(number)) + " - " + CountryManager.getCountryNameFromIso(CountryManager.getIsoFromPhone(number)));
         checkNumberIsSpam(number);
@@ -144,7 +217,7 @@ public class IcomingCallActivity extends AppCompatActivity {
     }
 
     public void find(String number) {
-        ApiFactory.createRetrofitService().findPhone(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<FindPhoneResponse>() {
+        ApiFactory.createRetrofitService().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 
@@ -156,17 +229,17 @@ public class IcomingCallActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNext(FindPhoneResponse findPhoneResponse) {
+            public void onNext(GetRecordByNumberResponse findPhoneResponse) {
                 Log.d("Success", String.valueOf(findPhoneResponse.getError()));
                 if (findPhoneResponse.getError() == 0) {
-                    nameTextView.setText(findPhoneResponse.getData().get(0).getName());
-                    if (findPhoneResponse.getData().get(0).getNumberOfSettedSpam() > 3) {
+                    nameTextView.setText(findPhoneResponse.getData().getName());
+                    if (findPhoneResponse.getData().getNumberOfSettedSpam() > 3) {
                         container.setBackgroundColor(getResources().getColor(R.color.missedCall));
                         spamTextView.setVisibility(View.VISIBLE);
-                        spamTextView.setText(findPhoneResponse.getData().get(0).getNumberOfSettedSpam() + " " + getString(R.string.usersCheckNumberAsSpam));
+                        spamTextView.setText(findPhoneResponse.getData().getNumberOfSettedSpam() + " " + getString(R.string.usersCheckNumberAsSpam));
                     }
-                    if (!TextUtils.isEmpty(findPhoneResponse.getData().get(0).getAvatar().getUrl()))
-                        Picasso.with(getApplicationContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().get(0).getAvatar().getUrl()).into(avatarImageView);
+                    if (!TextUtils.isEmpty(findPhoneResponse.getData().getAvatar().getUrl()))
+                        Picasso.with(getApplicationContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().getAvatar().getUrl()).into(avatarImageView);
                 }
             }
         });

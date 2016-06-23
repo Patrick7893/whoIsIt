@@ -29,6 +29,7 @@ public class Phone extends BaseModel {
     private String name;
     @Column
     private String countryIso;
+    private String operator;
     private Avatar avatar;
     @Column
     private int numberOfSettedSpam;
@@ -128,5 +129,13 @@ public class Phone extends BaseModel {
 
     public void setIsLiked(boolean liked) {
         isLiked = liked;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 }

@@ -9,7 +9,9 @@ import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.utils.Toaster;
 
+import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 
 /**
  * Created by stasenkopavel on 4/29/16.
@@ -17,7 +19,13 @@ import retrofit.RestAdapter;
 public class ApiFactory {
 
     public static ApiInterface createRetrofitService() {
-        final RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(ApiInterface.SERVICE_ENDPOINT).build();
+        final RestAdapter retrofit = new RestAdapter.Builder().setEndpoint(ApiInterface.SERVICE_ENDPOINT).setErrorHandler(new ErrorHandler() {
+            @Override
+            public Throwable handleError(RetrofitError cause) {
+                Toaster.toast(App.getContext(), R.string.serverError);
+                return new Throwable(cause.getCause());
+            }
+        }).build();
         retrofit.setLogLevel(RestAdapter.LogLevel.FULL);
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 

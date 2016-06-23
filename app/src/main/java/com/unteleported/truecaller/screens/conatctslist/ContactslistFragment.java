@@ -1,10 +1,13 @@
 package com.unteleported.truecaller.screens.conatctslist;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +24,11 @@ import android.widget.TextView;
 
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivityMethods;
+import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.screens.calls.CallFragment;
+import com.unteleported.truecaller.utils.KeyboardManager;
+import com.unteleported.truecaller.utils.PermissionManager;
 import com.unteleported.truecaller.utils.UserContactsManager;
 import com.unteleported.truecaller.view.FastScroller;
 
@@ -111,9 +117,15 @@ public class ContactslistFragment extends Fragment {
     Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
         @Override
         public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
-            ArrayList<Contact> contacts = UserContactsManager.readContacts(getActivity(), getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
-            subscriber.onNext(contacts);
-            subscriber.onCompleted();
+            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                ArrayList<Contact> contacts = UserContactsManager.readContacts(getActivity(), getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
+                subscriber.onNext(contacts);
+                subscriber.onCompleted();
+            }
+            else {
+                PermissionManager.requestPermissions(getActivity(), Manifest.permission.READ_CONTACTS);
+            }
+
         }
     });
 
@@ -163,8 +175,14 @@ public class ContactslistFragment extends Fragment {
                     @Override
                     public void callClick(Contact item) {
                         if (item.getNumbers().size() < 2) {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
-                            startActivity(intent);
+                            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
+                                startActivity(intent);
+                            }
+                            else {
+                                PermissionManager.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE);
+                            }
+
                         } else {
                             presenter.goToUserProfileScreen(item);
                         }
@@ -215,8 +233,14 @@ public class ContactslistFragment extends Fragment {
                 final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
                     @Override
                     public void callClick(Contact item) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
-                        startActivity(intent);
+                        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
+                            startActivity(intent);
+                        }
+                        else {
+                            PermissionManager.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE);
+                        }
+
                     }
 
                     @Override
@@ -239,6 +263,7 @@ public class ContactslistFragment extends Fragment {
 
     @OnClick(R.id.closeButton)
     public void close() {
+        KeyboardManager.hideKeyboard(getActivity());
         ((MainActivityMethods) getActivity()).back();
     }
 

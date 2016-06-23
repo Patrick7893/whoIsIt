@@ -11,6 +11,7 @@ import com.unteleported.truecaller.api.ApiFactory;
 import com.unteleported.truecaller.api.ApiInterface;
 import com.unteleported.truecaller.api.BaseResponse;
 import com.unteleported.truecaller.api.FindPhoneResponse;
+import com.unteleported.truecaller.api.GetRecordByNumberResponse;
 import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
@@ -45,7 +46,7 @@ public class UserProfilePresenter {
     }
 
     public void find(String number) {
-        ApiFactory.createRetrofitService().findPhone(SharedPreferencesSaver.get().getToken(), number).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<FindPhoneResponse>() {
+        ApiFactory.createRetrofitService().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 
@@ -54,15 +55,15 @@ public class UserProfilePresenter {
             @Override
             public void onError(Throwable e) {
                 view.hideProgressBar();
-              //  ApiFactory.checkConnection();
+                Log.d("Error", e.getMessage());
             }
 
             @Override
-            public void onNext(FindPhoneResponse findPhoneResponse) {
+            public void onNext(GetRecordByNumberResponse findPhoneResponse) {
                 view.hideProgressBar();
                 view.displayUserInfo(findPhoneResponse);
                 if (findPhoneResponse.getError() == 0)
-                    contact.setId(findPhoneResponse.getData().get(0).getServerId());
+                    contact.setId(findPhoneResponse.getData().getServerId());
                 else
                     contact.setId(0);
             }

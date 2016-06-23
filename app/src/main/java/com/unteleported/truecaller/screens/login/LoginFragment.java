@@ -63,8 +63,9 @@ public class LoginFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 countryIso = CountryManager.getCountryIsoFromName((String) countrySpinner.getItemAtPosition(position));
-                phoneEditText.setText(CountryManager.getCodeFromIso(countryIso));
+                phoneEditText.setText(CountryManager.getCodeFromIso(countryIso) + " ");
                 phoneEditText.setSelection(phoneEditText.getText().length());
+                phoneEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher(countryIso));
             }
 
             @Override

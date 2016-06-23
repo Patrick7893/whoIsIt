@@ -1,17 +1,22 @@
 package com.unteleported.truecaller.screens.calls;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Call;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.screens.numpad.NumpadFragment;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
 import com.unteleported.truecaller.utils.CountryManager;
+import com.unteleported.truecaller.utils.PermissionManager;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
 import java.util.ArrayList;
@@ -60,9 +65,15 @@ public class CallsPresenter {
     Observable<ArrayList<Call>> getCalls = Observable.create(new Observable.OnSubscribe<ArrayList<Call>>() {
         @Override
         public void call(Subscriber<? super ArrayList<Call>> subscriber) {
-            view.calls = UserContactsManager.getUserCallsList(view.getActivity());
-            subscriber.onNext(view.calls);
-            subscriber.onCompleted();
+            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                view.calls = UserContactsManager.getUserCallsList(view.getActivity());
+                subscriber.onNext(view.calls);
+                subscriber.onCompleted();
+            }
+            else {
+                PermissionManager.requestPermissions(view.getActivity(), Manifest.permission.READ_CALL_LOG);
+            }
+
         }
     });
 

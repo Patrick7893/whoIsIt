@@ -3,6 +3,7 @@ package com.unteleported.truecaller.screens.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,15 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.unteleported.truecaller.R;
-import com.unteleported.truecaller.screens.mainscreen.TabFragment;
 import com.unteleported.truecaller.utils.FontManager;
 import com.unteleported.truecaller.utils.Toaster;
 
-import org.w3c.dom.Text;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import butterknife.Bind;
@@ -63,6 +62,9 @@ public class NewUserFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     avatar = (Bitmap) bundle.get("Image");
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    avatar.compress(Bitmap.CompressFormat.PNG, 80, out);
+                    avatar = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
                     avatarImageView.setImageBitmap(avatar);
                     break;
                 }
@@ -80,7 +82,7 @@ public class NewUserFragment extends Fragment {
     public void okButton() {
         if (!TextUtils.isEmpty(firstNameEditText.getText())&&!TextUtils.isEmpty(surnameEditText.getText())) {
             try {
-                presenter.updateUser(this.getArguments().getInt(ID), firstNameEditText.getText().toString(), surnameEditText.getText().toString(), this.getArguments().getString(PHONE), emailEditText.getText().toString(), presenter.convertBitmapToFile(avatar));
+                presenter.createUser(this.getArguments().getString(PHONE), this.getArguments().getString(COUNTRY), firstNameEditText.getText().toString(), surnameEditText.getText().toString(), this.getArguments().getString(PHONE), emailEditText.getText().toString(), presenter.convertBitmapToFile(avatar));
             } catch (IOException e) {
                 e.getMessage();
             }

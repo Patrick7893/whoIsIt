@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:clickable="true">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -102,6 +103,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cpv_animAutostart="true"
+            app:cpv_indeterminate="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"/>
+
+
         <TextView
             android:id="@+id/phoneNumbersTextView"
             android:layout_width="wrap_content"
@@ -125,11 +138,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/background"
-            android:layout_above="@+id/contactsContainer"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_below="@+id/progressBar">
 
         </android.support.v7.widget.RecyclerView>
 

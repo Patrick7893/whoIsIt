@@ -3,6 +3,7 @@
     package="com.unteleported.truecaller">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -34,16 +35,14 @@
         <activity
             android:name=".activity.IcomingCallActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Dialog"
-            android:excludeFromRecents="true"/>
+            android:theme="@style/AppTheme.Dialog" />
 
         <activity
             android:name=".activity.MissedCallActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Dialog"
-            android:excludeFromRecents="true"/>
+            android:theme="@style/AppTheme.Dialog" />
+
 
         <receiver android:name=".callreceiver.CallReceiver" >
             <intent-filter>

@@ -1,8 +1,13 @@
 package com.unteleported.truecaller.screens.findcontact;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
@@ -14,6 +19,7 @@ import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
+import com.unteleported.truecaller.utils.PermissionManager;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
 import com.unteleported.truecaller.utils.Toaster;
 import com.unteleported.truecaller.utils.UserContactsManager;
@@ -40,9 +46,15 @@ public class FindContactsPresenter {
     Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
         @Override
         public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
-            ArrayList<Contact> contacts = UserContactsManager.readContacts(view.getActivity(), false);
-            subscriber.onNext(contacts);
-            subscriber.onCompleted();
+            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                ArrayList<Contact> contacts = UserContactsManager.readContacts(view.getActivity(), false);
+                subscriber.onNext(contacts);
+                subscriber.onCompleted();
+            }
+            else {
+                PermissionManager.requestPermissions(view.getActivity(), Manifest.permission.READ_CONTACTS);
+            }
+
         }
     });
 
@@ -57,19 +69,10 @@ public class FindContactsPresenter {
         return filteredModelList;
     }
 
-    public void goToUserProfileScreen(Contact contact) {
-        InputMethodManager imm = (InputMethodManager)view.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getActivity().getWindow().getDecorView().getWindowToken(), 0);
-        Gson gson = new Gson();
-        String contactString = gson.toJson(contact);
-        Bundle bundle = new Bundle();
-        bundle.putString(view.CONTACTINFO, contactString);
-        UserProfileFragment userProfileFragment = new UserProfileFragment();
-        userProfileFragment.setArguments(bundle);
-        view.getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
-    }
+
 
     public void find(String number) {
+        view.setProgressBarVisibility(View.VISIBLE);
         ApiFactory.createRetrofitService().findPhone(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<FindPhoneResponse>() {
             @Override
             public void onCompleted() {
@@ -80,10 +83,12 @@ public class FindContactsPresenter {
             public void onError(Throwable e) {
                 Log.d("ERROR", e.getMessage());
                 ApiFactory.checkConnection();
+                view.setProgressBarVisibility(View.GONE);
             }
 
             @Override
             public void onNext(FindPhoneResponse findPhoneResponse) {
+                view.setProgressBarVisibility(View.GONE);
                 Log.d("FINDPHONE", String.valueOf(findPhoneResponse.getError()));
                 if (findPhoneResponse.getError() == 0)
                     view.displayPhones(findPhoneResponse);

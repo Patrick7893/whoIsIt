@@ -1,20 +1,27 @@
 package com.unteleported.truecaller.screens.user_profile;
 
+import android.Manifest;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -25,6 +32,8 @@ import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivityMethods;
 import com.unteleported.truecaller.api.ApiInterface;
 import com.unteleported.truecaller.api.FindPhoneResponse;
+import com.unteleported.truecaller.api.GetRecordByNumberResponse;
+import com.unteleported.truecaller.app.App;
 import com.unteleported.truecaller.model.Contact;
 import com.unteleported.truecaller.model.ContactNumber;
 import com.unteleported.truecaller.model.Phone;
@@ -33,6 +42,7 @@ import com.unteleported.truecaller.screens.call_story.CallStoryFragment;
 import com.unteleported.truecaller.screens.conatctslist.ContactslistFragment;
 import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.FontManager;
+import com.unteleported.truecaller.utils.PermissionManager;
 import com.unteleported.truecaller.utils.PhoneFormatter;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
@@ -62,6 +72,7 @@ public class UserProfileFragment extends Fragment {
     @Bind(R.id.blockButton) TextView blockButton;
     @Bind(R.id.addressTextView) TextView addressTextView;
     @Bind(R.id.progressBar) CircularProgressView progressBar;
+    @Bind(R.id.actionBar) RelativeLayout actionBar;
 
     private UserProfilePresenter presenter;
 
@@ -95,8 +106,14 @@ public class UserProfileFragment extends Fragment {
         UserPhonesAdapter userPhonesAdapter = new UserPhonesAdapter(getActivity(), contact.getNumbers(), new UserPhonesAdapter.OnPhoneClickListener() {
             @Override
             public void callCLick(ContactNumber item) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
-                startActivity(intent);
+                if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
+                    startActivity(intent);
+                }
+                else {
+                    PermissionManager.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE);
+                }
+
             }
 
             @Override
@@ -115,12 +132,17 @@ public class UserProfileFragment extends Fragment {
         checkUserIsLiked();
     }
 
-    public void displayUserInfo(FindPhoneResponse findPhoneResponse) {
-        titleTextView.setText(findPhoneResponse.getData().get(0).getName());
-        if (!TextUtils.isEmpty(findPhoneResponse.getData().get(0).getAvatar().getUrl())) {
-            Picasso.with(getContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().get(0).getAvatar().getUrl()).into(avatarImageView);
+    public void displayUserInfo(GetRecordByNumberResponse findPhoneResponse) {
+        titleTextView.setText(findPhoneResponse.getData().getName());
+        if (!TextUtils.isEmpty(findPhoneResponse.getData().getAvatar().getUrl())) {
+            Picasso.with(getContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().getAvatar().getUrl()).into(avatarImageView);
         }
-        addressTextView.setText(CountryManager.getCountryNameFromIso(findPhoneResponse.getData().get(0).getCountryIso()));
+        String addressText;
+        if (TextUtils.isEmpty(findPhoneResponse.getData().getOperator()))
+            addressText = CountryManager.getCountryNameFromIso(findPhoneResponse.getData().getCountryIso());
+        else
+            addressText = CountryManager.getCountryNameFromIso(findPhoneResponse.getData().getCountryIso()) + ", " + findPhoneResponse.getData().getOperator();
+        addressTextView.setText(addressText);
 
     }
 
@@ -142,6 +164,7 @@ public class UserProfileFragment extends Fragment {
             } else {
                 isBlocked = true;
                 blockButton.setText(getString(R.string.removeFromBlackList));
+                actionBar.setBackgroundColor(getResources().getColor(R.color.missedCall));
             }
         }
     }
@@ -173,7 +196,7 @@ public class UserProfileFragment extends Fragment {
         bundle.putString(CONTACTINFO, contactString);
         CallStoryFragment callStoryFragment = new CallStoryFragment();
         callStoryFragment.setArguments(bundle);
-        ((MainActivityMethods)getActivity()).switchFragment(callStoryFragment);
+        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, callStoryFragment).addToBackStack(null).commit();
 
     }
 
@@ -224,11 +247,13 @@ public class UserProfileFragment extends Fragment {
             isBlocked = true;
             presenter.blockUser();
             blockButton.setText(getString(R.string.removeFromBlackList));
+            actionBar.setBackgroundColor(getResources().getColor(R.color.missedCall));
         }
         else {
             isBlocked = false;
             presenter.unblockUser();
             blockButton.setText(getString(R.string.block));
+            actionBar.setBackground(getResources().getDrawable(R.drawable.primary_color_gradient));
         }
 
     }

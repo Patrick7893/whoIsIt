@@ -28,7 +28,6 @@ public class User extends BaseModel {
     private String number;
     @Column
     private String email;
-    private int type;
     private File avatar;
     @Column
     private String countyIso;

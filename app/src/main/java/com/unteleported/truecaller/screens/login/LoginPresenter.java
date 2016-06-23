@@ -47,7 +47,7 @@ public class LoginPresenter {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.enter));
         pd.show();
-        ApiFactory.createRetrofitService().login(number, countryIso).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+        ApiFactory.createRetrofitService().login(number).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
             @Override
             public void onCompleted() {
 
@@ -63,8 +63,8 @@ public class LoginPresenter {
             @Override
             public void onNext(RegistrationResponse s) {
                 pd.dismiss();
-                Log.d("ONNEXT", String.valueOf(s.getError()));
-                Log.d("TOKEN", s.getToken() + "      " +  String.valueOf(s.getSms()));
+               // Log.d("ONNEXT", String.valueOf(s.getError()));
+               // Log.d("TOKEN", s.getToken() + "      " +  String.valueOf(s.getSms()));
                 if (s.getError() == 0) {
                     User user = s.getData();
                     if (!TextUtils.isEmpty(s.getAvatarPath()))
@@ -75,7 +75,6 @@ public class LoginPresenter {
                 }
                 else if (s.getError() == 1) {
                     Bundle bundle = new Bundle();
-                    bundle.putInt(NewUserFragment.ID, s.getId());
                     bundle.putInt(SMSConfirmFragment.SMS, s.getSms());
                     bundle.putString(NewUserFragment.PHONE, number);
                     bundle.putString(NewUserFragment.COUNTRY, countryIso);

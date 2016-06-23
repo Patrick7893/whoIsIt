@@ -1,7 +1,5 @@
 package com.unteleported.truecaller.screens.mainscreen;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,24 +7,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.activity.MainActivity;
 import com.unteleported.truecaller.activity.MainActivityMethods;
-import com.unteleported.truecaller.model.Contact;
-import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.calls.CallFragment;
 import com.unteleported.truecaller.screens.findcontact.FindContactsFragment;
 import com.unteleported.truecaller.screens.spam.SpamFragment;
 import com.unteleported.truecaller.screens.tutorial.TutorialDialog;
-import com.unteleported.truecaller.utils.CountryManager;
 import com.unteleported.truecaller.utils.SharedPreferencesSaver;
-import com.unteleported.truecaller.utils.UserContactsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +27,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by stasenkopavel on 4/8/16.
@@ -58,7 +47,7 @@ public class TabFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
         final TabFragmentPresenter presenter = new TabFragmentPresenter(this);
         ((MainActivityMethods)getActivity()).enableDrawer();
-        ((MainActivityMethods)getActivity()).setUserInfo();
+        ((MainActivity)getActivity()).getUserInfo();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         presenter.loadContatcs();

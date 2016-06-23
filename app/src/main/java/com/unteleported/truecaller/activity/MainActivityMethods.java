@@ -16,5 +16,5 @@ public interface MainActivityMethods {
 
     void openDrawer();
     void enableDrawer();
-    void setUserInfo();
+    void disableDrawer();
 }

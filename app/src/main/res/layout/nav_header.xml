@@ -51,11 +51,14 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/editProfileButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/profile_edit"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_centerVertical="true"
+            android:padding="10dp"/>
 
     </RelativeLayout>
 

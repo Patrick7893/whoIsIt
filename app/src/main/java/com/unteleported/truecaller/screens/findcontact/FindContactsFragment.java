@@ -20,6 +20,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.activity.MainActivity;
@@ -31,6 +32,7 @@ import com.unteleported.truecaller.model.Phone;
 import com.unteleported.truecaller.screens.calls.CallFragment;
 import com.unteleported.truecaller.screens.conatctslist.ContactsAdapter;
 import com.unteleported.truecaller.screens.user_profile.UserProfileFragment;
+import com.unteleported.truecaller.utils.KeyboardManager;
 import com.unteleported.truecaller.utils.UserContactsManager;
 
 import org.w3c.dom.Text;
@@ -54,6 +56,7 @@ public class FindContactsFragment extends Fragment {
 
     @Bind(R.id.findContactEditText) EditText findContactsEditText;
     @Bind(R.id.findList) RecyclerView findConatctsRecyclerView;
+    @Bind(R.id.progressBar) CircularProgressView progressBar;
 
     public static final String CONTACTINFO = "CONTACTINFO";
     public static final String ADAPTERSTATE = "ADAPTERSTATE";
@@ -83,7 +86,7 @@ public class FindContactsFragment extends Fragment {
                 autocompleteAdapter = new FindContactsAutocompliteAdapter(getActivity(), contacts, new FindContactsAutocompliteAdapter.OnContactsClickListener() {
                     @Override
                     public void infoClick(Contact item) {
-                        presenter.goToUserProfileScreen(item);
+                        goToUserProfileScreen(item);
                     }
                 });
                 layoutManager = new LinearLayoutManager(getActivity());
@@ -137,6 +140,18 @@ public class FindContactsFragment extends Fragment {
         autocompleteAdapter.addContactsFromServer(contacts);
     }
 
+    public void goToUserProfileScreen(Contact contact) {
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+        Gson gson = new Gson();
+        String contactString = gson.toJson(contact);
+        Bundle bundle = new Bundle();
+        bundle.putString(CONTACTINFO, contactString);
+        UserProfileFragment userProfileFragment = new UserProfileFragment();
+        userProfileFragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+    }
+
 
     @OnClick(R.id.menuButton)
     public void openDrawer() {
@@ -145,7 +160,12 @@ public class FindContactsFragment extends Fragment {
 
     @OnClick(R.id.searchButton)
     public void back() {
+        KeyboardManager.hideKeyboard(getActivity());
         ((MainActivityMethods)getActivity()).back();
+    }
+
+    public void setProgressBarVisibility(int visibility) {
+        progressBar.setVisibility(visibility);
     }
 
 }

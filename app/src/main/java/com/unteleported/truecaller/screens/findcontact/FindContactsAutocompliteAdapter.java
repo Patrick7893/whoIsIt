@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindContactsAutocompliteAdapter.ViewHolder> {
 
     private ArrayList<Contact> items;
+    private int localContcatsSize;
     private Context context;
     private OnContactsClickListener onContactsClickListener;
 
@@ -65,6 +66,7 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
     public void setFilter(List<Contact> contacts) {
         this.items = new ArrayList<>();
         this.items.addAll(contacts);
+        localContcatsSize = items.size();
         notifyDataSetChanged();
     }
 
@@ -74,7 +76,12 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
     }
 
     public void addContactsFromServer(List<Contact> contacts) {
-        this.items.addAll(contacts);
+        if (localContcatsSize > 0)
+            items = new ArrayList<>(items.subList(0, localContcatsSize));
+        else {
+            items = new ArrayList<>();
+        }
+        items.addAll(contacts);
         notifyDataSetChanged();
     }
 

@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <RelativeLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/actionBar"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="horizontal"

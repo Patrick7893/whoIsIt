@@ -1,17 +1,23 @@
 package com.unteleported.truecaller.screens.login;
 
 import android.os.Bundle;
+import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.unteleported.truecaller.R;
+import com.unteleported.truecaller.api.RegistrationResponse;
 import com.unteleported.truecaller.utils.FontManager;
+import com.unteleported.truecaller.utils.KeyboardManager;
 import com.unteleported.truecaller.utils.Toaster;
 
 import butterknife.Bind;
@@ -29,8 +35,12 @@ public class SMSConfirmFragment extends Fragment {
     @Bind(R.id.sms2EditText) EditText sms2EditText;
     @Bind(R.id.sms3EditText) EditText sms3EditText;
     @Bind(R.id.sms4EditText) EditText sms4EditText;
+    @Bind(R.id.smsNumberTextView) TextView smsNumberTextView;
 
     private int sms;
+    private String number;
+
+    private SMSConfirmPresenter presenter;
 
     @Nullable
     @Override
@@ -38,11 +48,16 @@ public class SMSConfirmFragment extends Fragment {
         View view = inflater.inflate(R.layout.screen_smsconfirm, container, false);
         ButterKnife.bind(this, view);
         FontManager.overrideFonts(view);
+        presenter = new SMSConfirmPresenter(this);
+        sms1EditText.requestFocus();
+        KeyboardManager.showKeyboard(getActivity());
         sms1EditText.addTextChangedListener(textWatcher);
         sms2EditText.addTextChangedListener(textWatcher);
         sms3EditText.addTextChangedListener(textWatcher);
         sms4EditText.addTextChangedListener(textWatcher);
         sms = this.getArguments().getInt(SMS);
+        number = getArguments().getString(NewUserFragment.PHONE);
+        smsNumberTextView.setText(getString(R.string.smsconfirm1) + " " + hideNumber(number) +  " " + getString(R.string.smsconfirm2));
 
         return view;
     }
@@ -74,16 +89,37 @@ public class SMSConfirmFragment extends Fragment {
 
     @OnClick(R.id.okButton)
     public void okButton() {
-        String smsString = sms1EditText.getText().toString() + sms2EditText.getText().toString() + sms3EditText.getText().toString() + sms4EditText.getText().toString();
-        if (Integer.valueOf(smsString) == sms) {
+        if (!TextUtils.isEmpty(sms1EditText.getText()) && !TextUtils.isEmpty(sms2EditText.getText()) && !TextUtils.isEmpty(sms3EditText.getText()) && !TextUtils.isEmpty(sms4EditText.getText())) {
+            String smsString = sms1EditText.getText().toString() + sms2EditText.getText().toString() + sms3EditText.getText().toString() + sms4EditText.getText().toString();
+            presenter.smsConfirm(Integer.valueOf(smsString));
+        }
+        else {
+            Toaster.toast(getContext(), R.string.pleaseInputSMS);
+        }
+    }
+
+    public void goToNewUserScreen(RegistrationResponse registrationResponse) {
+        if (registrationResponse.getError() == 0) {
             Bundle bundle = new Bundle();
-            bundle.putInt(NewUserFragment.ID, this.getArguments().getInt(NewUserFragment.ID));
+            bundle.putInt(NewUserFragment.ID, registrationResponse.getId());
             bundle.putString(NewUserFragment.COUNTRY, this.getArguments().getString(NewUserFragment.COUNTRY));
+            bundle.putString(NewUserFragment.PHONE, this.getArguments().getString(NewUserFragment.PHONE));
             NewUserFragment newUserFragment = new NewUserFragment();
             newUserFragment.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, newUserFragment).commit();
         }
-        else
-            Toaster.toast(getActivity(), R.string.smsconfirm);
+        else {
+            Toaster.toast(getActivity(), R.string.wrongSms);
+        }
+    }
+
+    private String hideNumber(String number) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (number.length() > 12) {
+            return stringBuilder.append(number.substring(0, 6)).append("*****").append(number.substring(number.length()-2)).toString();
+        }
+        else {
+            return stringBuilder.append(number.substring(0, 5)).append("*****").append(number.substring(number.length()-2)).toString();
+        }
     }
 }

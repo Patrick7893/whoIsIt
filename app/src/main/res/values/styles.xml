@@ -21,6 +21,12 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    
+    <style name="AppTheme.IncomingCall" parent="AppTheme">
+        <item name="android:theme">@android:style/Theme.Translucent.NoTitleBar.Fullscreen</item>
+        <item name="android:itemBackground">@android:color/transparent</item>
     </style>
 
     <style name="numPadButtonStyle" parent="AppTheme">

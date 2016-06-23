@@ -143,6 +143,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
                 else {
                     if (canCall) {
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
+                        hideKeyBoard();
                         startActivity(intent);
                     }
                     else {

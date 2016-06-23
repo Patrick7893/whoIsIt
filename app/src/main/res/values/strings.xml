@@ -4,7 +4,7 @@
 
     <!-- App -->
     <string name="checkConnection">Отсутствует подключение к интернету</string>
-    <string name="serverError">Ошибка сервера</string>
+    <string name="serverError">Ошибка соединения</string>
 
     <!--Fonts-->
     <string name="robotoMedium">Roboto-Medium.ttf</string>
@@ -93,7 +93,8 @@
 
     <!--Login -->
 
-    <string name="smsconfirm">На ваш номер был отправлен \nкод подтверждения</string>
+    <string name="smsconfirm1">На номер</string>
+    <string name="smsconfirm2">был отправлен \nкод подтверждения</string>
     <string name="confirm">ПОДТВЕРДИТЬ</string>
     <string name="welcome">Добро пожаловать!\nЗаполните свой профиль:</string>
     <string name="firstname">Имя</string>
@@ -108,7 +109,12 @@
     <string name="takePhoto">Сделать фото</string>
     <string name="takeFromGallery">Выбрать из галереи</string>
     <string name="enter">Вход...</string>
+    <string name="checkSms">Проверка...</string>
+    <string name="pleaseInputSMS">Пожалуйста, введите код подтверждения</string>
     <string name="loadingData">Загрузка данных...</string>
+    <string name="profile">Профиль</string>
+    <string name="changePhoto">Изменить фото</string>
+    <string name="exit">ВЫХОД</string>
 
 
     <!--countries-->

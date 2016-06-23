@@ -1,5 +1,6 @@
 package com.unteleported.truecaller.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,11 +12,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.unteleported.truecaller.R;
 import com.unteleported.truecaller.model.User;
+import com.unteleported.truecaller.screens.edit_profile.EditProfileFragment;
+import com.unteleported.truecaller.utils.KeyboardManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements MainActivityMethods{
+public class MainActivity extends AppCompatActivity implements MainActivityMethods, NavigationView.OnNavigationItemSelectedListener{
 
     private List<Fragment> fragmentsList = new ArrayList<Fragment>();
     public final static int MY_PERMISSIONS_REQUEST = 100;
@@ -36,8 +40,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
     @Bind(R.id.nav_view) NavigationView navigationView;
 
 
-    TextView nameTextView, phoneTextView;
-    CircleImageView avatarImageView;
+    private TextView nameTextView, phoneTextView;
+    private CircleImageView avatarImageView;
+    private ImageView editProfileButton;
 
 
     @Override
@@ -51,7 +56,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
         nameTextView = (TextView)headerView.findViewById(R.id.nameTextView);
         phoneTextView = (TextView)headerView.findViewById(R.id.phoneTextView);
         avatarImageView = (CircleImageView)headerView.findViewById(R.id.avatarImageView);
-    }
+        editProfileButton = (ImageView)headerView.findViewById(R.id.editProfileButton);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(0, 0, 0, R.anim.slide_out_to_top).add(R.id.flContent, new EditProfileFragment()).addToBackStack(null).commit();
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(this);
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
         return super.onOptionsItemSelected(item);
     }
 
-    public void displayUserInfo(User user) throws IOException {
+    public void displayUserInfo(User user) {
         nameTextView.setText(user.getFirstname() + " " + user.getSurname());
         phoneTextView.setText(PhoneNumberUtils.formatNumber(user.getNumber(), user.getCountyIso()));
         if (!TextUtils.isEmpty(user.getAvatarPath())) {
@@ -122,12 +136,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
     }
 
     @Override
-    public void setUserInfo() {
-        try {
-            presenter.setUserInfo();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void disableDrawer() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+
+    public void getUserInfo() {
+        presenter.getUserInfo();
+
     }
 
 
@@ -143,9 +159,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
 
     @Override
     public void openDrawer() {
+        KeyboardManager.hideKeyboard(this);
         drawer.openDrawer(GravityCompat.START);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.invite_sidebar) {
+            // Handle the camera action
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "ShareText");
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return false;
+    }
 
 
 }

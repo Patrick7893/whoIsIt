@@ -101,6 +101,10 @@ public class SpamFragment extends Fragment {
             emptyTextView.setVisibility(View.VISIBLE);
             spamRecyclerView.setVisibility(View.GONE);
         }
+        else {
+            emptyTextView.setVisibility(View.GONE);
+            spamRecyclerView.setVisibility(View.VISIBLE);
+        }
         swipeRefreshLayout.setRefreshing(false);
     }
 

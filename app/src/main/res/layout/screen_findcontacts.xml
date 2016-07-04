@@ -88,7 +88,7 @@
                     android:ellipsize="end"
                     android:imeOptions="actionSearch"
                     android:textColorHint="@color/greytext"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="@color/colorAccent"
                     android:padding="10dp"
                     android:tag="@string/roboroRegular"/>
@@ -119,7 +119,7 @@
             android:id="@+id/phoneNumbersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2 334 232 112"
+            android:text="150 000 000"
             android:textColor="@color/searchTextColor"
             android:textSize="20sp"
             android:layout_centerInParent="true" />

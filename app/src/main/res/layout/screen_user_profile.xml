@@ -80,116 +80,129 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/userInfoContainer"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:visibility="visible">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:clickable="false"
-            android:layout_marginTop="30dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.github.rahatarmanahmed.cpv.CircularProgressView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/progressBar"
-                android:layout_width="138dp"
-                android:layout_height="138dp"
-                app:cpv_animAutostart="true"
-                app:cpv_indeterminate="true"
-                android:layout_centerInParent="true"/>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avatarImageView"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:src="@drawable/user_noavatar"
-                android:background="@drawable/shape_background"
-                app:civ_border_width="1dp"
+            <LinearLayout
+                android:id="@+id/userInfoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:layout_margin="10dp"
                 android:clickable="true"
-                app:civ_border_color="@color/greytext"
-                android:layout_centerInParent="true" />
+                android:visibility="visible">
 
-        </RelativeLayout>
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:clickable="false"
+                    android:layout_marginTop="30dp">
+
+                    <com.github.rahatarmanahmed.cpv.CircularProgressView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/progressBar"
+                        android:layout_width="138dp"
+                        android:layout_height="138dp"
+                        app:cpv_animAutostart="true"
+                        app:cpv_indeterminate="true"
+                        android:layout_centerInParent="true"/>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/avatarImageView"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:src="@drawable/user_noavatar"
+                        android:background="@drawable/shape_background"
+                        app:civ_border_width="1dp"
+                        android:clickable="true"
+                        app:civ_border_color="@color/greytext"
+                        android:layout_centerInParent="true" />
+
+                </RelativeLayout>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/phoneNumbersRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/phoneNumbersRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
 
-        </android.support.v7.widget.RecyclerView>
+                </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/callStoryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/callStory"
-            android:textColor="@color/greytext"
-            android:tag="@string/robotoMedium"
-            android:drawableRight="@drawable/forward"
-            android:paddingLeft="45dp"
-            android:drawablePadding="20dp"
-            android:textSize="16sp"
-            android:background="?android:attr/selectableItemBackground"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:paddingRight="20dp" />
+                <TextView
+                    android:id="@+id/callStoryButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/callStory"
+                    android:textColor="@color/greytext"
+                    android:tag="@string/robotoMedium"
+                    android:drawableRight="@drawable/forward"
+                    android:paddingLeft="45dp"
+                    android:drawablePadding="20dp"
+                    android:textSize="16sp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:paddingRight="20dp" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/userActionsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
-        android:visibility="visible"
-        android:clickable="true"
-        android:background="@android:color/white">
+            <LinearLayout
+                android:id="@+id/userActionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:visibility="visible"
+                android:clickable="true"
+                android:background="@android:color/white">
 
-        <TextView
-            android:id="@+id/saveToContatcsButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/add_to_contatcs"
-            android:text="@string/saveConatcs"
-            android:background="?android:attr/selectableItemBackground"
-            android:drawablePadding="10dp"
-            android:textColor="@color/saveConatcsColor"
-            android:textSize="16sp"
-            android:tag="@string/roboroRegular"
-            android:padding="15dp" />
+                <TextView
+                    android:id="@+id/saveToContatcsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/add_to_contatcs"
+                    android:text="@string/saveConatcs"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:drawablePadding="10dp"
+                    android:textColor="@color/saveConatcsColor"
+                    android:textSize="16sp"
+                    android:tag="@string/roboroRegular"
+                    android:padding="15dp" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/greytext"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="10dp" />
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/greytext"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="10dp" />
 
-        <TextView
-            android:id="@+id/blockButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/block_user"
-            android:text="@string/block"
-            android:drawablePadding="10dp"
-            android:padding="16dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="@color/missedCall"
-            android:textSize="15sp"
-            android:tag="@string/roboroRegular"/>
+                <TextView
+                    android:id="@+id/blockButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/block_user"
+                    android:text="@string/block"
+                    android:drawablePadding="10dp"
+                    android:padding="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:textColor="@color/missedCall"
+                    android:textSize="15sp"
+                    android:tag="@string/roboroRegular"/>
 
-    </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

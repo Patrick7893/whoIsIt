@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Who is it?</string>
+    <string name="app_name">Who Is Who</string>
+    <string name="logoText">WHO\nIS WHO</string>
     <string name="action_settings">Settings</string>
 
     <!-- App -->
@@ -21,7 +22,7 @@
     <!--tutorial-->
     <string name="caller">Определитель номера</string>
     <string name="tutorial1">При каждом звонке вы \nбудете видеть личную \nкарточку звонящего.</string>
-    <string name="tutorial1_number">1/3</string>
+    <string name="tutorial1_number">1/2</string>
     <string name="userStatus">Статусы пользователя</string>
     <string name="tutorial2_a">Теперь вы знаете, когда \nпользователь </string>
     <string name="tutorial2_b"> доступен</string>
@@ -30,12 +31,15 @@
     <string name="tutorial2_e"> или его телефон в</string>
     <string name="tutorial2_f"> беззвучном режиме</string>
     <string name="tutorial2_g">.</string>
-    <string name="tutorial2_number">2/3</string>
+    <string name="tutorial2_number">2/2</string>
     <string name="smartJournal">Умный журнал вызовов</string>
     <string name="tutorial3">Посмотрите на фото \nнеизвестных абонентов, \nкоторые вам звонили. \nВозможно, вы их узнаете!</string>
     <string name="tutorial3_number">3/3</string>
     <string name="next">ДАЛЕЕ</string>
     <string name="ready">ПРИСТУПИМ!</string>
+    <string name="nameExample">Михаил Лесников</string>
+    <string name="phoneExample">050 000 00 00 - Украина</string>
+    <string name="tagExample">Юридические услуги</string>
 
 
     <!--DateConverter-->
@@ -52,6 +56,7 @@
     <string name="mobile">мобильный</string>
     <string name="work">рабочий</string>
     <string name="other">другой</string>
+    <string name="spammersListisEMpty">Список спамеров пуст</string>
 
     <string name="contacts">Контакты</string>
     <string name="favorites">Избранные</string>
@@ -62,11 +67,15 @@
     <string name="help">Помощь</string>
     <string name="invite">Пригласить друзей</string>
     <string name="settings">Настройки</string>
+    <string name="sendemail">Отправить сообшение</string>
+    <string name="rateapp">Оцените приложение</string>
+    <string name="shareText">Новое приложение-определитель номера для Android с возможностью блока спамеров! \n</string>
 
     <!--saerch screen-->
-    <string name="search">Введите имя или номер</string>
+    <string name="search">Введите имя или номер в формате 050 123 4567</string>
     <string name="numbersInBase">номеров в базе</string>
     <string name="firndNothind">Ничего не найдено</string>
+    <string name="inputTheRightNumber">Введите номер в формате 050 123-45-67</string>
 
     <!--User Profile screen-->
     <string name="callStory">История вызовов</string>
@@ -115,6 +124,7 @@
     <string name="profile">Профиль</string>
     <string name="changePhoto">Изменить фото</string>
     <string name="exit">ВЫХОД</string>
+    <string name="wrongNumber">Номер должен начинаться с +380</string>
 
 
     <!--countries-->

@@ -3,20 +3,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v4.view.ViewPager
+    <com.whois.whoiswho.view.CustomViewPager
         android:id="@+id/tutorialViewPager"
         android:layout_width="match_parent"
-        android:layout_height="280dp">
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
 
-    </android.support.v4.view.ViewPager>
+    </com.whois.whoiswho.view.CustomViewPager>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp">
+        android:background="@android:color/white"
+        android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/positionTextView"
@@ -25,6 +25,7 @@
             android:text="@string/tutorial1_number"
             android:textColor="@color/greytext"
             android:tag="@string/roboroRegular"
+            android:paddingLeft="20dp"
             android:layout_centerVertical="true" />
 
         <TextView
@@ -36,6 +37,7 @@
             android:tag="@string/robotoMedium"
             android:background="?android:attr/selectableItemBackground"
             android:padding="10dp"
+            android:layout_marginRight="20dp"
             android:layout_alignParentRight="true" />
 
     </RelativeLayout>

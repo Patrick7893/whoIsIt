@@ -30,7 +30,7 @@
         android:id="@+id/emptyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="СПАМ"
+        android:text="@string/spammersListisEMpty"
         android:textColor="@color/searchTextColor"
         android:textSize="20sp"
         android:layout_centerInParent="true"

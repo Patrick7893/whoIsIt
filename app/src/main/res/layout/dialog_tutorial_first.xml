@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Михаил Лесников"
+                    android:text="@string/nameExample"
                     android:textSize="20sp"
                     android:tag="@string/roboroRegular"
                     android:textColor="@android:color/white"/>
@@ -53,7 +53,7 @@
                     android:id="@+id/phoneTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="095 817 79 78 - Украина"
+                    android:text="@string/phoneExample"
                     android:layout_centerInParent="true"
                     android:textSize="14sp"
                     android:tag="@string/roboroRegular"
@@ -64,7 +64,7 @@
                     android:id="@+id/tagTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Юридические услуги"
+                    android:text="@string/tagExample"
                     android:layout_centerInParent="true"
                     android:textSize="12sp"
                     android:background="@drawable/tag_textview"

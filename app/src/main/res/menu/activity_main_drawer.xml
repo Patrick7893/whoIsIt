@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/buypro_sidebar"
-            android:icon="@drawable/buypro"
-            android:title="@string/buypro"/>
 
         <item
             android:id="@+id/help_sidebar"
@@ -18,9 +14,9 @@
             android:title="@string/invite"/>
 
         <item
-            android:id="@+id/settings_sidebar"
-            android:icon="@drawable/settings"
-            android:title="@string/settings"/>
+            android:id="@+id/rateapp_sidebar"
+            android:icon="@drawable/ic_star_outline_white_24dp"
+            android:title="@string/rateapp"/>
 
     </group>
 

@@ -3,13 +3,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg_blur">
+    android:background="@drawable/bg_login_blur">
 
-    <ImageView
+    <TextView
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"
+        android:text="@string/logoText"
+        android:tag="futura.ttf"
+        android:textSize="34sp"
+        android:gravity="center"
+        android:textColor="#3d3737"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/logoTopMargin" />
 
@@ -28,6 +32,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:gravity="center"
+
             android:tag="@string/roboroRegular"
             android:layout_marginBottom="30dp" />
 

@@ -5,9 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
+import com.raizlabs.android.dbflow.sql.language.Select;
+import com.whois.whoiswho.R;
 import com.whois.whoiswho.activity.IcomingCallActivity;
 import com.whois.whoiswho.activity.MissedCallActivity;
+import com.whois.whoiswho.model.Phone;
+import com.whois.whoiswho.model.Phone_Table;
 import com.whois.whoiswho.utils.ContactsManager;
 
 import java.util.Date;
@@ -23,7 +28,6 @@ public class CallReceiver extends PhonecallReceiver {
     @Override
     protected void onIncomingCallReceived(final Context ctx, final String number, Date start) {
         showDialogActivity(ctx, IcomingCallActivity.class, number);
-        Log.d("IncomingCall", number);
     }
 
     @Override
@@ -33,7 +37,6 @@ public class CallReceiver extends PhonecallReceiver {
 
     @Override
     protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end) {
-        Log.d("IncomingCallEnded", number);
         Intent callEndedIntent = new Intent("CallEnd");
         ctx.sendBroadcast(callEndedIntent);
 
@@ -41,19 +44,16 @@ public class CallReceiver extends PhonecallReceiver {
 
     @Override
     protected void onOutgoingCallStarted(Context ctx, String number, Date start) {
-        Log.d("OutgoingCall", number);
     }
 
     @Override
     protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end) {
-        Log.d("OutgoingCallEnded", number);
         Intent callEndedIntent = new Intent("CallEnd");
         ctx.sendBroadcast(callEndedIntent);
     }
 
     @Override
     protected void onMissedCall(Context ctx, String number, Date start) {
-        Log.d("MISSED CALL", number);
         Intent callEndedIntent = new Intent("CallEnd");
         ctx.sendBroadcast(callEndedIntent);
         showDialogActivity(ctx, MissedCallActivity.class, number);
@@ -61,24 +61,23 @@ public class CallReceiver extends PhonecallReceiver {
 
 
     private void showDialogActivity(final Context ctx, final Class activityClass, final String number) {
+        Phone phone = new Select().from(Phone.class).where(Phone_Table.number.is(number)).querySingle();
+        if (phone!=null) {
+            if (phone.isBlocked()) {
+                new Handler().postDelayed(new Runnable() {
 
-        if (!ContactsManager.checkNumberInContacts(ctx, number)) {
-
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    // TODO Auto-generated method stub   Intent i = new Intent(ctx, activityClass);
-                    Intent i = new Intent(ctx, activityClass);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    Bundle b = new Bundle();
-                    b.putString("phone", number);
-                    i.putExtras(b); //P
-                    ctx.startActivity(i);
-                }
-            }, 1000);
-
-
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub   Intent i = new Intent(ctx, activityClass);
+                        Intent i = new Intent(ctx, activityClass);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Bundle b = new Bundle();
+                        b.putString("phone", number);
+                        i.putExtras(b); //P
+                        ctx.startActivity(i);
+                    }
+                }, 1000);
+            }
         }
     }
 

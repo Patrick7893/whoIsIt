@@ -38,7 +38,7 @@
     <string name="next">ДАЛЕЕ</string>
     <string name="ready">ПРИСТУПИМ!</string>
     <string name="nameExample">Михаил Лесников</string>
-    <string name="phoneExample">050 000 00 00 - Украина</string>
+    <string name="phoneExample">050 123 45 67 - Украина</string>
     <string name="tagExample">Юридические услуги</string>
 
 
@@ -70,6 +70,7 @@
     <string name="sendemail">Отправить сообшение</string>
     <string name="rateapp">Оцените приложение</string>
     <string name="shareText">Новое приложение-определитель номера для Android с возможностью блока спамеров! \n</string>
+    <string name="youhaveNoGmail">Не найдено приложение Gmail</string>
 
     <!--saerch screen-->
     <string name="search">Введите имя или номер в формате 050 123 4567</string>
@@ -86,6 +87,8 @@
     <string name="listIsEmpty">Список пуст</string>
     <string name="userAddedToBlackList">Пользователь заблокирован!</string>
     <string name="userRemovedFromBlackList">Пользователь разблокирован</string>
+    <string name="contactAddedToStarred">Контакт добавлен в избранное</string>
+    <string name="contactRemovedFromStarred">Контакт удален из избранного</string>
 
     <!--Dialog activity -->
     <string name="call">ВЫЗВАТЬ</string>
@@ -124,7 +127,7 @@
     <string name="profile">Профиль</string>
     <string name="changePhoto">Изменить фото</string>
     <string name="exit">ВЫХОД</string>
-    <string name="wrongNumber">Номер должен начинаться с +380</string>
+    <string name="wrongNumber">Номер должен быть в формате +380 50 123 45 67</string>
 
 
     <!--countries-->

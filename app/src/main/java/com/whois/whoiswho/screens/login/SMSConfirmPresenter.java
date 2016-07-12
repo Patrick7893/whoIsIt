@@ -6,6 +6,7 @@ import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.ApiFactory;
 import com.whois.whoiswho.api.RegistrationResponse;
 import com.whois.whoiswho.app.App;
+import com.whois.whoiswho.utils.Toaster;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -22,7 +23,7 @@ public class SMSConfirmPresenter {
         this.view = view;
     }
 
-    public void smsConfirm(String number, int sms) {
+    public void smsConfirm(String number, String sms) {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.checkSms));
         pd.show();
@@ -35,6 +36,7 @@ public class SMSConfirmPresenter {
             @Override
             public void onError(Throwable e) {
                 pd.dismiss();
+                Toaster.toast(view.getActivity(), R.string.wrongSms);
             }
 
             @Override

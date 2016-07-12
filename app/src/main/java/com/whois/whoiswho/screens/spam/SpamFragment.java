@@ -74,17 +74,17 @@ public class SpamFragment extends Fragment {
     }
 
     public void displaySpammersFromServer(GetSpammersResponse getSpammersResponse) {
-        if (getSpammersResponse.getSpammersOfUser().size()>0) {
-            for (Phone spammer : getSpammersResponse.getSpammersOfUser()) {
+        if (getSpammersResponse.getUserSpammers().size()>0) {
+            for (Phone spammer : getSpammersResponse.getUserSpammers()) {
                 spammer.setIsBlocked(true);
                 spammer.save();
             }
-            adapter.addSpammersFromServer(getSpammersResponse.getSpammersOfUser());
+            adapter.addSpammersFromServer(getSpammersResponse.getUserSpammers());
         }
         if (getSpammersResponse.getGlobalSpammers().size()>0) {
             adapter.addGlobalSpammers(getSpammersResponse.getGlobalSpammers());
         }
-        if (getSpammersResponse.getGlobalSpammers().size()==0 && getSpammersResponse.getSpammersOfUser().size() == 0 && localSpammers.size() == 0) {
+        if (getSpammersResponse.getGlobalSpammers().size()==0 && getSpammersResponse.getUserSpammers().size() == 0 && localSpammers.size() == 0) {
             emptyTextView.setVisibility(View.VISIBLE);
             spamRecyclerView.setVisibility(View.GONE);
         }

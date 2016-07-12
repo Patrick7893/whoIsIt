@@ -41,6 +41,7 @@ import com.whois.whoiswho.utils.FontManager;
 import com.whois.whoiswho.utils.PermissionManager;
 import com.whois.whoiswho.utils.PhoneFormatter;
 import com.whois.whoiswho.utils.ContactsManager;
+import com.whois.whoiswho.utils.Toaster;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +70,8 @@ public class UserProfileFragment extends Fragment {
 
     private Contact contact;
     private Phone phoneFromDb;
-    private boolean isContactPresent, isBlocked, isLiked  = false;
+    private int isContactPresent;
+    private boolean isBlocked = false;
     public static final String CONTACTINFO = "CONTACTINFOTOSTORY";
 
 
@@ -118,16 +120,15 @@ public class UserProfileFragment extends Fragment {
             Picasso.with(getContext()).load(contact.getAvatar()).into(avatarImageView);
 
 
-        checkUserInContacts();
-        checkUserIsBlocked();
-        checkUserIsLiked();
+        checkPhoneInContacts();
+        checkPhoneIsBlocked();
     }
 
     public void displayUserInfo(GetRecordByNumberResponse findPhoneResponse) {
         titleTextView.setText(findPhoneResponse.getData().getName());
-        if (!TextUtils.isEmpty(findPhoneResponse.getData().getAvatar().getUrl())) {
+        if (!TextUtils.isEmpty(findPhoneResponse.getData().getAvatar().getUrl()))
             Picasso.with(getContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().getAvatar().getUrl()).into(avatarImageView);
-        }
+
         String addressText;
         if (TextUtils.isEmpty(findPhoneResponse.getData().getOperator()))
             addressText = CountryManager.getCountryNameFromIso(findPhoneResponse.getData().getCountryIso());
@@ -141,13 +142,15 @@ public class UserProfileFragment extends Fragment {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void checkUserInContacts() {
+    private void checkPhoneInContacts() {
         isContactPresent = ContactsManager.checkNumberInContacts(getActivity(), contact.getNumbers().get(0).getNumber());
-        if (isContactPresent)
+        if (isContactPresent != ContactsManager.DONT_PRESENT_IN_CONTACTS)
             saveToContactsButton.setText(getString(R.string.changeContact));
+        if (isContactPresent == ContactsManager.PRESENT_IN_CONTACTS_STARRED)
+            likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorites_filled));
     }
 
-    private void checkUserIsBlocked () {
+    private void checkPhoneIsBlocked() {
         phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(PhoneFormatter.removeAllNonNumeric(contact.getNumbers().get(0).getNumber()))).querySingle();
         if (phoneFromDb != null) {
             if (!phoneFromDb.isBlocked()) {
@@ -160,17 +163,6 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    private void checkUserIsLiked() {
-        phoneFromDb = new Select().from(Phone.class).where(Phone_Table.number.is(PhoneFormatter.removeAllNonNumeric(contact.getNumbers().get(0).getNumber()))).querySingle();
-        if (phoneFromDb != null) {
-            if (!phoneFromDb.getIsLiked()) {
-                isLiked = false;
-            } else {
-                isLiked = true;
-                likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorites_filled));
-            }
-        }
-    }
 
     @OnClick(R.id.backButton)
     public void back() {
@@ -193,7 +185,7 @@ public class UserProfileFragment extends Fragment {
 
     @OnClick(R.id.saveToContatcsButton)
     public void saveToContatcs() {
-        if (isContactPresent) {
+        if (isContactPresent != ContactsManager.DONT_PRESENT_IN_CONTACTS) {
             Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contact.getNumbers().get(0).getNumber()));
             String[] mPhoneNumberProjection = { ContactsContract.PhoneLookup._ID};
             Cursor cur = getActivity().getContentResolver().query(uri, mPhoneNumberProjection, null, null, null);
@@ -219,17 +211,22 @@ public class UserProfileFragment extends Fragment {
 
     @OnClick(R.id.likeButton)
     public void setLike() {
-        if (!isLiked) {
+        if (isContactPresent == ContactsManager.PRESENT_IN_CONTACTS_NOT_STARRED) {
             likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorites_filled));
-            contact.setIsLiked(true);
-            isLiked = true;
+            ContactsManager.changeContactStarred(getContext(), String.valueOf(contact.getNumbers().get(0).getNumber()), ContactsManager.PRESENT_IN_CONTACTS_STARRED);
+            Toaster.toast(getActivity(), R.string.contactAddedToStarred);
+        }
+        else if (isContactPresent == ContactsManager.PRESENT_IN_CONTACTS_STARRED){
+            likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorite));
+            ContactsManager.changeContactStarred(getContext(), String.valueOf(contact.getNumbers().get(0).getNumber()), ContactsManager.PRESENT_IN_CONTACTS_NOT_STARRED);
+            Toaster.toast(getActivity(), R.string.contactRemovedFromStarred);
         }
         else {
-            likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorite));
-            contact.setIsLiked(false);
-            isLiked = false;
+            Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+            intent.setType(ContactsContract.RawContacts.CONTENT_TYPE).putExtra(ContactsContract.Intents.Insert.PHONE, contact.getNumbers().get(0).getNumber());
+            startActivity(intent);
         }
-        setUserLike(isLiked);
+
     }
 
     @OnClick(R.id.blockButton)
@@ -249,14 +246,4 @@ public class UserProfileFragment extends Fragment {
 
     }
 
-    private void setUserLike(boolean like) {
-        if (phoneFromDb == null) {
-            phoneFromDb = new Phone(contact.getNumbers().get(0).getNumber(), contact.getNumbers().get(0).getTypeOfNumber());
-            phoneFromDb.setName(titleTextView.getText().toString());
-        }
-        else {
-            phoneFromDb.setIsLiked(like);
-        }
-        phoneFromDb.save();
-    }
 }

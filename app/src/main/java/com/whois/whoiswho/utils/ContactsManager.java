@@ -1,9 +1,15 @@
 package com.whois.whoiswho.utils;
 
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.RemoteException;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -27,56 +33,52 @@ import java.util.HashMap;
  */
 public class ContactsManager {
 
+    public static final int DONT_PRESENT_IN_CONTACTS = -1;
+    public static final int PRESENT_IN_CONTACTS_NOT_STARRED = 0;
+    public static final int PRESENT_IN_CONTACTS_STARRED = 1;
+
     public static ArrayList<Contact> readContacts(Context ctx, boolean favourite) {
         ArrayList<Contact> contacts = new ArrayList<>();
         TelephonyManager tMgr = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        ContentResolver cr = ctx.getContentResolver();
-        Cursor cur;
-        if (!favourite) {
-            cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                    null, null, null, null);
-        } else {
-            cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                    null, "starred=?", new String[]{"1"}, null);
-        }
-        if (cur.getCount() > 0) {
-            while (cur.moveToNext()) {
-                Contact contact = new Contact();
-                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String photo = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
-                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    contact.setId(Integer.parseInt(id));
-                    contact.setName(name);
-                    if (!TextUtils.isEmpty(photo)) {
-                        contact.setAvatar(photo);
-                    }
+        Cursor phones;
+        if (!favourite)
+            phones = ctx.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null,  ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+        else
+            phones = ctx.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, "starred=?", new String[]{"1"}, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
 
-                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-                    while (pCur.moveToNext()) {
-                        String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        Integer type = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                        ContactNumber contactNumber = new ContactNumber(number, type);
-                        if (number.startsWith("+")) {
-                            contactNumber.setCountryIso(CountryManager.getIsoFromPhone(number));
-                        } else {
-                            contactNumber.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
-                        }
-                        contact.addNumber(contactNumber);
-                    }
-                    contacts.add(contact);
-                    pCur.close();
+        int lastId = -1;
+        while (phones.moveToNext()) {
+            Contact contact = new Contact();
+            int id = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            Integer type = phones.getInt(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+            String photo = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
 
-                }
+            contact.setName(name);
+            contact.setId(id);
+            if (!TextUtils.isEmpty(photo))
+                contact.setAvatar(photo);
+
+            ContactNumber contactNumber = new ContactNumber(phoneNumber, type);
+            if (phoneNumber.startsWith("+"))
+                contactNumber.setCountryIso(CountryManager.getIsoFromPhone(phoneNumber));
+            else
+                contactNumber.setCountryIso(tMgr.getSimCountryIso().toUpperCase());
+
+            if (lastId != -1 && lastId == id) {
+                contacts.get(contacts.size()-1).addNumber(contactNumber);
             }
-            cur.close();
+            else {
+                contact.addNumber(contactNumber);
+                contacts.add(contact);
+            }
+            lastId = id;
+
         }
-        Collections.sort(contacts, new Comparator<Contact>() {
-            @Override
-            public int compare(Contact lhs, Contact rhs) {
-                return lhs.getName().toUpperCase().compareTo(rhs.getName().toUpperCase());
-            }
-        });
+        phones.close();
+
+
         if (!favourite) {
             Contact lastContact = null;
             for (Contact contact : contacts) {
@@ -86,22 +88,29 @@ public class ContactsManager {
                 }
             }
         }
+
+
         return contacts;
     }
 
-    public static Boolean checkNumberInContacts(Context ctx, String number) {
+    public static int checkNumberInContacts(Context ctx, String number) {
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
-        String[] mPhoneNumberProjection = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME};
+        String[] mPhoneNumberProjection = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.STARRED, ContactsContract.PhoneLookup.DISPLAY_NAME};
         Cursor cur = ctx.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
-            if (cur.moveToFirst()) {
-                return true;
+            Log.d("COUNT", String.valueOf(cur.getCount()));
+            if (cur.getCount() > 0) {
+                cur.moveToNext();
+                if (cur.getString(cur.getColumnIndex(ContactsContract.Contacts.STARRED)).equals(String.valueOf(1)))
+                    return PRESENT_IN_CONTACTS_STARRED;
+                else
+                    return PRESENT_IN_CONTACTS_NOT_STARRED;
             }
         } finally {
             if (cur != null)
                 cur.close();
         }
-        return false;
+        return DONT_PRESENT_IN_CONTACTS;
     }
 
     public static ArrayList<Call> getUserCallsList(Context ctx) {
@@ -141,7 +150,8 @@ public class ContactsManager {
                 }
                 if (!TextUtils.isEmpty(call.getName())) {
                     if (numberType == 0) {
-                        numberType = typeMap.get(call.getName());
+                        if (typeMap!=null)
+                            numberType = typeMap.get(call.getName());
                     }
                 }
                 switch (numberType) {
@@ -219,6 +229,20 @@ public class ContactsManager {
             }
         }
         return calls;
+    }
+
+    public static void changeContactStarred(Context context, String number, int starred) {
+        Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        String[] mPhoneNumberProjection = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.DISPLAY_NAME};
+        Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
+        if (cur.getCount()>0) {
+            cur.moveToNext();
+            String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ContactsContract.CommonDataKinds.Phone.STARRED, starred);
+            context.getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, contentValues, ContactsContract.Contacts.DISPLAY_NAME + "= ?", new String[]{name});
+            cur.close();
+        }
     }
 
 

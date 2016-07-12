@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.RegistrationResponse;
 import com.whois.whoiswho.utils.FontManager;
@@ -39,6 +41,7 @@ public class SMSConfirmFragment extends Fragment {
     private String number;
 
     private SMSConfirmPresenter presenter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Nullable
     @Override
@@ -56,6 +59,7 @@ public class SMSConfirmFragment extends Fragment {
         sms = this.getArguments().getInt(SMS);
         number = getArguments().getString(NewUserFragment.PHONE);
         smsNumberTextView.setText(getString(R.string.smsconfirm1) + " " + hideNumber(number) +  " " + getString(R.string.smsconfirm2));
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         return view;
     }
@@ -68,20 +72,33 @@ public class SMSConfirmFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            if (count > before) {
+                if (sms3EditText.getText().length()>0) {
+                    sms4EditText.requestFocus();
+                }
+                else if (sms2EditText.getText().length()>0) {
+                    sms3EditText.requestFocus();
+                }
+                else if (sms1EditText.getText().length()>0) {
+                    sms2EditText.requestFocus();
+                }
+            }
+            else {
+                if (sms2EditText.getText().length()==0) {
+                    sms1EditText.requestFocus();
+                }
+                else if (sms3EditText.getText().length()==0) {
+                    sms2EditText.requestFocus();
+                }
+                else if (sms4EditText.getText().length()==0) {
+                    sms3EditText.requestFocus();
+                }
+            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (sms3EditText.getText().length()>0) {
-                sms4EditText.requestFocus();
-            }
-            else if (sms2EditText.getText().length()>0) {
-                sms3EditText.requestFocus();
-            }
-            else if (sms1EditText.getText().length()>0) {
-                sms2EditText.requestFocus();
-            }
+
         }
     };
 
@@ -89,7 +106,11 @@ public class SMSConfirmFragment extends Fragment {
     public void okButton() {
         if (!TextUtils.isEmpty(sms1EditText.getText()) && !TextUtils.isEmpty(sms2EditText.getText()) && !TextUtils.isEmpty(sms3EditText.getText()) && !TextUtils.isEmpty(sms4EditText.getText())) {
             String smsString = sms1EditText.getText().toString() + sms2EditText.getText().toString() + sms3EditText.getText().toString() + sms4EditText.getText().toString();
-            presenter.smsConfirm(this.getArguments().getString(NewUserFragment.PHONE), Integer.valueOf(smsString));
+            presenter.smsConfirm(this.getArguments().getString(NewUserFragment.PHONE), smsString);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "sms");
+            bundle.putString(FirebaseAnalytics.Param.VALUE, smsString);
+            mFirebaseAnalytics.logEvent("ConfirmSMS", bundle);
         }
         else {
             Toaster.toast(getContext(), R.string.pleaseInputSMS);
@@ -117,8 +138,11 @@ public class SMSConfirmFragment extends Fragment {
         if (number.length() > 12) {
             return stringBuilder.append(number.substring(0, 6)).append("*****").append(number.substring(number.length()-2)).toString();
         }
-        else {
+        else if (number.length() == 12){
             return stringBuilder.append(number.substring(0, 5)).append("*****").append(number.substring(number.length()-2)).toString();
+        }
+        else {
+            return number;
         }
     }
 }

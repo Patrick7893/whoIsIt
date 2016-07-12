@@ -28,6 +28,7 @@ public class Phone extends BaseModel {
     private String operator;
     private Avatar avatar;
     @Column
+    @SerializedName("number_of_setted_spam")
     private int numberOfSettedSpam;
     @Column
     private boolean isBlocked;

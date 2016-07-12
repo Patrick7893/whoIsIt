@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.utils.CountryManager;
 import com.whois.whoiswho.utils.FontManager;
@@ -34,6 +35,7 @@ public class LoginFragment extends Fragment {
 
     private static LoginPresenter presenter;
     private String countryIso;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Nullable
@@ -43,6 +45,7 @@ public class LoginFragment extends Fragment {
         ButterKnife.bind(this, view);
         FontManager.overrideFonts(view);
         presenter = new LoginPresenter(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.countryList, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countrySpinner.setAdapter(adapter);
@@ -67,8 +70,13 @@ public class LoginFragment extends Fragment {
 
     @OnClick(R.id.okButton)
     public void login() {
-        if (phoneEditText.getText().toString().startsWith("+380"))
+        if (phoneEditText.getText().toString().startsWith("+380") && PhoneFormatter.removeAllNonNumeric(phoneEditText.getText().toString()).length() >= 13) {
             presenter.login(PhoneFormatter.removeAllNonNumeric(phoneEditText.getText().toString()), countryIso);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "number");
+            bundle.putString(FirebaseAnalytics.Param.VALUE, phoneEditText.getText().toString());
+            mFirebaseAnalytics.logEvent("Login", bundle);
+        }
         else
             Toaster.toast(getActivity(), R.string.wrongNumber);
     }

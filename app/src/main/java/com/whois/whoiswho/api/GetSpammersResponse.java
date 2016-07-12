@@ -9,15 +9,15 @@ import java.util.ArrayList;
  */
 public class GetSpammersResponse extends BaseResponse {
 
-    private ArrayList<Phone> spammersOfUser;
+    private ArrayList<Phone> user_spammers;
 
-    private ArrayList<Phone> globalSpammers;
+    private ArrayList<Phone> global_spammers;
 
     public ArrayList<Phone> getGlobalSpammers() {
-        return globalSpammers;
+        return global_spammers;
     }
 
-    public ArrayList<Phone> getSpammersOfUser() {
-        return spammersOfUser;
+    public ArrayList<Phone> getUserSpammers() {
+        return user_spammers;
     }
 }

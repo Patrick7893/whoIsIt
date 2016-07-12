@@ -141,7 +141,7 @@ public class FindContactsFragment extends Fragment {
         autocompleteAdapter.addContactsFromServer(contacts);
     }
 
-    public void goToUserProfileScreen(Contact contact) {
+    private void goToUserProfileScreen(Contact contact) {
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
         Gson gson = new Gson();

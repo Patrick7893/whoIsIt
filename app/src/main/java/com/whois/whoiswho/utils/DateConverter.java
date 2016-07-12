@@ -33,7 +33,7 @@ public class DateConverter {
             stringDate = context.getString(R.string.twodayssago);
         }
         else {
-            stringDate =new SimpleDateFormat("dd/MM/yyyy").format(date);
+            stringDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
         }
         return stringDate;
 

@@ -1,15 +1,25 @@
 package com.whois.whoiswho.screens.conatctslist;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 
 import com.google.gson.Gson;
 import com.whois.whoiswho.R;
+import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.Contact;
+import com.whois.whoiswho.screens.calls.CallFragment;
 import com.whois.whoiswho.screens.user_profile.UserProfileFragment;
+import com.whois.whoiswho.utils.ContactsManager;
 import com.whois.whoiswho.utils.KeyboardManager;
+import com.whois.whoiswho.utils.PermissionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by stasenkopavel on 4/28/16.
@@ -45,6 +55,21 @@ public class ContactListPresenter {
         }
         return filteredModelList;
     }
+
+    Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
+        @Override
+        public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
+            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                ArrayList<Contact> contacts = ContactsManager.readContacts(view.getActivity(), view.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
+                subscriber.onNext(contacts);
+                subscriber.onCompleted();
+            }
+            else {
+                PermissionManager.requestPermissions(view.getActivity(), Manifest.permission.READ_CONTACTS);
+            }
+
+        }
+    });
 
 
 }

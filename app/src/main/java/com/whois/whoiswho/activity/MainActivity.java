@@ -22,6 +22,7 @@ import com.whois.whoiswho.R;
 import com.whois.whoiswho.model.User;
 import com.whois.whoiswho.screens.edit_profile.EditProfileFragment;
 import com.whois.whoiswho.utils.KeyboardManager;
+import com.whois.whoiswho.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
             sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.shareText) + Uri.parse("http://play.google.com/store/apps/details?id=" + this.getPackageName()));
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
-
         }
         else if (id == R.id.help_sidebar) {
             Intent sendIntent = new Intent(Intent.ACTION_VIEW);
@@ -185,7 +185,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
             sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
             sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "whoiswhoapp@gmail.com" });
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, "WhoIsWhoApp support");
-            startActivity(sendIntent);
+            try {
+                startActivity(sendIntent);
+            } catch (ActivityNotFoundException e) {
+                Toaster.toast(this, R.string.youhaveNoGmail);
+            }
         }
         else if (id == R.id.rateapp_sidebar) {
             Uri uri = Uri.parse("market://details?id=" + this.getPackageName());

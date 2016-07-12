@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,33 +77,41 @@ public class ContactslistFragment extends Fragment {
             searchButton.setVisibility(View.GONE);
         }
 
-        if (!getIsFavourite()) {
-            initiallizeScreenAllContacts();
-        } else {
-            initiallizeScreenFavouriteContacts();
-        }
-
         return view;
     }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (!getIsFavourite())
+                    initiallizeScreenAllContacts();
+                else
+                    initiallizeScreenFavouriteContacts();
+            }
+        });
+
+        return anim;
+    }
+
 
     private boolean getIsFavourite() {
         return this.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS);
     }
 
-    Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
-        @Override
-        public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
-            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                ArrayList<Contact> contacts = ContactsManager.readContacts(getActivity(), getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
-                subscriber.onNext(contacts);
-                subscriber.onCompleted();
-            }
-            else {
-                PermissionManager.requestPermissions(getActivity(), Manifest.permission.READ_CONTACTS);
-            }
 
-        }
-    });
 
     public void initSearchView(final ArrayList<Contact> contacts, final ContactsAdapter contactsAdapter) {
         searchView.setFocusable(true);
@@ -142,7 +152,7 @@ public class ContactslistFragment extends Fragment {
     }
 
     public void initiallizeScreenAllContacts() {
-        getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
+        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
             @Override
             public void call(ArrayList<Contact> contacts) {
                     final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
@@ -202,7 +212,7 @@ public class ContactslistFragment extends Fragment {
         titleTextView.setText(getString(R.string.favorites));
         searchButton.setVisibility(View.GONE);
         searchView.clearFocus();
-        getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
+        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
             @Override
             public void call(ArrayList<Contact> contacts) {
                     final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {

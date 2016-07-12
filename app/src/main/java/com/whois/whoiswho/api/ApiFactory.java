@@ -9,7 +9,9 @@ import com.whois.whoiswho.R;
 import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.utils.Toaster;
 
+import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 
 /**
  * Created by stasenkopavel on 4/29/16.

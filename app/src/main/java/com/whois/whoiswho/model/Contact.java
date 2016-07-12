@@ -37,18 +37,6 @@ public class Contact {
         this.name = name;
     }
 
-   /* public ArrayList<Phone> getPhones() {
-        return phones;
-    }
-
-    public void setPhones(ArrayList<Phone> phones) {
-        this.phones = phones;
-    }
-
-    public void addPhone(Phone phone) {
-        phones.add(phone);
-    }*/
-
     public String getTitle() {
         return title;
     }
@@ -63,14 +51,6 @@ public class Contact {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public boolean isLiked() {
-        return isLiked;
-    }
-
-    public void setIsLiked(boolean isLiked) {
-        this.isLiked = isLiked;
     }
 
     public ArrayList<ContactNumber> getNumbers() {

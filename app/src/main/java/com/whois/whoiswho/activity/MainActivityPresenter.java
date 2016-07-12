@@ -28,10 +28,10 @@ public class MainActivityPresenter {
         if ((ContextCompat.checkSelfPermission(view, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)&&
                 (ContextCompat.checkSelfPermission(view, Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED)&&
                 (ContextCompat.checkSelfPermission(view, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED)&&
-                (ContextCompat.checkSelfPermission(view, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED)) {
+                (ContextCompat.checkSelfPermission(view, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED)) {
             view.switchFragment(new LoginFragment());
             view.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            ActivityCompat.requestPermissions(view, new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS, Manifest.permission.READ_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.CALL_PHONE, Manifest.permission.SYSTEM_ALERT_WINDOW}, view.MY_PERMISSIONS_REQUEST);
+            ActivityCompat.requestPermissions(view, new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CALL_LOG, Manifest.permission.CALL_PHONE, Manifest.permission.SYSTEM_ALERT_WINDOW}, view.MY_PERMISSIONS_REQUEST);
         }
         else {
             if (!TextUtils.isEmpty(SharedPreferencesSaver.get().getToken())) {

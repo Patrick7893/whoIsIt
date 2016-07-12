@@ -42,10 +42,8 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.item_phone_numbers_list, parent, false);
 
-        // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }

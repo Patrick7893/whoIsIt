@@ -18,7 +18,7 @@ import rx.Observable;
 public interface ApiInterface {
 
    // String SERVICE_ENDPOINT = "http://10.0.1.6:3000";
-   String SERVICE_ENDPOINT = "http://truecaller.unteleported.com";
+    String SERVICE_ENDPOINT = "http://truecaller.unteleported.com";
 
 
     @Multipart
@@ -27,7 +27,7 @@ public interface ApiInterface {
 
     @Multipart
     @POST("/users/smsconfirm")
-    Observable<RegistrationResponse> smsConfirm(@Part("number") String number, @Part("sms") int sms);
+    Observable<RegistrationResponse> smsConfirm(@Part("number") String number, @Part("sms") String sms);
 
     @Multipart
     @POST("/users")
@@ -46,16 +46,15 @@ public interface ApiInterface {
     @GET("/phones/getRecordByNumber")
     Observable<GetRecordByNumberResponse> getPhoneRecord(@Query("token") String token, @Query("number") String number);
 
-    @GET("/phones/getSpammers")
+    @GET("/phones/get_spammers")
     Observable<GetSpammersResponse> getSpammers(@Query("token") String token);
 
     @Multipart
     @PUT("/phones/{id}/block")
-    Observable<BaseResponse> blockUser(@Path("id") long id, @Part("token") String token,  @Part("userId") long userId);
+    Observable<BaseResponse> blockUser(@Path("id") long id, @Part("token") String token,  @Part("user_id") long userId);
 
     @Multipart
     @PUT("/phones/{id}/unblock")
-    Observable<BaseResponse> unblockUser(@Path("id") long id, @Part("token") String token, @Part("userId") long userId);
-
+    Observable<BaseResponse> unblockUser(@Path("id") long id, @Part("token") String token, @Part("user_id") long userId);
 
 }

@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class LoadContactsRequest {
 
     private String token;
-    private ArrayList<Phone> phone;
+    private ArrayList<Phone> phones;
 
-    public LoadContactsRequest(String token, ArrayList<Phone> phone) {
+    public LoadContactsRequest(String token, ArrayList<Phone> phones) {
         this.token = token;
-        this.phone = phone;
+        this.phones = phones;
     }
 
 

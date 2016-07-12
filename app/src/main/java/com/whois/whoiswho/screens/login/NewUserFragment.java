@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.utils.FontManager;
 import com.whois.whoiswho.utils.Toaster;
@@ -41,6 +42,7 @@ public class NewUserFragment extends Fragment {
     @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
 
     private Bitmap avatar;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Nullable
     @Override
@@ -49,6 +51,7 @@ public class NewUserFragment extends Fragment {
         ButterKnife.bind(this, view);
         FontManager.overrideFonts(view);
         presenter = new NewUserPresener(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         return view;
     }
 
@@ -77,6 +80,10 @@ public class NewUserFragment extends Fragment {
         if (!TextUtils.isEmpty(firstNameEditText.getText())&&!TextUtils.isEmpty(surnameEditText.getText())) {
             try {
                 presenter.createUser(this.getArguments().getString(PHONE), this.getArguments().getString(COUNTRY), firstNameEditText.getText().toString(), surnameEditText.getText().toString(), this.getArguments().getString(PHONE), emailEditText.getText().toString(), presenter.convertBitmapToFile(avatar));
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "name");
+                bundle.putString(FirebaseAnalytics.Param.VALUE, firstNameEditText.getText().toString() + surnameEditText.getText().toString());
+                mFirebaseAnalytics.logEvent("Registration", bundle);
             } catch (IOException e) {
                 e.getMessage();
             }

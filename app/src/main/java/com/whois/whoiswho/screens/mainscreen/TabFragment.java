@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.activity.MainActivity;
 import com.whois.whoiswho.activity.MainActivityMethods;
@@ -35,7 +36,6 @@ public class TabFragment extends Fragment {
 
     @Bind(R.id.tabs) TabLayout tabLayout;
     @Bind(R.id.viewpager) ViewPager viewPager;
-
 
 
     @Nullable

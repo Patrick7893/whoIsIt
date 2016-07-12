@@ -30,18 +30,21 @@ public class UserProfilePresenter {
     private UserProfileFragment view;
     private Contact contact;
     private User user;
-    private TelephonyManager tm;
 
     public UserProfilePresenter(UserProfileFragment view, Contact contact) {
         this.view = view;
         this.contact = contact;
-        tm = (TelephonyManager)view.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         user = new Select().from(User.class).querySingle();
     }
 
     public void find(String number) {
         if (!number.startsWith("+")) {
-            number = "+38" + number;
+            if (number.length() == 10)
+                number = "+38" + number;
+            else if (number.length() == 11)
+                number = "+3" + number;
+            else if (number.length() == 12)
+                number = "+" + number;
         }
         ApiFactory.createRetrofitService().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
@@ -52,7 +55,6 @@ public class UserProfilePresenter {
             @Override
             public void onError(Throwable e) {
                 view.hideProgressBar();
-                Log.d("Error", e.getMessage());
             }
 
             @Override

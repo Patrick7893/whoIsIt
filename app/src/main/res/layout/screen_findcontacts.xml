@@ -114,7 +114,6 @@
             android:layout_marginTop="10dp"
             android:visibility="gone"/>
 
-
         <TextView
             android:id="@+id/phoneNumbersTextView"
             android:layout_width="wrap_content"

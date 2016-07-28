@@ -352,7 +352,7 @@ public class CountryManager {
         countryNamesMap.put("HR", "+385");
         countryNamesMap.put("CU", "+53");
         countryNamesMap.put("CY", "+357");
-        countryNamesMap.put("CZ", "+420");
+        countryNamesMap.put("CZ", ctx.getResources().getStringArray(R.array.countryList)[1]);
         countryNamesMap.put("DK", "+45");
         countryNamesMap.put("DJ", "+253");
         countryNamesMap.put("DM", "+1-767");
@@ -447,7 +447,7 @@ public class CountryManager {
         countryNamesMap.put("PT", "+351");
         countryNamesMap.put("QA", "+974");
         countryNamesMap.put("RO", "+40");
-        countryNamesMap.put("RU", ctx.getResources().getStringArray(R.array.countryList)[1]);
+        countryNamesMap.put("RU", "+7");
         countryNamesMap.put("RW", "+250");
         countryNamesMap.put("KN", "+1-869");
         countryNamesMap.put("LC", "+1-758");

@@ -65,7 +65,7 @@ public class FindContactsPresenter {
 
 
     public void find(String query) {
-        if (Character.isDigit(query.charAt(0))) {
+        if (Character.isDigit(query.charAt(0)) || query.startsWith("+")) {
             query = PhoneFormatter.removeAllNonNumeric(query);
             if (query.length() < 10) {
                 Toaster.toast(App.getContext(), R.string.inputTheRightNumber);

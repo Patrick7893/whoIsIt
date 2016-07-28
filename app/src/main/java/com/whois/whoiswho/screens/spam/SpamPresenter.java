@@ -51,7 +51,8 @@ public class SpamPresenter {
             @Override
             public void onNext(GetSpammersResponse response) {
                 Log.d("getSpammers", String.valueOf(response.error));
-                view.displaySpammersFromServer(response);
+                if (response.error == 0)
+                    view.displaySpammersFromServer(response);
             }
         });
     }

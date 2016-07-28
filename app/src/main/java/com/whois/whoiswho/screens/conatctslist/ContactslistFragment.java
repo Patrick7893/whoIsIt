@@ -77,33 +77,12 @@ public class ContactslistFragment extends Fragment {
             searchButton.setVisibility(View.GONE);
         }
 
+        if (!getIsFavourite())
+            initiallizeScreenAllContacts();
+        else
+            initiallizeScreenFavouriteContacts();
+
         return view;
-    }
-
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-
-        anim.setAnimationListener(new Animation.AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (!getIsFavourite())
-                    initiallizeScreenAllContacts();
-                else
-                    initiallizeScreenFavouriteContacts();
-            }
-        });
-
-        return anim;
     }
 
 

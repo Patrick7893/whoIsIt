@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Who Is Who</string>
     <string name="logoText">WHO\nIS WHO</string>
-    <string name="action_settings">Settings</string>
-
     <!-- App -->
     <string name="checkConnection">Отсутствует подключение к интернету</string>
     <string name="serverError">Ошибка соединения</string>
@@ -14,7 +12,6 @@
     <string name="robotoLight">Roboto-Light.ttf</string>
 
     <!--Splash-->
-    <string name="app_name_caps">WHO IS IT?</string>
     <string name="nowYouKnow">Теперь вы всегда знаете, кто \nвам звонит - больше никаких \nнежелательных вызовов и спама</string>
     <string name="letsGo">ПОЕХАЛИ</string>
     <string name="conditions">Нажимая "Поехали", вы солглашаетесь с <u>условиями использования</u></string>
@@ -133,8 +130,7 @@
     <!--countries-->
     <string-array name="countryList">
         <item>Украина</item>
-        <item>Россия</item>
-        <item>Казахстан</item>
+        <item>Чехия</item>
     </string-array>
 
 </resources>

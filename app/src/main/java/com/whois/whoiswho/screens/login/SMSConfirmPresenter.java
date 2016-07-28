@@ -6,6 +6,7 @@ import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.ApiFactory;
 import com.whois.whoiswho.api.RegistrationResponse;
 import com.whois.whoiswho.app.App;
+import com.whois.whoiswho.utils.FirebaseLogManager;
 import com.whois.whoiswho.utils.Toaster;
 
 import rx.Subscriber;
@@ -37,6 +38,7 @@ public class SMSConfirmPresenter {
             public void onError(Throwable e) {
                 pd.dismiss();
                 Toaster.toast(view.getActivity(), R.string.wrongSms);
+                FirebaseLogManager.sendLogToFirebase(view.mFirebaseAnalytics, "ConfirmSMSFailed", "sms", e.getMessage());
             }
 
             @Override

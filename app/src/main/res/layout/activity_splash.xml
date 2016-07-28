@@ -15,7 +15,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name_caps"
             android:textColor="@android:color/white"
             android:textSize="100sp"
             android:gravity="center"

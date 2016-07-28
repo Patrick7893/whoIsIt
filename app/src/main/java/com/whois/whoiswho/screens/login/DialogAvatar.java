@@ -1,5 +1,6 @@
 package com.whois.whoiswho.screens.login;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.whois.whoiswho.R;
+import com.whois.whoiswho.utils.PermissionManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -47,6 +49,7 @@ public class DialogAvatar extends DialogFragment {
 
     @OnClick(R.id.galleryButton)
     public void pickGallery() {
+        PermissionManager.requestPermissions(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto , PICKFROMGALLERY);
     }

@@ -11,6 +11,7 @@ import com.whois.whoiswho.api.RegistrationResponse;
 import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.User;
 import com.whois.whoiswho.screens.mainscreen.TabFragment;
+import com.whois.whoiswho.utils.FirebaseLogManager;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
 
 import java.io.ByteArrayOutputStream;
@@ -58,6 +59,7 @@ public class NewUserPresener {
                     public void onError(Throwable e) {
                         ApiFactory.checkConnection();
                         pd.dismiss();
+                        FirebaseLogManager.sendLogToFirebase(view.mFirebaseAnalytics, "RegistrationFailed", "name", e.getMessage());
                     }
 
                     @Override

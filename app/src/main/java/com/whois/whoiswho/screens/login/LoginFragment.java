@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,13 @@ import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
+import com.whois.whoiswho.model.Phone;
 import com.whois.whoiswho.utils.CountryManager;
 import com.whois.whoiswho.utils.FontManager;
 import com.whois.whoiswho.utils.PhoneFormatter;
 import com.whois.whoiswho.utils.Toaster;
+
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,6 +39,7 @@ public class LoginFragment extends Fragment {
 
     private static LoginPresenter presenter;
     private String countryIso;
+    private String countryCode = "+380";
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -49,13 +54,19 @@ public class LoginFragment extends Fragment {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.countryList, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countrySpinner.setAdapter(adapter);
+        final String countryLocale = getResources().getConfiguration().locale.getCountry();
+        if (countryLocale.equals("CZ"))
+            countrySpinner.setSelection(1);
+        else
+            countrySpinner.setSelection(0);
         phoneEditText.setSelection(phoneEditText.getText().length());
         phoneEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 countryIso = CountryManager.getCountryIsoFromName((String) countrySpinner.getItemAtPosition(position));
-                phoneEditText.setText(CountryManager.getCodeFromIso(countryIso) + " ");
+                countryCode = CountryManager.getCodeFromIso(countryIso);
+                phoneEditText.setText(countryCode + " ");
                 phoneEditText.setSelection(phoneEditText.getText().length());
                 phoneEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher(countryIso));
             }
@@ -70,15 +81,26 @@ public class LoginFragment extends Fragment {
 
     @OnClick(R.id.okButton)
     public void login() {
-        if (phoneEditText.getText().toString().startsWith("+380") && PhoneFormatter.removeAllNonNumeric(phoneEditText.getText().toString()).length() >= 13) {
+        if (valdatePhone(phoneEditText.getText().toString())) {
             presenter.login(PhoneFormatter.removeAllNonNumeric(phoneEditText.getText().toString()), countryIso);
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "number");
-            bundle.putString(FirebaseAnalytics.Param.VALUE, phoneEditText.getText().toString());
-            mFirebaseAnalytics.logEvent("Login", bundle);
+            sendLogToFirebase("Login", "number", phoneEditText.getText().toString());
         }
         else
             Toaster.toast(getActivity(), R.string.wrongNumber);
+    }
+
+    private boolean valdatePhone(String phone) {
+        if ((phone.startsWith(countryCode)) && (PhoneFormatter.removeAllNonNumeric(phone).length() >= 13))
+            return true;
+        else
+            return false;
+    }
+
+    public void sendLogToFirebase(String event, String key, String value) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, key);
+        bundle.putString(FirebaseAnalytics.Param.VALUE, value);
+        mFirebaseAnalytics.logEvent(event, bundle);
     }
 
 

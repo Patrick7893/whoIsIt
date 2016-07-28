@@ -148,10 +148,12 @@ public class ContactsManager {
                 else {
                     call.setName(namesMap.get(call.getNumber()));
                 }
-                if (!TextUtils.isEmpty(call.getName())) {
+                if (!TextUtils.isEmpty(call.getName()) && call.getName()!=null) {
                     if (numberType == 0) {
-                        if (typeMap!=null)
-                            numberType = typeMap.get(call.getName());
+                        if (typeMap!=null) {
+                            String nameofcall = call.getName();
+                            numberType = typeMap.get(nameofcall);
+                        }
                     }
                 }
                 switch (numberType) {

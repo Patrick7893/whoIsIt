@@ -34,7 +34,7 @@ public class LoginPresenter {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.enter));
         pd.show();
-        ApiFactory.createRetrofitService().login(number).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+        ApiFactory.getInstance().getApiInterface().login(number).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
             @Override
             public void onCompleted() {
 

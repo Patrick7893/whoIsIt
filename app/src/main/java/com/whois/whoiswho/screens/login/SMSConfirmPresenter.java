@@ -1,7 +1,9 @@
 package com.whois.whoiswho.screens.login;
 
 import android.app.ProgressDialog;
+import android.os.Bundle;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.ApiFactory;
 import com.whois.whoiswho.api.RegistrationResponse;
@@ -28,7 +30,7 @@ public class SMSConfirmPresenter {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.checkSms));
         pd.show();
-        ApiFactory.createRetrofitService().smsConfirm(number, sms).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+        ApiFactory.getInstance().getApiInterface().smsConfirm(number, sms).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
             @Override
             public void onCompleted() {
 
@@ -38,7 +40,11 @@ public class SMSConfirmPresenter {
             public void onError(Throwable e) {
                 pd.dismiss();
                 Toaster.toast(view.getActivity(), R.string.wrongSms);
-                FirebaseLogManager.sendLogToFirebase(view.mFirebaseAnalytics, "ConfirmSMSFailed", "sms", e.getMessage());
+                Bundle bundle = new Bundle();
+                bundle.getString(FirebaseAnalytics.Param.ITEM_ID, "ID");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "SMS confirm failed");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, e.getMessage());
+                view.mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
 
             @Override

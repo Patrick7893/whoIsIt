@@ -149,11 +149,10 @@ public class ContactsManager {
                     call.setName(namesMap.get(call.getNumber()));
                 }
                 if (!TextUtils.isEmpty(call.getName()) && call.getName()!=null) {
-                    if (numberType == 0) {
-                        if (typeMap!=null) {
-                            String nameofcall = call.getName();
+                    if (numberType == 0 && cur.getPosition()!=0) {
+                        String nameofcall = call.getName();
+                        if (typeMap.containsKey(nameofcall))
                             numberType = typeMap.get(nameofcall);
-                        }
                     }
                 }
                 switch (numberType) {

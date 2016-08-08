@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -54,6 +55,7 @@ public class FindContactsFragment extends Fragment {
     public static final String ADAPTERSTATE = "ADAPTERSTATE";
 
     private static FindContactsPresenter presenter;
+    private String countryIso;
 
     FindContactsAutocompliteAdapter autocompleteAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -65,6 +67,8 @@ public class FindContactsFragment extends Fragment {
         View view = inflater.inflate(R.layout.screen_findcontacts, container, false);
         ButterKnife.bind(this, view);
         presenter = new FindContactsPresenter(this);
+        TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        countryIso = tm.getSimCountryIso();
         initiallizeScreen();
 
         return view;
@@ -112,7 +116,7 @@ public class FindContactsFragment extends Fragment {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            presenter.find(findContactsEditText.getText().toString());
+                            presenter.find(findContactsEditText.getText().toString(), countryIso);
                             return true;
                         }
                         return false;

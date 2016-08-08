@@ -2,8 +2,8 @@
     <string name="app_name">Who Is Who</string>
     <string name="logoText">WHO\nIS WHO</string>
     <!-- App -->
-    <string name="checkConnection">Отсутствует подключение к интернету</string>
-    <string name="serverError">Ошибка соединения</string>
+    <string name="checkConnection">No internet connection</string>
+    <string name="serverError">Connection error</string>
 
     <!--Fonts-->
     <string name="robotoMedium">Roboto-Medium.ttf</string>
@@ -12,125 +12,125 @@
     <string name="robotoLight">Roboto-Light.ttf</string>
 
     <!--Splash-->
-    <string name="nowYouKnow">Теперь вы всегда знаете, кто \nвам звонит - больше никаких \nнежелательных вызовов и спама</string>
-    <string name="letsGo">ПОЕХАЛИ</string>
-    <string name="conditions">Нажимая "Поехали", вы солглашаетесь с <u>условиями использования</u></string>
+    <string name="nowYouKnow">Now you always know who\'s \ncalling - no more unwanted \ncalls and spam</string>
+    <string name="letsGo">LET\`S GO</string>
+    <string name="conditions">By pressing "Let\'s go", you agree to the <u> terms of use </u></string>
 
     <!--tutorial-->
-    <string name="caller">Определитель номера</string>
-    <string name="tutorial1">При каждом звонке вы \nбудете видеть личную \nкарточку звонящего.</string>
+    <string name="caller">Caller ID</string>
+    <string name="tutorial1">With each call you\`ll see personal card of caller.</string>
     <string name="tutorial1_number">1/2</string>
-    <string name="userStatus">Статусы пользователя</string>
-    <string name="tutorial2_a">Теперь вы знаете, когда \nпользователь </string>
-    <string name="tutorial2_b"> доступен</string>
+    <string name="userStatus">User stauses</string>
+    <string name="tutorial2_a">Now you know when \nuser</string>
+    <string name="tutorial2_b"> available</string>
     <string name="tutorial2_c">,</string>
-    <string name="tutorial2_d">\nразговаривает</string>
-    <string name="tutorial2_e"> или его телефон в</string>
-    <string name="tutorial2_f"> беззвучном режиме</string>
+    <string name="tutorial2_d">\nspeaking</string>
+    <string name="tutorial2_e"> or his phone in</string>
+    <string name="tutorial2_f"> silent mode</string>
     <string name="tutorial2_g">.</string>
     <string name="tutorial2_number">2/2</string>
-    <string name="smartJournal">Умный журнал вызовов</string>
-    <string name="tutorial3">Посмотрите на фото \nнеизвестных абонентов, \nкоторые вам звонили. \nВозможно, вы их узнаете!</string>
+    <string name="smartJournal">Smart call log</string>
+    <string name="tutorial3">Look at the photo of unknown callers You may know them!</string>
     <string name="tutorial3_number">3/3</string>
-    <string name="next">ДАЛЕЕ</string>
-    <string name="ready">ПРИСТУПИМ!</string>
-    <string name="nameExample">Михаил Лесников</string>
-    <string name="phoneExample">050 123 45 67 - Украина</string>
-    <string name="tagExample">Юридические услуги</string>
+    <string name="next">NEXT</string>
+    <string name="ready">GET STARTED!</string>
+    <string name="nameExample">John Deer</string>
+    <string name="phoneExample">050 123 45 67 - Ukraine</string>
+    <string name="tagExample">Legal services</string>
 
 
     <!--DateConverter-->
-    <string name="min.">мин.</string>
-    <string name="h.">ч.</string>
-    <string name="yesturday">Вчера</string>
-    <string name="twodayssago">Позавчера</string>
+    <string name="min.">min.</string>
+    <string name="h.">h.</string>
+    <string name="yesturday">Yesterday</string>
+    <string name="twodayssago">2 days ago</string>
 
     <!--MainScreen-->
-    <string name="calls">ЗВОНКИ</string>
-    <string name="spam">СПАМ</string>
-    <string name="find">Поиск</string>
-    <string name="home">домашний</string>
-    <string name="mobile">мобильный</string>
-    <string name="work">рабочий</string>
-    <string name="other">другой</string>
-    <string name="spammersListisEMpty">Список спамеров пуст</string>
+    <string name="calls">CALLS</string>
+    <string name="spam">SPAM</string>
+    <string name="find">Search</string>
+    <string name="home">home</string>
+    <string name="mobile">mobile</string>
+    <string name="work">work</string>
+    <string name="other">other</string>
+    <string name="spammersListisEMpty">Spammers list is empty</string>
 
-    <string name="contacts">Контакты</string>
-    <string name="favorites">Избранные</string>
+    <string name="contacts">Contacts</string>
+    <string name="favorites">Favourites</string>
     <string name="arrow">←</string>
 
     <!--sidebar-->
-    <string name="buypro">Купить Про-аккуант</string>
-    <string name="help">Помощь</string>
-    <string name="invite">Пригласить друзей</string>
-    <string name="settings">Настройки</string>
-    <string name="sendemail">Отправить сообшение</string>
-    <string name="rateapp">Оцените приложение</string>
-    <string name="shareText">Новое приложение-определитель номера для Android с возможностью блока спамеров! \n</string>
-    <string name="youhaveNoGmail">Не найдено приложение Gmail</string>
+    <string name="buypro">Buy Pro-account</string>
+    <string name="help">Help</string>
+    <string name="invite">Invite friends</string>
+    <string name="settings">Settings</string>
+    <string name="sendemail">Send message</string>
+    <string name="rateapp">Rate the app</string>
+    <string name="shareText">New caller id app for Android with the ability to block spammers! \n</string>
+    <string name="youhaveNoGmail">Gmail app not found</string>
 
     <!--saerch screen-->
-    <string name="search">Введите имя или номер в формате 050 123 4567</string>
-    <string name="numbersInBase">номеров в базе</string>
-    <string name="firndNothind">Ничего не найдено</string>
-    <string name="inputTheRightNumber">Введите номер в формате 050 123-45-67</string>
+    <string name="search">Enter a name or number in the format 050 123 4567</string>
+    <string name="numbersInBase">numbers in the database</string>
+    <string name="firndNothind">Nothing was found</string>
+    <string name="inputTheRightNumber">Input number in the format 050 123-45-67</string>
 
     <!--User Profile screen-->
-    <string name="callStory">История вызовов</string>
-    <string name="saveConatcs">Сохранить в контакты</string>
-    <string name="changeContact">Изменить контакт</string>
-    <string name="block">Блокировать</string>
-    <string name="removeFromBlackList">Удалить из спама</string>
-    <string name="listIsEmpty">Список пуст</string>
-    <string name="userAddedToBlackList">Пользователь заблокирован!</string>
-    <string name="userRemovedFromBlackList">Пользователь разблокирован</string>
-    <string name="contactAddedToStarred">Контакт добавлен в избранное</string>
-    <string name="contactRemovedFromStarred">Контакт удален из избранного</string>
+    <string name="callStory">Call history</string>
+    <string name="saveConatcs">Save to contacts</string>
+    <string name="changeContact">Change contact</string>
+    <string name="block">Block</string>
+    <string name="removeFromBlackList">Unblock</string>
+    <string name="listIsEmpty">List is empty</string>
+    <string name="userAddedToBlackList">User was blocked!</string>
+    <string name="userRemovedFromBlackList">User was unblocked</string>
+    <string name="contactAddedToStarred">Contact was added to favourites</string>
+    <string name="contactRemovedFromStarred">Contact was removed from favourites</string>
 
     <!--Dialog activity -->
-    <string name="call">ВЫЗВАТЬ</string>
-    <string name="save">СОХРАНИТЬ</string>
-    <string name="block_caps">БЛОКИРОВАТЬ</string>
-    <string name="unknown_user">Неизвестный номер</string>
-    <string name="unblock">РАЗБЛОКИРОВАТЬ</string>
+    <string name="call">CALL</string>
+    <string name="save">SAVE</string>
+    <string name="block_caps">BLOCK</string>
+    <string name="unknown_user">Unknown number</string>
+    <string name="unblock">UNBLOCK</string>
 
     <!--Spam screen-->
-    <string name="myBlackList">Мой черный список</string>
-    <string name="spammers">Основные спамеры</string>
-    <string name="userInBlackList">Номер у вас в черном списке</string>
-    <string name="usersCheckNumberAsSpam">пользователей отметили это номер как спам</string>
+    <string name="myBlackList">My black list</string>
+    <string name="spammers">Major spammers</string>
+    <string name="userInBlackList">Number is in your black list</string>
+    <string name="usersCheckNumberAsSpam">users was added this number to black list</string>
 
     <!--Login -->
 
-    <string name="smsconfirm1">На номер</string>
-    <string name="smsconfirm2">был отправлен \nкод подтверждения</string>
-    <string name="confirm">ПОДТВЕРДИТЬ</string>
-    <string name="welcome">Добро пожаловать!\nЗаполните свой профиль:</string>
-    <string name="firstname">Имя</string>
-    <string name="firstname_example">Иван</string>
-    <string name="surname">Фамилия</string>
-    <string name="surname_example">Петров</string>
+    <string name="smsconfirm1">On number</string>
+    <string name="smsconfirm2">was sent \nverefication code</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="welcome">Welcome!\nPlease, fill your user profile :</string>
+    <string name="firstname">Name</string>
+    <string name="firstname_example">John</string>
+    <string name="surname">Surname</string>
+    <string name="surname_example">Deer</string>
     <string name="email">E-mail</string>
     <string name="email_example">johnny@apple.com</string>
-    <string name="begin">НАЧАТЬ ПОЛЬЗОВАТЬСЯ</string>
-    <string name="wrongSms">Неверный код подтверждения!</string>
-    <string name="pleaseInputName">Пожалуйста, введите имя и фамилию</string>
-    <string name="takePhoto">Сделать фото</string>
-    <string name="takeFromGallery">Выбрать из галереи</string>
-    <string name="enter">Вход...</string>
-    <string name="checkSms">Проверка...</string>
-    <string name="pleaseInputSMS">Пожалуйста, введите код подтверждения</string>
-    <string name="loadingData">Загрузка данных...</string>
-    <string name="profile">Профиль</string>
-    <string name="changePhoto">Изменить фото</string>
-    <string name="exit">ВЫХОД</string>
-    <string name="wrongNumber">Номер должен быть в формате +380 50 123 45 67</string>
+    <string name="begin">START TO USE</string>
+    <string name="wrongSms">Wrong verification code!</string>
+    <string name="pleaseInputName">Please, input your name and surname</string>
+    <string name="takePhoto">Take a photo</string>
+    <string name="takeFromGallery">Choose from gallery</string>
+    <string name="enter">Enter...</string>
+    <string name="checkSms">Check...</string>
+    <string name="pleaseInputSMS">Please, input verification code</string>
+    <string name="loadingData">Loading...</string>
+    <string name="profile">Profile</string>
+    <string name="changePhoto">Change photo</string>
+    <string name="exit">EXIT</string>
+    <string name="wrongNumber">Number must be in the format +380 50 123 45 67</string>
 
 
     <!--countries-->
     <string-array name="countryList">
-        <item>Украина</item>
-        <item>Чехия</item>
+        <item>Ukraine</item>
+        <item>Czech Republic</item>
     </string-array>
 
 </resources>

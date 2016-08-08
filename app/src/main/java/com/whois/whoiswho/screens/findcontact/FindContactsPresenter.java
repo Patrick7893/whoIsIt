@@ -64,28 +64,18 @@ public class FindContactsPresenter {
 
 
 
-    public void find(String query) {
+    public void find(String query, String countryIso) {
         if (Character.isDigit(query.charAt(0)) || query.startsWith("+")) {
             query = PhoneFormatter.removeAllNonNumeric(query);
-            if (query.length() < 10) {
+            if (query.length() < 9) {
                 Toaster.toast(App.getContext(), R.string.inputTheRightNumber);
                 return;
-            } else {
-                switch (query.length()) {
-                    case 10:
-                        query = "+38" + query;
-                        break;
-                    case 11:
-                        query = "+3" + query;
-                        break;
-                    case 12:
-                        query = "+" + query;
-                        break;
-                }
             }
         }
+        if (query.startsWith("+"))
+            countryIso = null;
         view.setProgressBarVisibility(View.VISIBLE);
-        ApiFactory.createRetrofitService().findPhone(SharedPreferencesSaver.get().getToken(), query).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<FindPhoneResponse>() {
+        ApiFactory.getInstance().getApiInterface().findPhone(SharedPreferencesSaver.get().getToken(), query, countryIso).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<FindPhoneResponse>() {
             @Override
             public void onCompleted() {
 

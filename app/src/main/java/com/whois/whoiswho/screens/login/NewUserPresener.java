@@ -39,10 +39,10 @@ public class NewUserPresener {
     public void createUser(String number, String countyIso, String firstname, String surname, String phone, String email, final File avatar) throws IOException {
         Observable<RegistrationResponse> updateUserObservable;
         if (avatar == null) {
-            updateUserObservable = ApiFactory.createRetrofitService().createUser(number, countyIso, firstname, surname, email, null);
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().createUser(number, countyIso, firstname, surname, email, null);
         }
         else {
-            updateUserObservable = ApiFactory.createRetrofitService().createUser(number, countyIso, firstname, surname, email, new TypedFile("multipart/form-data", avatar));
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().createUser(number, countyIso, firstname, surname, email, new TypedFile("multipart/form-data", avatar));
         }
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.loadingData));

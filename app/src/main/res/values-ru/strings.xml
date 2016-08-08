@@ -18,10 +18,10 @@
 
     <!--tutorial-->
     <string name="caller">Определитель номера</string>
-    <string name="tutorial1">При каждом звонке вы \nбудете видеть личную \nкарточку звонящего.</string>
+    <string name="tutorial1">При каждом звонке вы будете видеть личную карточку звонящего.</string>
     <string name="tutorial1_number">1/2</string>
     <string name="userStatus">Статусы пользователя</string>
-    <string name="tutorial2_a">Теперь вы знаете, когда \nпользователь </string>
+    <string name="tutorial2_a">Теперь вы знаете, когда пользователь </string>
     <string name="tutorial2_b"> доступен</string>
     <string name="tutorial2_c">,</string>
     <string name="tutorial2_d">\nразговаривает</string>
@@ -30,7 +30,7 @@
     <string name="tutorial2_g">.</string>
     <string name="tutorial2_number">2/2</string>
     <string name="smartJournal">Умный журнал вызовов</string>
-    <string name="tutorial3">Посмотрите на фото \nнеизвестных абонентов, \nкоторые вам звонили. \nВозможно, вы их узнаете!</string>
+    <string name="tutorial3">Посмотрите на фото неизвестных абонентов, которые вам звонили. Возможно, вы их узнаете!</string>
     <string name="tutorial3_number">3/3</string>
     <string name="next">ДАЛЕЕ</string>
     <string name="ready">ПРИСТУПИМ!</string>

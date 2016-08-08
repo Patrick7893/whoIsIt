@@ -47,10 +47,10 @@ public class EditProfilePresenter {
         User user = new User(id, firstname, surname, phone, email, avatar);
         final Observable<RegistrationResponse> updateUserObservable;
         if (user.getAvatar() == null) {
-            updateUserObservable = ApiFactory.createRetrofitService().updateUser(user.getServerId(), user.getFirstname(), user.getSurname(), user.getEmail(), null);
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().updateUser(user.getServerId(), user.getFirstname(), user.getSurname(), user.getEmail(), null);
         }
         else {
-            updateUserObservable = ApiFactory.createRetrofitService().updateUser(user.getServerId(), user.getFirstname(), user.getSurname(), user.getEmail(), new TypedFile("multipart/form-data", user.getAvatar()));
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().updateUser(user.getServerId(), user.getFirstname(), user.getSurname(), user.getEmail(), new TypedFile("multipart/form-data", user.getAvatar()));
         }
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.loadingData));

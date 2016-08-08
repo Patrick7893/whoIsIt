@@ -22,12 +22,20 @@ import retrofit.client.OkClient;
  */
 public class ApiFactory {
 
-    public static ApiInterface createRetrofitService() {
+    private static ApiFactory instance;
+
+    private ApiInterface apiInterface;
+
+    public ApiFactory() {
         final RestAdapter retrofit = new RestAdapter.Builder().setClient(new OkClient(getClient())).setEndpoint(ApiInterface.SERVICE_ENDPOINT).build();
         retrofit.setLogLevel(RestAdapter.LogLevel.FULL);
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+        apiInterface = retrofit.create(ApiInterface.class);
+    }
 
-        return apiInterface;
+    public static ApiFactory getInstance() {
+        if (instance == null)
+            instance = new ApiFactory();
+        return instance;
     }
 
     public static void checkConnection() {
@@ -41,10 +49,14 @@ public class ApiFactory {
         }
     }
 
-    private static OkHttpClient getClient() {
+    private OkHttpClient getClient() {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(5, TimeUnit.MINUTES);
         client.setReadTimeout(5, TimeUnit.MINUTES);
         return client;
+    }
+
+    public ApiInterface getApiInterface() {
+        return apiInterface;
     }
 }

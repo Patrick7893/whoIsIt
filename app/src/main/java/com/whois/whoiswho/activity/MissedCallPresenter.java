@@ -31,7 +31,7 @@ public class MissedCallPresenter {
     }
 
     public void find(String number) {
-        ApiFactory.createRetrofitService().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
+        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 
@@ -66,7 +66,7 @@ public class MissedCallPresenter {
         }
         Toaster.toast(App.getContext(), view.getString(R.string.userAddedToBlackList));
         if (phone !=null && this.phone.getServerId()!=0) {
-            ApiFactory.createRetrofitService().blockUser(this.phone.getServerId(), SharedPreferencesSaver.get().getToken(), this.phone.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
+            ApiFactory.getInstance().getApiInterface().blockUser(this.phone.getServerId(), SharedPreferencesSaver.get().getToken(), this.phone.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
                 @Override
                 public void onCompleted() {
 
@@ -91,7 +91,7 @@ public class MissedCallPresenter {
         spamPhone.save();
         Toaster.toast(App.getContext(), view.getString(R.string.userRemovedFromBlackList));
         if (phone!=null && phone.getServerId()!=0) {
-            ApiFactory.createRetrofitService().unblockUser(phone.getServerId(), SharedPreferencesSaver.get().getToken(), phone.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
+            ApiFactory.getInstance().getApiInterface().unblockUser(phone.getServerId(), SharedPreferencesSaver.get().getToken(), phone.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
                 @Override
                 public void onCompleted() {
 

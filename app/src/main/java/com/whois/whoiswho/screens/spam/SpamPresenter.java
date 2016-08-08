@@ -37,7 +37,7 @@ public class SpamPresenter {
     }
 
     public void getSpammers() {
-        ApiFactory.createRetrofitService().getSpammers(SharedPreferencesSaver.get().getToken()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetSpammersResponse>() {
+        ApiFactory.getInstance().getApiInterface().getSpammers(SharedPreferencesSaver.get().getToken()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetSpammersResponse>() {
             @Override
             public void onCompleted() {
 

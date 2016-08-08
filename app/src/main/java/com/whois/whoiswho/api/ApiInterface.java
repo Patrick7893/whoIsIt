@@ -41,7 +41,7 @@ public interface ApiInterface {
     Observable<RegistrationResponse> loadContacts(@Body LoadContactsRequest loadContactsRequest);
 
     @GET("/phones/search")
-    Observable<FindPhoneResponse> findPhone(@Query("token") String token, @Query("query") String query);
+    Observable<FindPhoneResponse> findPhone(@Query("token") String token, @Query("query") String query, @Query("user_locale") String locale);
 
     @GET("/phones/getRecordByNumber")
     Observable<GetRecordByNumberResponse> getPhoneRecord(@Query("token") String token, @Query("number") String number);

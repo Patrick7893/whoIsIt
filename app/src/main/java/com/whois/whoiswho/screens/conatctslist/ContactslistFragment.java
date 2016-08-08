@@ -241,10 +241,16 @@ public class ContactslistFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         onContactsDetachListener.onDetachContacts(this.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 }
 
 

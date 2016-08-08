@@ -46,7 +46,7 @@ public class UserProfilePresenter {
             else if (number.length() == 12)
                 number = "+" + number;
         }
-        ApiFactory.createRetrofitService().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
+        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 
@@ -83,7 +83,7 @@ public class UserProfilePresenter {
         }
         Toaster.toast(view.getContext(), view.getString(R.string.userAddedToBlackList));
         if (contact.getId()!=0) {
-            ApiFactory.createRetrofitService().blockUser(contact.getId(), SharedPreferencesSaver.get().getToken(), user.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
+            ApiFactory.getInstance().getApiInterface().blockUser(contact.getId(), SharedPreferencesSaver.get().getToken(), user.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
                 @Override
                 public void onCompleted() {
 
@@ -109,7 +109,7 @@ public class UserProfilePresenter {
         spamPhone.save();
         Toaster.toast(view.getContext(), view.getString(R.string.userRemovedFromBlackList));
         if (contact.getId()!=0) {
-            ApiFactory.createRetrofitService().unblockUser(contact.getId(), SharedPreferencesSaver.get().getToken(), user.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
+            ApiFactory.getInstance().getApiInterface().unblockUser(contact.getId(), SharedPreferencesSaver.get().getToken(), user.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
                 @Override
                 public void onCompleted() {
 

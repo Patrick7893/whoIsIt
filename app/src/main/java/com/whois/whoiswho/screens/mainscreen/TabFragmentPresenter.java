@@ -95,7 +95,7 @@ public class TabFragmentPresenter {
             @Override
             public void onNext(ArrayList<Phone> phones) {
                 if (phones.size() > 0) {
-                    ApiFactory.createRetrofitService().loadContacts(new LoadContactsRequest(SharedPreferencesSaver.get().getToken(), phones)).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+                    ApiFactory.getInstance().getApiInterface().loadContacts(new LoadContactsRequest(SharedPreferencesSaver.get().getToken(), phones)).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
                         @Override
                         public void onCompleted() {
                         }

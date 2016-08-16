@@ -1,18 +1,22 @@
 package com.whois.whoiswho.screens.user_profile;
 
 import android.Manifest;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +47,7 @@ import com.whois.whoiswho.utils.PhoneFormatter;
 import com.whois.whoiswho.utils.ContactsManager;
 import com.whois.whoiswho.utils.Toaster;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -53,18 +57,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class UserProfileFragment extends Fragment {
 
-    @Bind(R.id.userInfoContainer) View userInfoContainer;
-    @Bind(R.id.userActionsContainer) View userActionsContainer;
-    @Bind(R.id.titleTextView) TextView titleTextView;
-    @Bind(R.id.phoneNumbersRecyclerView) RecyclerView phoneNumbersRecyclerView;
-    @Bind(R.id.likeButton) ImageView likeButton;
-    @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
-    @Bind(R.id.saveToContatcsButton) TextView saveToContactsButton;
-    @Bind(R.id.divider) View divider;
-    @Bind(R.id.blockButton) TextView blockButton;
-    @Bind(R.id.addressTextView) TextView addressTextView;
-    @Bind(R.id.progressBar) CircularProgressView progressBar;
-    @Bind(R.id.actionBar) RelativeLayout actionBar;
+    @BindView(R.id.userInfoContainer) View userInfoContainer;
+    @BindView(R.id.userActionsContainer) View userActionsContainer;
+    @BindView(R.id.titleTextView) TextView titleTextView;
+    @BindView(R.id.phoneNumbersRecyclerView) RecyclerView phoneNumbersRecyclerView;
+    @BindView(R.id.likeButton) ImageView likeButton;
+    @BindView(R.id.avatarImageView) CircleImageView avatarImageView;
+    @BindView(R.id.saveToContatcsButton) TextView saveToContactsButton;
+    @BindView(R.id.divider) View divider;
+    @BindView(R.id.blockButton) TextView blockButton;
+    @BindView(R.id.addressTextView) TextView addressTextView;
+    @BindView(R.id.progressBar) CircularProgressView progressBar;
+    @BindView(R.id.actionBar) RelativeLayout actionBar;
 
     private UserProfilePresenter presenter;
 
@@ -92,7 +96,8 @@ public class UserProfileFragment extends Fragment {
         Gson gson = new Gson();
         contact = gson.fromJson(contatcString, Contact.class);
         presenter = new UserProfilePresenter(this, contact);
-        presenter.find(contact.getNumbers().get(0).getNumber().replaceAll("[^0-9+]", ""));
+        TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        presenter.find(contact.getNumbers().get(0).getNumber().replaceAll("[^0-9+]", ""), tm.getSimCountryIso());
         if (!TextUtils.isEmpty(contact.getName()))
             titleTextView.setText(contact.getName());
         addressTextView.setText(CountryManager.getCountryNameFromIso(contact.getNumbers().get(0).getCountryIso()));
@@ -117,7 +122,7 @@ public class UserProfileFragment extends Fragment {
         phoneNumbersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         phoneNumbersRecyclerView.setAdapter(userPhonesAdapter);
         if (!TextUtils.isEmpty(contact.getAvatar()))
-            Picasso.with(getContext()).load(contact.getAvatar()).into(avatarImageView);
+            Picasso.with(getActivity().getApplicationContext()).load(contact.getAvatar()).into(avatarImageView);
 
 
         checkPhoneInContacts();
@@ -127,7 +132,7 @@ public class UserProfileFragment extends Fragment {
     public void displayUserInfo(GetRecordByNumberResponse findPhoneResponse) {
         titleTextView.setText(findPhoneResponse.getData().getName());
         if (!TextUtils.isEmpty(findPhoneResponse.getData().getAvatar().getUrl()))
-            Picasso.with(getContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().getAvatar().getUrl()).into(avatarImageView);
+            Picasso.with(getActivity().getApplicationContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().getAvatar().getUrl()).into(avatarImageView);
 
         String addressText;
         if (TextUtils.isEmpty(findPhoneResponse.getData().getOperator()))
@@ -179,7 +184,7 @@ public class UserProfileFragment extends Fragment {
         bundle.putString(CONTACTINFO, contactString);
         CallStoryFragment callStoryFragment = new CallStoryFragment();
         callStoryFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, callStoryFragment).addToBackStack(null).commit();
+        getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left, R.animator.slide_in_from_left, R.animator.slide_out_to_right).add(R.id.flContent, callStoryFragment).addToBackStack(null).commit();
 
     }
 
@@ -213,12 +218,12 @@ public class UserProfileFragment extends Fragment {
     public void setLike() {
         if (isContactPresent == ContactsManager.PRESENT_IN_CONTACTS_NOT_STARRED) {
             likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorites_filled));
-            ContactsManager.changeContactStarred(getContext(), String.valueOf(contact.getNumbers().get(0).getNumber()), ContactsManager.PRESENT_IN_CONTACTS_STARRED);
+            ContactsManager.changeContactStarred(App.getContext(), String.valueOf(contact.getNumbers().get(0).getNumber()), ContactsManager.PRESENT_IN_CONTACTS_STARRED);
             Toaster.toast(getActivity(), R.string.contactAddedToStarred);
         }
         else if (isContactPresent == ContactsManager.PRESENT_IN_CONTACTS_STARRED){
             likeButton.setImageDrawable(getResources().getDrawable(R.drawable.favorite));
-            ContactsManager.changeContactStarred(getContext(), String.valueOf(contact.getNumbers().get(0).getNumber()), ContactsManager.PRESENT_IN_CONTACTS_NOT_STARRED);
+            ContactsManager.changeContactStarred(App.getContext(), String.valueOf(contact.getNumbers().get(0).getNumber()), ContactsManager.PRESENT_IN_CONTACTS_NOT_STARRED);
             Toaster.toast(getActivity(), R.string.contactRemovedFromStarred);
         }
         else {
@@ -241,7 +246,9 @@ public class UserProfileFragment extends Fragment {
             isBlocked = false;
             presenter.unblockUser();
             blockButton.setText(getString(R.string.block));
-            actionBar.setBackground(getResources().getDrawable(R.drawable.primary_color_gradient));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                actionBar.setBackground(getResources().getDrawable(R.drawable.primary_color_gradient));
+            }
         }
 
     }

@@ -14,7 +14,7 @@ import com.whois.whoiswho.model.ContactNumber;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -63,10 +63,10 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.numberTextView) TextView numberTextView;
-        @Bind(R.id.numberTypeTextView) TextView numberTypeTextView;
-        @Bind(R.id.callContainer) RelativeLayout callContainer;
-        @Bind(R.id.messageImageView) ImageView messageImageView;
+        @BindView(R.id.numberTextView) TextView numberTextView;
+        @BindView(R.id.numberTypeTextView) TextView numberTypeTextView;
+        @BindView(R.id.callContainer) RelativeLayout callContainer;
+        @BindView(R.id.messageImageView) ImageView messageImageView;
 
         public ViewHolder(View v) {
             super(v);

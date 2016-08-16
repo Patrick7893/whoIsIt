@@ -1,12 +1,12 @@
 package com.whois.whoiswho.screens.numpad;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
@@ -24,7 +24,8 @@ import com.whois.whoiswho.utils.FontManager;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 /**
@@ -32,10 +33,10 @@ import butterknife.ButterKnife;
  */
 public class NumpadFragment extends Fragment {
 
-    @Bind({R.id.number1, R.id.number2, R.id.number3, R.id.number4, R.id.number5, R.id.number6, R.id.number7, R.id.number8, R.id.number9, R.id.number0, R.id.numberAst, R.id.numberDiez}) List<RelativeLayout> numbers;
-    @Bind(R.id.numberContainer) RelativeLayout numberContainer;
-    @Bind(R.id.numberTextView) TextView numberTextView;
-    @Bind(R.id.backspaceButton) ImageView backSpaceImageView;
+    @BindViews({R.id.number1, R.id.number2, R.id.number3, R.id.number4, R.id.number5, R.id.number6, R.id.number7, R.id.number8, R.id.number9, R.id.number0, R.id.numberAst, R.id.numberDiez}) List<RelativeLayout> numbers;
+    @BindView(R.id.numberContainer) RelativeLayout numberContainer;
+    @BindView(R.id.numberTextView) TextView numberTextView;
+    @BindView(R.id.backspaceButton) ImageView backSpaceImageView;
 
 
     private Vibrator vibe;

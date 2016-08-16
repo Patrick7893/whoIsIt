@@ -26,21 +26,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
+            android:background="@android:color/white"
             android:layout_marginRight="20dp">
 
             <Spinner
                 android:id="@+id/countrySpinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textColor="@android:color/black"
                 android:tag="@string/robotoMedium"
                 android:textSize="18sp"
                 android:padding="15dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="gone">
+                android:focusableInTouchMode="true">
 
             </Spinner>
 

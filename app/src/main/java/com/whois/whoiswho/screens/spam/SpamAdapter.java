@@ -15,7 +15,7 @@ import com.whois.whoiswho.utils.FontManager;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -79,11 +79,11 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        @Bind(R.id.nameTextView) TextView nameTextView;
-        @Bind(R.id.phoneTextView) TextView phoneTextView;
-        @Bind(R.id.titleTextView) TextView titleTextView;
-        @Bind(R.id.spamContainer) LinearLayout spamContainer;
+
+        @BindView(R.id.nameTextView) TextView nameTextView;
+        @BindView(R.id.phoneTextView) TextView phoneTextView;
+        @BindView(R.id.titleTextView) TextView titleTextView;
+        @BindView(R.id.spamContainer) LinearLayout spamContainer;
 
         public ViewHolder(View v) {
             super(v);

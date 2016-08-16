@@ -1,6 +1,7 @@
 package com.whois.whoiswho.screens.conatctslist;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -35,7 +35,7 @@ import com.whois.whoiswho.view.FastScroller;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
@@ -49,11 +49,11 @@ import rx.schedulers.Schedulers;
  */
 public class ContactslistFragment extends Fragment {
 
-    @Bind(R.id.contactsListView) RecyclerView contactsRecyclerView;
-    @Bind(R.id.fastscroller) FastScroller fastScroller;
-    @Bind(R.id.titleTextView) TextView titleTextView;
-    @Bind(R.id.searchButton) ImageView searchButton;
-    @Bind(R.id.searchView) SearchView searchView;
+    @BindView(R.id.contactsListView) RecyclerView contactsRecyclerView;
+    @BindView(R.id.fastscroller) FastScroller fastScroller;
+    @BindView(R.id.titleTextView) TextView titleTextView;
+    @BindView(R.id.searchButton) ImageView searchButton;
+    @BindView(R.id.searchView) SearchView searchView;
 
     private static ContactListPresenter presenter;
 

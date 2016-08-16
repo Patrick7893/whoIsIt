@@ -1,10 +1,10 @@
 package com.whois.whoiswho.screens.call_story;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,8 +21,7 @@ import com.whois.whoiswho.screens.user_profile.UserProfileFragment;
 import com.whois.whoiswho.utils.FontManager;
 
 import java.util.ArrayList;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.android.schedulers.AndroidSchedulers;
@@ -38,8 +37,8 @@ public class CallStoryFragment extends Fragment {
 
     private Contact contact;
 
-    @Bind(R.id.callStoryRecyclerView) RecyclerView callStoryRecyclerView;
-    @Bind(R.id.emptyListView) TextView emptyTextView;
+    @BindView(R.id.callStoryRecyclerView) RecyclerView callStoryRecyclerView;
+    @BindView(R.id.emptyListView) TextView emptyTextView;
 
     @Nullable
     @Override

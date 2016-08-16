@@ -1,11 +1,11 @@
 package com.whois.whoiswho.screens.mainscreen;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +25,7 @@ import com.whois.whoiswho.utils.SharedPreferencesSaver;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -34,8 +34,9 @@ import butterknife.OnClick;
  */
 public class TabFragment extends Fragment {
 
-    @Bind(R.id.tabs) TabLayout tabLayout;
-    @Bind(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.tabs) TabLayout tabLayout;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
 
 
     @Nullable
@@ -52,17 +53,17 @@ public class TabFragment extends Fragment {
 
         presenter.loadContatcs();
 
-        if (!SharedPreferencesSaver.get().getTutorialDone()) {
+        if (!SharedPreferencesSaver.get().getTutorialDone() && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
             TutorialDialog tutorialDialog = new TutorialDialog();
             tutorialDialog.setCancelable(false);
-            tutorialDialog.show(getActivity().getSupportFragmentManager(), "tutorial");
+            tutorialDialog.show(getActivity().getFragmentManager(), "tutorial");
         }
 
         return view;
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
         adapter.addFragment(new CallFragment(), getString(R.string.calls));
         adapter.addFragment(new SpamFragment(), getString(R.string.spam));
         viewPager.setAdapter(adapter);
@@ -100,7 +101,7 @@ public class TabFragment extends Fragment {
 
     @OnClick(R.id.searchButton)
     public void goToSearchScreen() {
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.flContent, new FindContactsFragment()).addToBackStack(null).commit();
+        getActivity().getFragmentManager().beginTransaction().add(R.id.flContent, new FindContactsFragment()).addToBackStack(null).commit();
     }
 
     @Override

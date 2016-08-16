@@ -14,8 +14,7 @@ import com.whois.whoiswho.model.Call;
 import com.whois.whoiswho.utils.DateConverter;
 
 import java.util.ArrayList;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -66,10 +65,10 @@ public class CallStoryAdapter extends RecyclerView.Adapter<CallStoryAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        @Bind(R.id.dateTextView) TextView dateTextView;
-        @Bind(R.id.phoneTextView) TextView nameTextView;
-        @Bind(R.id.numberTypeTextView) TextView numberTypeTextView;
-        @Bind(R.id.callContainer) RelativeLayout nameContainer;
+        @BindView(R.id.dateTextView) TextView dateTextView;
+        @BindView(R.id.phoneTextView) TextView nameTextView;
+        @BindView(R.id.numberTypeTextView) TextView numberTypeTextView;
+        @BindView(R.id.callContainer) RelativeLayout nameContainer;
 
         public ViewHolder(View v) {
             super(v);

@@ -1,6 +1,7 @@
 package com.whois.whoiswho.screens.calls;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -59,7 +60,8 @@ public class CallsPresenter {
         bundle.putString(view.CONTACTINFO, contactString);
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
-        view.getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+        //view.getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+         view.getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left, R.animator.slide_in_from_left, R.animator.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
     }
 
     Observable<ArrayList<Call>> getCalls = Observable.create(new Observable.OnSubscribe<ArrayList<Call>>() {

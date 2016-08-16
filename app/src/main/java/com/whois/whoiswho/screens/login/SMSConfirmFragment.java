@@ -1,8 +1,8 @@
 package com.whois.whoiswho.screens.login;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,8 +19,7 @@ import com.whois.whoiswho.api.RegistrationResponse;
 import com.whois.whoiswho.utils.FontManager;
 import com.whois.whoiswho.utils.KeyboardManager;
 import com.whois.whoiswho.utils.Toaster;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -31,11 +30,11 @@ public class SMSConfirmFragment extends Fragment {
 
     public static final String SMS = "SMS";
 
-    @Bind(R.id.sms1EditText) EditText sms1EditText;
-    @Bind(R.id.sms2EditText) EditText sms2EditText;
-    @Bind(R.id.sms3EditText) EditText sms3EditText;
-    @Bind(R.id.sms4EditText) EditText sms4EditText;
-    @Bind(R.id.smsNumberTextView) TextView smsNumberTextView;
+    @BindView(R.id.sms1EditText) EditText sms1EditText;
+    @BindView(R.id.sms2EditText) EditText sms2EditText;
+    @BindView(R.id.sms3EditText) EditText sms3EditText;
+    @BindView(R.id.sms4EditText) EditText sms4EditText;
+    @BindView(R.id.smsNumberTextView) TextView smsNumberTextView;
 
     private int sms;
     private String number;
@@ -110,7 +109,7 @@ public class SMSConfirmFragment extends Fragment {
             sendLogToFirebase("ConfirmSMS", "sms", smsString);
         }
         else {
-            Toaster.toast(getContext(), R.string.pleaseInputSMS);
+            Toaster.toast(getActivity().getApplicationContext(), R.string.pleaseInputSMS);
         }
     }
 
@@ -123,7 +122,7 @@ public class SMSConfirmFragment extends Fragment {
             bundle.putString(NewUserFragment.PHONE, this.getArguments().getString(NewUserFragment.PHONE));
             NewUserFragment newUserFragment = new NewUserFragment();
             newUserFragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, newUserFragment).commit();
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, newUserFragment).commit();
         }
         else {
             Toaster.toast(getActivity(), R.string.wrongSms);

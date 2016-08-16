@@ -1,6 +1,7 @@
 package com.whois.whoiswho.activity;
 
-import android.support.v4.app.Fragment;
+
+import android.app.Fragment;
 
 /**
  * Created by stasenkopavel on 4/8/16.

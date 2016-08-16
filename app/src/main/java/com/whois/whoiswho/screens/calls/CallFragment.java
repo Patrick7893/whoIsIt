@@ -1,6 +1,8 @@
 package com.whois.whoiswho.screens.calls;
 
 import android.Manifest;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,8 +31,7 @@ import com.whois.whoiswho.utils.PermissionManager;
 
 
 import java.util.ArrayList;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,10 +43,10 @@ import rx.schedulers.Schedulers;
  */
 public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrsesentListener, ContactslistFragment.OnContactsDetachListener {
 
-    @Bind(R.id.callsList) RecyclerView callsRecyclerView;
-    @Bind(R.id.contactsImageView) ImageView contactsImageView;
-    @Bind(R.id.favouiteContacts) ImageView favouriteContactsImageView;
-    @Bind(R.id.numpadImageView) ImageView numPadImageView;
+    @BindView(R.id.callsList) RecyclerView callsRecyclerView;
+    @BindView(R.id.contactsImageView) ImageView contactsImageView;
+    @BindView(R.id.favouiteContacts) ImageView favouriteContactsImageView;
+    @BindView(R.id.numpadImageView) ImageView numPadImageView;
 
     public final static String ISFAVOURITECONTACTS = "isFavourite";
     public static final String CONTACTINFO = "CONTACTINFO";
@@ -218,12 +218,12 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
     void showKeyBoard() {
         numPadImageView.setImageDrawable(getResources().getDrawable(R.drawable.keypad_filled));
         if (isContatcsPresent()) {
-            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top, R.anim.slide_in_from_bottom, R.anim.slide_out_to_top).remove(contactslistFragment).commit();
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().getFragmentManager().beginTransaction().setCustomAnimations(0, 0, 0, R.animator.slide_out_to_top).remove(contactslistFragment).commit();
+            getActivity().getFragmentManager().popBackStack();
         }
         numpadFragment = new NumpadFragment();
         numpadFragment.setOnPhonePresentListener(this);
-        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top, R.anim.slide_in_from_bottom, R.anim.slide_out_to_top).add(R.id.numPadContainer, numpadFragment).addToBackStack(null).commit();
+        getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_from_bottom, R.animator.slide_out_to_top, R.animator.slide_in_from_bottom, R.animator.slide_out_to_top).add(R.id.numPadContainer, numpadFragment).addToBackStack(null).commit();
         setKeyBoardPresent(true);
     }
 

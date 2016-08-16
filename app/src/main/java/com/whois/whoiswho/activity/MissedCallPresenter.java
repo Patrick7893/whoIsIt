@@ -30,8 +30,8 @@ public class MissedCallPresenter {
         this.view = view;
     }
 
-    public void find(String number) {
-        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
+    public void find(String number, String countryIso) {
+        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number, countryIso).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 

@@ -1,11 +1,11 @@
 package com.whois.whoiswho.screens.login;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,7 @@ import com.whois.whoiswho.utils.Toaster;
 
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,10 +37,10 @@ public class NewUserFragment extends Fragment {
 
     private NewUserPresener presenter;
 
-    @Bind(R.id.firstnameEditText) EditText firstNameEditText;
-    @Bind(R.id.surnameEditText) EditText surnameEditText;
-    @Bind(R.id.emailEditText) EditText emailEditText;
-    @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
+    @BindView(R.id.firstnameEditText) EditText firstNameEditText;
+    @BindView(R.id.surnameEditText) EditText surnameEditText;
+    @BindView(R.id.emailEditText) EditText emailEditText;
+    @BindView(R.id.avatarImageView) CircleImageView avatarImageView;
 
     private Bitmap avatar;
     public FirebaseAnalytics mFirebaseAnalytics;
@@ -73,7 +73,7 @@ public class NewUserFragment extends Fragment {
     public void pickImage() {
         DialogAvatar dialogAvatar = new DialogAvatar();
         dialogAvatar.setTargetFragment(this, 1);
-        dialogAvatar.show(getActivity().getSupportFragmentManager(), "AVATARDIALOG");
+        dialogAvatar.show(getActivity().getFragmentManager(), "AVATARDIALOG");
     }
 
     @OnClick(R.id.okButton)

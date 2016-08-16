@@ -1,6 +1,7 @@
 package com.whois.whoiswho.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -10,6 +11,7 @@ import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -29,7 +31,7 @@ import com.whois.whoiswho.model.Phone_Table;
 import com.whois.whoiswho.utils.CountryManager;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,12 +43,12 @@ public class MissedCallActivity extends AppCompatActivity {
 
     private MissedCallPresenter presenter;
 
-    @Bind(R.id.phoneTextView) TextView phoneTextView;
-    @Bind(R.id.nameTextView) TextView nameTextView;
-    @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
-    @Bind(R.id.spamTextView) TextView spamTextView;
-    @Bind(R.id.container) RelativeLayout container;
-    @Bind(R.id.blockTextView) TextView blockTextView;
+    @BindView(R.id.phoneTextView) TextView phoneTextView;
+    @BindView(R.id.nameTextView) TextView nameTextView;
+    @BindView(R.id.avatarImageView) CircleImageView avatarImageView;
+    @BindView(R.id.spamTextView) TextView spamTextView;
+    @BindView(R.id.container) RelativeLayout container;
+    @BindView(R.id.blockTextView) TextView blockTextView;
 
     private WindowManager.LayoutParams wlp;
     private int scrennHeight;
@@ -88,7 +90,8 @@ public class MissedCallActivity extends AppCompatActivity {
         window.setAttributes(wlp);
         Bundle b = getIntent().getExtras();
         number = b.getString("phone");
-        presenter.find(number);
+        TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        presenter.find(number, tm.getSimCountryIso());
         phoneTextView.setText(PhoneNumberUtils.formatNumber(number, CountryManager.getIsoFromPhone(number)) + " - " + CountryManager.getCountryNameFromIso(CountryManager.getIsoFromPhone(number)));
         isBlocked = checkNumberIsSpam(number);
     }

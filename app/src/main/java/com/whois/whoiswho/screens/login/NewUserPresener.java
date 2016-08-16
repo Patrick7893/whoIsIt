@@ -1,9 +1,12 @@
 package com.whois.whoiswho.screens.login;
 
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.jaredrummler.android.device.DeviceName;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.ApiFactory;
 import com.whois.whoiswho.api.ApiInterface;
@@ -39,10 +42,10 @@ public class NewUserPresener {
     public void createUser(String number, String countyIso, String firstname, String surname, String phone, String email, final File avatar) throws IOException {
         Observable<RegistrationResponse> updateUserObservable;
         if (avatar == null) {
-            updateUserObservable = ApiFactory.getInstance().getApiInterface().createUser(number, countyIso, firstname, surname, email, null);
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().createUser(number, countyIso, firstname, surname, email, DeviceName.getDeviceName(), null);
         }
         else {
-            updateUserObservable = ApiFactory.getInstance().getApiInterface().createUser(number, countyIso, firstname, surname, email, new TypedFile("multipart/form-data", avatar));
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().createUser(number, countyIso, firstname, surname, email, DeviceName.getDeviceName(), new TypedFile("multipart/form-data", avatar));
         }
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.loadingData));
@@ -59,6 +62,7 @@ public class NewUserPresener {
                     public void onError(Throwable e) {
                         ApiFactory.checkConnection();
                         pd.dismiss();
+                        Log.d("CREATEUSERERROR", e.getMessage());
                         FirebaseLogManager.sendLogToFirebase(view.mFirebaseAnalytics, "RegistrationFailed", "name", e.getMessage());
                     }
 
@@ -73,7 +77,8 @@ public class NewUserPresener {
                             user.setCountyIso(view.getArguments().getString(NewUserFragment.COUNTRY));
                             user.setAvatar(avatar);
                             user.save();
-                            view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).commit();
+                            //view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).commit();
+                            view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
                         }
                     }
                 });

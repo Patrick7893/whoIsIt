@@ -2,11 +2,13 @@ package com.whois.whoiswho.activity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -31,7 +33,7 @@ import com.whois.whoiswho.utils.SharedPreferencesSaver;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,11 +48,11 @@ public class IcomingCallActivity extends Activity {
 
     WindowManager.LayoutParams wlp;
     private int scrennHeight;
-    @Bind(R.id.phoneTextView) TextView phoneTextView;
-    @Bind(R.id.nameTextView) TextView nameTextView;
-    @Bind(R.id.avatarImageView) CircleImageView avatarImageView;
-    @Bind(R.id.spamTextView) TextView spamTextView;
-    @Bind(R.id.container) FrameLayout container;
+    @BindView(R.id.phoneTextView) TextView phoneTextView;
+    @BindView(R.id.nameTextView) TextView nameTextView;
+    @BindView(R.id.avatarImageView) CircleImageView avatarImageView;
+    @BindView(R.id.spamTextView) TextView spamTextView;
+    @BindView(R.id.container) FrameLayout container;
 
     private ActivityManager mActivityManager;
     private boolean mDismissed = false;
@@ -182,7 +184,8 @@ public class IcomingCallActivity extends Activity {
         window.setAttributes(wlp);
         Bundle b = getIntent().getExtras();
         number = b.getString("phone");
-        find(number);
+        TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        find(number, tm.getSimCountryIso());
         phoneTextView.setText(PhoneNumberUtils.formatNumber(number, CountryManager.getIsoFromPhone(number)) + " - " + CountryManager.getCountryNameFromIso(CountryManager.getIsoFromPhone(number)));
         checkNumberIsSpam(number);
     }
@@ -204,8 +207,8 @@ public class IcomingCallActivity extends Activity {
         return size.y;
     }
 
-    public void find(String number) {
-        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
+    public void find(String number, String countyIso) {
+        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number, countyIso).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 

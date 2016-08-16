@@ -1,5 +1,6 @@
 package com.whois.whoiswho.screens.login;
 
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -56,7 +57,8 @@ public class LoginPresenter {
                         user.setAvatarPath(ApiInterface.SERVICE_ENDPOINT + s.getAvatarPath());
                     user.save();
                     SharedPreferencesSaver.get().saveToken(s.getToken());
-                    view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
+                    //view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
+                    view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, new TabFragment()).addToBackStack("stack").commit();
                 }
                 else if (s.getError() == 1) {
                     Bundle bundle = new Bundle();
@@ -65,7 +67,8 @@ public class LoginPresenter {
                     bundle.putString(NewUserFragment.COUNTRY, countryIso);
                     SMSConfirmFragment smsConfirmFragment = new SMSConfirmFragment();
                     smsConfirmFragment.setArguments(bundle);
-                    view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
+                  //  view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
+                    view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
                 }
             }
         });

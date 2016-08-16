@@ -1,6 +1,7 @@
 package com.whois.whoiswho.screens.conatctslist;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -40,7 +41,8 @@ public class ContactListPresenter {
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
         KeyboardManager.hideKeyboard(view.getActivity());
-        view.getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+       // view.getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+        view.getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left, R.animator.slide_in_from_left, R.animator.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
     }
 
     public List<Contact> filter(List<Contact> models, String query) {

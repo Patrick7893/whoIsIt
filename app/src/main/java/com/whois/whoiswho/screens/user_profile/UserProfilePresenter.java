@@ -37,16 +37,8 @@ public class UserProfilePresenter {
         user = new Select().from(User.class).querySingle();
     }
 
-    public void find(String number) {
-        if (!number.startsWith("+")) {
-            if (number.length() == 10)
-                number = "+38" + number;
-            else if (number.length() == 11)
-                number = "+3" + number;
-            else if (number.length() == 12)
-                number = "+" + number;
-        }
-        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
+    public void find(String number, String countryIso) {
+        ApiFactory.getInstance().getApiInterface().getPhoneRecord(SharedPreferencesSaver.get().getToken(), number, countryIso).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetRecordByNumberResponse>() {
             @Override
             public void onCompleted() {
 
@@ -81,7 +73,7 @@ public class UserProfilePresenter {
             phone.setIsBlocked(true);
             phone.save();
         }
-        Toaster.toast(view.getContext(), view.getString(R.string.userAddedToBlackList));
+        Toaster.toast(view.getActivity(), view.getString(R.string.userAddedToBlackList));
         if (contact.getId()!=0) {
             ApiFactory.getInstance().getApiInterface().blockUser(contact.getId(), SharedPreferencesSaver.get().getToken(), user.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
                 @Override
@@ -107,7 +99,7 @@ public class UserProfilePresenter {
         Phone spamPhone = new Select().from(Phone.class).where(Phone_Table.number.is(PhoneFormatter.removeAllNonNumeric(contact.getNumbers().get(0).getNumber()))).querySingle();
         spamPhone.setIsBlocked(false);
         spamPhone.save();
-        Toaster.toast(view.getContext(), view.getString(R.string.userRemovedFromBlackList));
+        Toaster.toast(view.getActivity(), view.getString(R.string.userRemovedFromBlackList));
         if (contact.getId()!=0) {
             ApiFactory.getInstance().getApiInterface().unblockUser(contact.getId(), SharedPreferencesSaver.get().getToken(), user.getServerId()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<BaseResponse>() {
                 @Override

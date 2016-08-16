@@ -1,8 +1,8 @@
 package com.whois.whoiswho.screens.login;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
+import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.Phone;
 import com.whois.whoiswho.utils.CountryManager;
 import com.whois.whoiswho.utils.FontManager;
@@ -24,7 +25,7 @@ import com.whois.whoiswho.utils.Toaster;
 
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -33,9 +34,9 @@ import butterknife.OnClick;
  */
 public class LoginFragment extends Fragment {
 
-    @Bind(R.id.phoneEditText) EditText phoneEditText;
-    @Bind(R.id.countrySpinner) Spinner countrySpinner;
-    @Bind(R.id.okButton) TextView okButton;
+    @BindView(R.id.phoneEditText) EditText phoneEditText;
+    @BindView(R.id.countrySpinner) Spinner countrySpinner;
+    @BindView(R.id.okButton) TextView okButton;
 
     private static LoginPresenter presenter;
     private String countryIso;
@@ -51,7 +52,7 @@ public class LoginFragment extends Fragment {
         FontManager.overrideFonts(view);
         presenter = new LoginPresenter(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.countryList, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.countryList, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countrySpinner.setAdapter(adapter);
         final String countryLocale = getResources().getConfiguration().locale.getCountry();

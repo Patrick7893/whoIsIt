@@ -1,22 +1,25 @@
 package com.whois.whoiswho.activity;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jaredrummler.android.device.DeviceName;
 import com.squareup.picasso.Picasso;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.model.User;
@@ -27,19 +30,18 @@ import com.whois.whoiswho.utils.Toaster;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements MainActivityMethods, NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends Activity implements MainActivityMethods, NavigationView.OnNavigationItemSelectedListener{
 
-    private List<Fragment> fragmentsList = new ArrayList<Fragment>();
     public final static int MY_PERMISSIONS_REQUEST = 100;
 
     private static MainActivityPresenter presenter;
 
-    @Bind(R.id.drawer_layout) DrawerLayout drawer;
-    @Bind(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
 
 
     private TextView nameTextView, phoneTextView;
@@ -62,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(0, 0, 0, R.anim.slide_out_to_top).add(R.id.flContent, new EditProfileFragment()).addToBackStack(null).commit();
+               // getFragmentManager().beginTransaction().setCustomAnimations(0, 0, 0, R.anim.slide_out_to_top).add(R.id.flContent, new EditProfileFragment()).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().setCustomAnimations(0,0,0, R.animator.slide_out_to_bottom).add(R.id.flContent, new EditProfileFragment()).addToBackStack(null).commit();
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
@@ -109,20 +112,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityMetho
     @Override
     public void switchFragment(Fragment fragment, boolean addToFragmentList) {
         if (addToFragmentList) {
-            getSupportFragmentManager().beginTransaction().add(R.id.flContent, fragment).addToBackStack(null).commit();
+            getFragmentManager().beginTransaction().add(R.id.flContent, fragment).addToBackStack(null).commit();
         } else {
-            getSupportFragmentManager().beginTransaction().add(R.id.flContent, fragment).commit();
+            getFragmentManager().beginTransaction().add(R.id.flContent, fragment).commit();
         }
     }
 
     @Override
     public void removeFragment(Fragment fragment) {
-        getSupportFragmentManager().popBackStack();
+        getFragmentManager().popBackStack();
     }
 
     @Override
     public void swithConatcsFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top, R.anim.slide_in_from_bottom, R.anim.slide_out_to_top).add(R.id.flContent, fragment).addToBackStack(null).commit();
+        getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_from_bottom, R.animator.slide_out_to_top, R.animator.slide_in_from_top, R.animator.slide_out_to_bottom).add(R.id.flContent, fragment).addToBackStack(null).commit();
     }
 
 

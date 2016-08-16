@@ -17,7 +17,7 @@ import com.whois.whoiswho.utils.CountryManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -87,10 +87,10 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
 
     public static class ViewHolder extends RecyclerView.ViewHolder  {
         // each data item is just a string in this case
-        @Bind(R.id.nameTextView) TextView nameTextView;
-        @Bind(R.id.countryTextView) TextView countryTextView;
-        @Bind(R.id.photoImageView) ImageView photoImageView;
-        @Bind(R.id.findContainer) RelativeLayout findContainer;
+        @BindView(R.id.nameTextView) TextView nameTextView;
+        @BindView(R.id.countryTextView) TextView countryTextView;
+        @BindView(R.id.photoImageView) ImageView photoImageView;
+        @BindView(R.id.findContainer) RelativeLayout findContainer;
 
         public ViewHolder(View v) {
             super(v);

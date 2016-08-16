@@ -1,9 +1,9 @@
 package com.whois.whoiswho.screens.tutorial;
 
+import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.utils.FontManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  */
 public class TutorialSecond extends Fragment {
 
-    @Bind(R.id.tutorial2TextView) TextView tutorial2TextView;
+    @BindView(R.id.tutorial2TextView) TextView tutorial2TextView;
 
     @Nullable
     @Override

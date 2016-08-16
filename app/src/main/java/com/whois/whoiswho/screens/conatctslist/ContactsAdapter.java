@@ -18,7 +18,7 @@ import com.whois.whoiswho.view.FastScroller;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -77,11 +77,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        @Bind(R.id.categoryTextView) TextView categoryTextView;
-        @Bind(R.id.nameTextView) TextView nameTextView;
-        @Bind(R.id.photoImageView) CircleImageView photoImageView;
-        @Bind(R.id.nameContainer) RelativeLayout nameContainer;
-        @Bind(R.id.informationImageView) ImageView informationImageView;
+        @BindView(R.id.categoryTextView) TextView categoryTextView;
+        @BindView(R.id.nameTextView) TextView nameTextView;
+        @BindView(R.id.photoImageView) CircleImageView photoImageView;
+        @BindView(R.id.nameContainer) RelativeLayout nameContainer;
+        @BindView(R.id.informationImageView) ImageView informationImageView;
 
         public ViewHolder(View v) {
             super(v);

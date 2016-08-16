@@ -1,8 +1,9 @@
 package com.whois.whoiswho.screens.spam;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,7 @@ import com.whois.whoiswho.screens.user_profile.UserProfileFragment;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -31,9 +32,9 @@ import butterknife.ButterKnife;
  */
 public class SpamFragment extends Fragment {
 
-    @Bind(R.id.spamList) RecyclerView spamRecyclerView;
-    @Bind(R.id.emptyTextView) TextView emptyTextView;
-    @Bind(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.spamList) RecyclerView spamRecyclerView;
+    @BindView(R.id.emptyTextView) TextView emptyTextView;
+    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
 
     private SpamPresenter presenter;
     private SpamAdapter spamAdapter;
@@ -106,7 +107,8 @@ public class SpamFragment extends Fragment {
         bundle.putString(ContactslistFragment.CONTACTINFO, contactString);
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+       // getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
+         getActivity().getFragmentManager().beginTransaction().setCustomAnimations(R.animator.slide_in_from_right, R.animator.slide_out_to_left, R.animator.slide_in_from_left, R.animator.slide_out_to_right).add(R.id.flContent, userProfileFragment).addToBackStack(null).commit();
     }
 
 }

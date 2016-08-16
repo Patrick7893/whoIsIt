@@ -1,12 +1,14 @@
 package com.whois.whoiswho.screens.tutorial;
 
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +22,18 @@ import com.whois.whoiswho.view.CustomViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by stasenkopavel on 4/20/16.
  */
-public class TutorialDialog extends android.support.v4.app.DialogFragment {
+public class TutorialDialog extends DialogFragment {
 
-    @Bind(R.id.tutorialViewPager) CustomViewPager viewPager;
-    @Bind(R.id.positionTextView) TextView postionTextView;
-    @Bind(R.id.nextTextView) TextView nextTextView;
+    @BindView(R.id.tutorialViewPager) CustomViewPager viewPager;
+    @BindView(R.id.positionTextView) TextView postionTextView;
+    @BindView(R.id.nextTextView) TextView nextTextView;
 
     @Nullable
     @Override
@@ -46,7 +47,8 @@ public class TutorialDialog extends android.support.v4.app.DialogFragment {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        ViewPagerAdapter adapter = null;
+        adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new TutorialFirst(), "FIRST");
         //adapter.addFragment(new TutorialSecond(), "SECOND");
         adapter.addFragment(new TutorialThird(), "THIRD");
@@ -98,7 +100,7 @@ public class TutorialDialog extends android.support.v4.app.DialogFragment {
 
 
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 

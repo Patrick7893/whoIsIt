@@ -17,7 +17,7 @@ import rx.Observable;
  */
 public interface ApiInterface {
 
-   // String SERVICE_ENDPOINT = "http://10.0.1.6:3000";
+    //String SERVICE_ENDPOINT = "http://10.0.1.14:3000";
     String SERVICE_ENDPOINT = "http://truecaller.unteleported.com";
 
 
@@ -31,7 +31,7 @@ public interface ApiInterface {
 
     @Multipart
     @POST("/users")
-    Observable<RegistrationResponse> createUser(@Part("number") String number, @Part("countryIso") String countryIso, @Part("firstname") String firstname, @Part("surname") String surname, @Part("email") String email, @Part("avatar") TypedFile avatar);
+    Observable<RegistrationResponse> createUser(@Part("number") String number, @Part("countryIso") String countryIso, @Part("firstname") String firstname, @Part("surname") String surname, @Part("email") String email, @Part("device") String device, @Part("avatar") TypedFile avatar);
 
     @Multipart
     @PUT("/users/{id}")
@@ -44,7 +44,7 @@ public interface ApiInterface {
     Observable<FindPhoneResponse> findPhone(@Query("token") String token, @Query("query") String query, @Query("user_locale") String locale);
 
     @GET("/phones/getRecordByNumber")
-    Observable<GetRecordByNumberResponse> getPhoneRecord(@Query("token") String token, @Query("number") String number);
+    Observable<GetRecordByNumberResponse> getPhoneRecord(@Query("token") String token, @Query("number") String number, @Query("countryIso") String countryIso);
 
     @GET("/phones/get_spammers")
     Observable<GetSpammersResponse> getSpammers(@Query("token") String token);

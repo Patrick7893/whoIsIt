@@ -26,8 +26,8 @@ android {
         applicationId "com.whois.whoiswho"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 12
-        versionName "1.1.0"
+        versionCode 13
+        versionName "1.1.1"
     }
     buildTypes {
         release {

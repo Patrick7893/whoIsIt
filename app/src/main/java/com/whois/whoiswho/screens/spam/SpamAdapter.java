@@ -114,12 +114,7 @@ public class SpamAdapter extends RecyclerView.Adapter<SpamAdapter.ViewHolder> {
                 titleTextView.setVisibility(View.GONE);
             }
 
-            spamContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.spamClick(phone);
-                }
-            });
+            spamContainer.setOnClickListener(v -> listener.spamClick(phone));
 
         }
     }

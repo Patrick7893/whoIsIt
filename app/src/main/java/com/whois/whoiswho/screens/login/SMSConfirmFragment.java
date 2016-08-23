@@ -113,6 +113,11 @@ public class SMSConfirmFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.smsNotReceivedButton)
+    public void resendSms() {
+        presenter.resend(number, getArguments().getString(NewUserFragment.COUNTRY));
+    }
+
     public void goToNewUserScreen(RegistrationResponse registrationResponse) {
         KeyboardManager.hideKeyboard(getActivity());
         if (registrationResponse.getError() == 0) {

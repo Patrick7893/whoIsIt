@@ -58,6 +58,10 @@
     <string name="contacts">Контакты</string>
     <string name="favorites">Избранные</string>
     <string name="arrow">←</string>
+    <string name="allowCalls">Для отображение журнала звонков, необходимо дать разрешение</string>
+    <string name="givePermission">Дать разрешение</string>
+    <string name="allowContacts">Для отображение списка контактов, необходимо дать разрешение</string>
+
 
     <!--sidebar-->
     <string name="buypro">Купить Про-аккуант</string>
@@ -104,6 +108,8 @@
 
     <string name="smsconfirm1">На номер</string>
     <string name="smsconfirm2">был отправлен \nкод подтверждения</string>
+    <string name="smsNotReceived">Не пришло смс?</string>
+    <string name="dispatch">Отправка...</string>
     <string name="confirm">ПОДТВЕРДИТЬ</string>
     <string name="welcome">Добро пожаловать!\nЗаполните свой профиль:</string>
     <string name="firstname">Имя</string>

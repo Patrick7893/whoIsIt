@@ -78,18 +78,8 @@ public class UserPhonesAdapter extends RecyclerView.Adapter<UserPhonesAdapter.Vi
             phone.setTypeDescriptionFromType(ctx, phone.getTypeOfNumber());
             numberTypeTextView.setText(phone.getTypeDescription());
 
-            callContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onPhoneClickListener.callCLick(phone);
-                }
-            });
-            messageImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onPhoneClickListener.messageClick(phone);
-                }
-            });
+            callContainer.setOnClickListener(v -> onPhoneClickListener.callCLick(phone));
+            messageImageView.setOnClickListener(v -> onPhoneClickListener.messageClick(phone));
         }
     }
 }

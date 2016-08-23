@@ -61,15 +61,9 @@ public class ContactListPresenter {
     Observable<ArrayList<Contact>> getContacts = Observable.create(new Observable.OnSubscribe<ArrayList<Contact>>() {
         @Override
         public void call(Subscriber<? super ArrayList<Contact>> subscriber) {
-            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 ArrayList<Contact> contacts = ContactsManager.readContacts(view.getActivity(), view.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
                 subscriber.onNext(contacts);
                 subscriber.onCompleted();
-            }
-            else {
-                PermissionManager.requestPermissions(view.getActivity(), Manifest.permission.READ_CONTACTS);
-            }
-
         }
     });
 

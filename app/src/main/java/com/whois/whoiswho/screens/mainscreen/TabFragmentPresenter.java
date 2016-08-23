@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -34,6 +35,7 @@ import rx.schedulers.Schedulers;
 public class TabFragmentPresenter {
 
     private TabFragment view;
+    private Subscription loadContactsSubscription;
 
     public TabFragmentPresenter (TabFragment view) {
         this.view = view;
@@ -69,6 +71,12 @@ public class TabFragmentPresenter {
                         phonesToLoad.add(phone);
                         phone.save();
                     }
+                    else {
+                        if (!phoneFromDb.getName().equals(phone.getName())) {
+                            phonesToLoad.add(phone);
+                            phone.save();
+                        }
+                    }
                 }
                 subscriber.onNext(phonesToLoad);
                 subscriber.onCompleted();
@@ -81,7 +89,7 @@ public class TabFragmentPresenter {
     });
 
     public void loadContatcs() {
-        getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<Phone>>() {
+        loadContactsSubscription = getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<Phone>>() {
             @Override
             public void onCompleted() {
 
@@ -114,5 +122,9 @@ public class TabFragmentPresenter {
             }
         });
 
+    }
+
+    public void unsubsribe() {
+        loadContactsSubscription.unsubscribe();
     }
 }

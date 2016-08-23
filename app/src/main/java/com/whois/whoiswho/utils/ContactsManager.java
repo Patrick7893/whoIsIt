@@ -28,6 +28,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
+import rx.Observable;
+
 /**
  * Created by stasenkopavel on 4/4/16.
  */
@@ -45,6 +47,7 @@ public class ContactsManager {
             phones = ctx.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null,  ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
         else
             phones = ctx.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, "starred=?", new String[]{"1"}, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+
 
         int lastId = -1;
         while (phones.moveToNext()) {
@@ -88,8 +91,6 @@ public class ContactsManager {
                 }
             }
         }
-
-
         return contacts;
     }
 
@@ -244,6 +245,9 @@ public class ContactsManager {
             context.getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, contentValues, ContactsContract.Contacts.DISPLAY_NAME + "= ?", new String[]{name});
             cur.close();
         }
+
+
+
     }
 
 

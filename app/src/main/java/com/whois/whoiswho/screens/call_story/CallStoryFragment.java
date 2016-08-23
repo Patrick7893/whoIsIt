@@ -56,21 +56,15 @@ public class CallStoryFragment extends Fragment {
         String contatcString = bundle.getString(UserProfileFragment.CONTACTINFO);
         Gson gson = new Gson();
         contact = gson.fromJson(contatcString, Contact.class);
-        presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Call>>() {
-            @Override
-            public void call(ArrayList<Call> calls) {
-                callStoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                callStoryRecyclerView.setAdapter(new CallStoryAdapter(getActivity(), calls, new CallStoryAdapter.onCallClickListener() {
-                    @Override
-                    public void callCLick(Call item) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
-                        startActivity(intent);
-                    }
-                }));
-                if (callStoryRecyclerView.getAdapter().getItemCount() == 0) {
-                    callStoryRecyclerView.setVisibility(View.GONE);
-                    emptyTextView.setVisibility(View.VISIBLE);
-                }
+        presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(calls -> {
+            callStoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            callStoryRecyclerView.setAdapter(new CallStoryAdapter(getActivity(), calls, item -> {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
+                CallStoryFragment.this.startActivity(intent);
+            }));
+            if (callStoryRecyclerView.getAdapter().getItemCount() == 0) {
+                callStoryRecyclerView.setVisibility(View.GONE);
+                emptyTextView.setVisibility(View.VISIBLE);
             }
         });
     }

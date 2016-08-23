@@ -50,12 +50,7 @@ public class SpamFragment extends Fragment {
         presenter = new SpamPresenter(this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         spamRecyclerView.setLayoutManager(layoutManager);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.getLocalSpammers();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.getLocalSpammers());
         presenter.getLocalSpammers();
         return view;
     }
@@ -64,12 +59,7 @@ public class SpamFragment extends Fragment {
     public void dispayLocalSpammers(CursorResult<Phone> tResult) {
         localSpammers = new ArrayList<>(tResult.toList());
         Log.d("SPAMMERS", "loaded");
-        adapter = new SpamAdapter(localSpammers, new SpamAdapter.OnSpamClickListener() {
-            @Override
-            public void spamClick(Phone item) {
-                goToContactInfoScreen(item);
-            }
-        });
+        adapter = new SpamAdapter(localSpammers, this::goToContactInfoScreen);
         spamRecyclerView.setAdapter(adapter);
         presenter.getSpammers();
     }
@@ -96,7 +86,11 @@ public class SpamFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.unsubscribe();
+    }
 
     private void goToContactInfoScreen(Phone phone) {
         Contact contact = new Contact();

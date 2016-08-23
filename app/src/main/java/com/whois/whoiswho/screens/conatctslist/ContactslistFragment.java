@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.whois.whoiswho.R;
@@ -54,6 +55,7 @@ public class ContactslistFragment extends Fragment {
     @BindView(R.id.titleTextView) TextView titleTextView;
     @BindView(R.id.searchButton) ImageView searchButton;
     @BindView(R.id.searchView) SearchView searchView;
+    @BindView(R.id.allowContactsLayout) LinearLayout allowConatctsLayout;
 
     private static ContactListPresenter presenter;
 
@@ -91,6 +93,12 @@ public class ContactslistFragment extends Fragment {
     }
 
 
+    public void setAllowContactsLayoutVisible() {
+        contactsRecyclerView.setVisibility(View.GONE);
+        allowConatctsLayout.setVisibility(View.VISIBLE);
+    }
+
+
 
     public void initSearchView(final ArrayList<Contact> contacts, final ContactsAdapter contactsAdapter) {
         searchView.setFocusable(true);
@@ -108,32 +116,27 @@ public class ContactslistFragment extends Fragment {
                 return true;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                searchView.setVisibility(View.GONE);
-                searchButton.setVisibility(View.VISIBLE);
-                titleTextView.setVisibility(View.VISIBLE);
-                return false;
-            }
+        searchView.setOnCloseListener(() -> {
+            searchView.setVisibility(View.GONE);
+            searchButton.setVisibility(View.VISIBLE);
+            titleTextView.setVisibility(View.VISIBLE);
+            return false;
         });
-        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.showSoftInput(v, 0);
-                    }
+        searchView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(v, 0);
                 }
             }
         });
     }
 
     public void initiallizeScreenAllContacts() {
-        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
-            @Override
-            public void call(ArrayList<Contact> contacts) {
+        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
+                @Override
+                public void call(ArrayList<Contact> contacts) {
                     final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
                         @Override
                         public void callClick(Contact item) {
@@ -182,40 +185,44 @@ public class ContactslistFragment extends Fragment {
                     searchView.clearFocus();
                 }
 
-        });
-
-
+            });
+        }
+        else {
+            setAllowContactsLayoutVisible();
+        }
     }
 
     public void initiallizeScreenFavouriteContacts() {
         titleTextView.setText(getString(R.string.favorites));
         searchButton.setVisibility(View.GONE);
         searchView.clearFocus();
-        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
-            @Override
-            public void call(ArrayList<Contact> contacts) {
-                    final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
-                        @Override
-                        public void callClick(Contact item) {
-                            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
-                                startActivity(intent);
-                            } else {
-                                PermissionManager.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE);
-                            }
-
+        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(contacts -> {
+                final ContactsAdapter contactsAdapter = new ContactsAdapter(getActivity(), contacts, new ContactsAdapter.OnContactsClickListener() {
+                    @Override
+                    public void callClick(Contact item) {
+                        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumbers().get(0).getNumber()));
+                            startActivity(intent);
+                        } else {
+                            PermissionManager.requestPermissions(getActivity(), Manifest.permission.CALL_PHONE);
                         }
 
-                        @Override
-                        public void infoClick(Contact item) {
-                            presenter.goToUserProfileScreen(item);
-                        }
-                    });
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                    contactsRecyclerView.setLayoutManager(layoutManager);
-                    contactsRecyclerView.setAdapter(contactsAdapter);
-                }
-        });
+                    }
+
+                    @Override
+                    public void infoClick(Contact item) {
+                        presenter.goToUserProfileScreen(item);
+                    }
+                });
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                contactsRecyclerView.setLayoutManager(layoutManager);
+                contactsRecyclerView.setAdapter(contactsAdapter);
+            });
+        }
+        else {
+            setAllowContactsLayoutVisible();
+        }
     }
 
     public void setOnContatcsDetachListener(OnContactsDetachListener onContatcsDetachListener) {
@@ -228,6 +235,11 @@ public class ContactslistFragment extends Fragment {
     public void close() {
         KeyboardManager.hideKeyboard(getActivity());
         ((MainActivityMethods) getActivity()).back();
+    }
+
+    @OnClick(R.id.givePermissionButton)
+    public void requestPermission() {
+        PermissionManager.requestPermissions(getActivity(), Manifest.permission.READ_CONTACTS);
     }
 
     @OnClick(R.id.searchButton)

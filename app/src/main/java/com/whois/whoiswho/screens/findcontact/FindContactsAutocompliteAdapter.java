@@ -101,12 +101,7 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
             nameTextView.setText(contact.getName());
             Picasso.with(ctx).load(contact.getAvatar()).into(photoImageView);
 
-            findContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onContactsClickListener.infoClick(contact);
-                }
-            });
+            findContainer.setOnClickListener(v -> onContactsClickListener.infoClick(contact));
             countryTextView.setText(CountryManager.getCountryNameFromIso(contact.getNumbers().get(0).getCountryIso()));
 
         }

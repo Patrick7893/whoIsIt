@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.activity.MainActivity;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import butterknife.OnClick;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -47,6 +49,7 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
     @BindView(R.id.contactsImageView) ImageView contactsImageView;
     @BindView(R.id.favouiteContacts) ImageView favouriteContactsImageView;
     @BindView(R.id.numpadImageView) ImageView numPadImageView;
+    @BindView(R.id.allowCallsLayout) LinearLayout allowCallsLayout;
 
     public final static String ISFAVOURITECONTACTS = "isFavourite";
     public static final String CONTACTINFO = "CONTACTINFO";
@@ -78,40 +81,45 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
     public void initiallizeScreen() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         callsRecyclerView.setLayoutManager(layoutManager);
-        presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Call>>() {
-            @Override
-            public void call(ArrayList<Call> calls) {
-                callsAdapter = new CallsAdapter(getActivity(), calls, new CallsAdapter.onCallsClickListener() {
-                    @Override
-                    public void callCLick(Call item) {
-                        if (keyBoardPresent) {
-                            numPadImageView.setImageDrawable(getResources().getDrawable(R.drawable.keypad_icon));
-                            hideKeyBoard();
-                            keyBoardPresent = false;
+        if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+            presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Call>>() {
+                @Override
+                public void call(ArrayList<Call> calls) {
+                    callsAdapter = new CallsAdapter(getActivity(), calls, new CallsAdapter.onCallsClickListener() {
+                        @Override
+                        public void callCLick(Call item) {
+                            if (keyBoardPresent) {
+                                numPadImageView.setImageDrawable(getResources().getDrawable(R.drawable.keypad_icon));
+                                hideKeyBoard();
+                                keyBoardPresent = false;
+                            }
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
+                            startActivity(intent);
                         }
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + item.getNumber()));
-                        startActivity(intent);
-                    }
 
-                    @Override
-                    public void infoClick(Call item) {
-                        presenter.goToUserProfileScreen(item);
-                        //find(item.getNumber());
-                    }
-                });
-                callsRecyclerView.setAdapter(callsAdapter);
-                callsRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-                        if (keyBoardPresent) {
-                            hideKeyBoard();
-                            keyBoardPresent = false;
+                        @Override
+                        public void infoClick(Call item) {
+                            presenter.goToUserProfileScreen(item);
+                            //find(item.getNumber());
                         }
-                    }
-                });
-            }
-        });
+                    });
+                    callsRecyclerView.setAdapter(callsAdapter);
+                    callsRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                            if (keyBoardPresent) {
+                                hideKeyBoard();
+                                keyBoardPresent = false;
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else {
+           setAllowCallsLayoutVisible();
+        }
     }
 
     View.OnClickListener onClickListener  = new View.OnClickListener() {
@@ -169,12 +177,14 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
     private BroadcastReceiver callEndedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Call>>() {
-                @Override
-                public void call(ArrayList<Call> calls) {
-                    callsAdapter.notify(calls);
-                }
-            });
+            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Call>>() {
+                    @Override
+                    public void call(ArrayList<Call> calls) {
+                        callsAdapter.notify(calls);
+                    }
+                });
+            }
         }
     };
 
@@ -263,5 +273,15 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
 
     public void setContatcsPresent(boolean contatcsPresent) {
         this.contatcsPresent = contatcsPresent;
+    }
+
+    public void setAllowCallsLayoutVisible() {
+        callsRecyclerView.setVisibility(View.GONE);
+        allowCallsLayout.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.givePermissionButton)
+    public void requestPermission() {
+        PermissionManager.requestPermissions(getActivity(), Manifest.permission.READ_CALL_LOG);
     }
 }

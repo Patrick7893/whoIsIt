@@ -67,15 +67,9 @@ public class CallsPresenter {
     Observable<ArrayList<Call>> getCalls = Observable.create(new Observable.OnSubscribe<ArrayList<Call>>() {
         @Override
         public void call(Subscriber<? super ArrayList<Call>> subscriber) {
-            if (ActivityCompat.checkSelfPermission(App.getContext(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
                 view.calls = ContactsManager.getUserCallsList(view.getActivity());
                 subscriber.onNext(view.calls);
                 subscriber.onCompleted();
-            }
-            else {
-                PermissionManager.requestPermissions(view.getActivity(), Manifest.permission.READ_CALL_LOG);
-            }
-
         }
     });
 

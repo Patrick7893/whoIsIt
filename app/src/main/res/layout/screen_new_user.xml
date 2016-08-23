@@ -83,6 +83,10 @@
                         android:inputType="textCapWords|text"
                         android:background="@android:color/transparent"
                         android:textSize="@dimen/loginTextSize"
+                        android:nextFocusDown="@+id/surnameEditText"
+                        android:nextFocusForward="@+id/surnameEditText"
+                        android:nextFocusLeft="@+id/surnameEditText"
+                        android:nextFocusRight="@+id/surnameEditText"
                         android:padding="15dp"/>
 
                 </LinearLayout>

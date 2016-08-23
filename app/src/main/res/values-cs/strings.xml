@@ -4,9 +4,15 @@
     <string name="serverError">Chyba připojení</string><!--Fonts--><string name="robotoMedium">Roboto-Medium.ttf</string>
     <string name="roboroRegular">Roboto-Regular.ttf</string>
     <string name="bebas">bebas_neue.ttf</string>
-    <string name="robotoLight">Roboto-Light.ttf</string><!--Splash--><string name="nowYouKnow">Teď už vždy budete vědět, \nkdo vám volá – už žádné \nnevyžádané hovory a spam</string>
+    <string name="robotoLight">Roboto-Light.ttf</string>
+
+    <!--Splash-->
+    <string name="nowYouKnow">Teď už vždy budete vědět, \nkdo vám volá – už žádné \nnevyžádané hovory a spam</string>
     <string name="letsGo">POKRAČOVAT</string>
-    <string name="conditions">Stisknutím Pokračovat! souhlasíte s <u>podmínkami použití</u></string><!--tutorial--><string name="caller">ID volajícího</string>
+    <string name="conditions">Stisknutím Pokračovat! souhlasíte s <u>podmínkami použití</u></string>
+
+    <!--tutorial-->
+    <string name="caller">ID volajícího</string>
     <string name="tutorial1">Při každém hovoru uvidíte ID volajícího.</string>
     <string name="tutorial1_number">1/2</string>
     <string name="userStatus">Stav uživatele</string>
@@ -25,10 +31,16 @@
     <string name="ready">ZAČÍNÁME!</string>
     <string name="nameExample">Marek Novák</string>
     <string name="phoneExample">601 123 456 - Česká republika</string>
-    <string name="tagExample">Právní služby</string><!--DateConverter--><string name="min.">min.</string>
+    <string name="tagExample">Právní služby</string>
+
+    <!--DateConverter-->
+    <string name="min.">min.</string>
     <string name="h.">h.</string>
     <string name="yesturday">Včera</string>
-    <string name="twodayssago">Předevčírem</string><!--MainScreen--><string name="calls">HOVORY</string>
+    <string name="twodayssago">Předevčírem</string>
+
+    <!--MainScreen-->
+    <string name="calls">HOVORY</string>
     <string name="spam">SPAM</string>
     <string name="find">Vyhledávání</string>
     <string name="home">domácí</string>
@@ -39,17 +51,29 @@
 
     <string name="contacts">Kontakty</string>
     <string name="favorites">Oblíbené</string>
-    <string name="arrow">←</string><!--sidebar--><string name="buypro">Koupit účet Pro</string>
+    <string name="arrow">←</string>
+    <string name="allowCalls">Chcete-li zobrazit seznam hovorů, je nutné udělit oprávnění</string>
+    <string name="givePermission">Dát svolení</string>
+    <string name="allowContacts">Chcete-li zobrazit seznam kontaktů, je nutné udělit oprávnění</string>
+
+    <!--sidebar-->
+    <string name="buypro">Koupit účet Pro</string>
     <string name="help">Nápověda</string>
     <string name="invite">Pozvat přátele</string>
     <string name="settings">Nastavení</string>
     <string name="sendemail">Poslat zprávu</string>
     <string name="rateapp">Ohodnotit aplikaci</string>
     <string name="shareText">Nová aplikace – ID volajícího pro Android s možností blokovat spammery! \n</string>
-    <string name="youhaveNoGmail">Aplikace Gmail nebyla nalezena</string><!--saerch screen--><string name="search">Zadejte jméno nebo číslo ve formátu 050 123 4567</string>
+    <string name="youhaveNoGmail">Aplikace Gmail nebyla nalezena</string>
+
+    <!--saerch screen-->
+    <string name="search">Zadejte jméno nebo číslo ve formátu 050 123 4567</string>
     <string name="numbersInBase">čísel v databázi</string>
     <string name="firndNothind">Nebylo nic nalezeno</string>
-    <string name="inputTheRightNumber">Zadejte číslo ve formátu 601 123 456</string><!--User Profile screen--><string name="callStory">Historie hovorů</string>
+    <string name="inputTheRightNumber">Zadejte číslo ve formátu 601 123 456</string>
+
+    <!--User Profile screen-->
+    <string name="callStory">Historie hovorů</string>
     <string name="saveConatcs">Uložit do kontaktů</string>
     <string name="changeContact">Změnit kontakt</string>
     <string name="block">Blokovat</string>
@@ -58,15 +82,26 @@
     <string name="userAddedToBlackList">Uživatel je blokován!</string>
     <string name="userRemovedFromBlackList">Uživatel je odblokován!</string>
     <string name="contactAddedToStarred">Kontakt byl přidán mezi Oblíbené</string>
-    <string name="contactRemovedFromStarred">Kontakt byl smazán z Oblíbených</string><!--Dialog activity --><string name="call">VOLAT</string>
+    <string name="contactRemovedFromStarred">Kontakt byl smazán z Oblíbených</string>
+
+    <!--Dialog activity -->
+    <string name="call">VOLAT</string>
     <string name="save">ULOŽIT</string>
     <string name="block_caps">BLOKOVAT</string>
     <string name="unknown_user">Neznámé číslo</string>
-    <string name="unblock">ODBLOKOVAT</string><!--Spam screen--><string name="myBlackList">Moje černá listina</string>
+    <string name="unblock">ODBLOKOVAT</string>
+
+    <!--Spam screen-->
+    <string name="myBlackList">Moje černá listina</string>
     <string name="spammers">Hlavní spammeři</string>
     <string name="userInBlackList">Toto číslo je na vaší černé listině</string>
-    <string name="usersCheckNumberAsSpam">uživatelé označili toto číslo jako spam</string><!--Login --><string name="smsconfirm1">Potvrzovací kód</string>
+    <string name="usersCheckNumberAsSpam">uživatelé označili toto číslo jako spam</string>
+
+    <!--Login -->
+    <string name="smsconfirm1">Potvrzovací kód</string>
     <string name="smsconfirm2">byl odeslán \nna číslo</string>
+    <string name="smsNotReceived">SMS nepřijde?</string>
+    <string name="dispatch">Odeslání...</string>
     <string name="confirm">POTVRDIT</string>
     <string name="welcome">Vítejte!\nProsím vyplňte svůj profil:</string>
     <string name="firstname">Jméno</string>
@@ -89,7 +124,9 @@
     <string name="exit">ODHLÁSIT</string>
     <string name="wrongNumber">Formát čísla musí být +420 601 123 456</string>
 
-    <!--countries--><string-array name="countryList">
+    <!--countries-->
+
+    <string-array name="countryList">
         <item>Ukrajina</item>
         <item>Česká republika</item>
     </string-array>

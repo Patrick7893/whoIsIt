@@ -11,6 +11,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.whois.whoiswho.R;
 import com.whois.whoiswho.utils.CountryManager;
 import com.whois.whoiswho.utils.FontManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -60,18 +62,16 @@ public class NumpadFragment extends Fragment {
             number.setOnLongClickListener(onLongClickListener);
         }
         backSpaceImageView.setOnClickListener(onClickListener);
-        backSpaceImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                backSpaceHandler.post(new BackspaceRunnable());
-                return false;
+        backSpaceImageView.setOnLongClickListener(v -> {
+            backSpaceHandler.post(new BackspaceRunnable());
+            return false;
 
-            }
         });
         tMgr = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         numberTextView.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         FontManager.overrideFonts(view);
+
         return view;
     }
 
@@ -94,6 +94,7 @@ public class NumpadFragment extends Fragment {
             }
         }
     };
+
 
     public void setNumberText(String number) {
         if (TextUtils.isEmpty(numberTextView.getText())) {
@@ -130,17 +131,12 @@ public class NumpadFragment extends Fragment {
         }
     }
 
-    View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            if (v.getId() == R.id.number0) {
-                setNumberText("+");
-            }
-            return true;
+    View.OnLongClickListener onLongClickListener = v -> {
+        if (v.getId() == R.id.number0) {
+            setNumberText("+");
         }
+        return true;
     };
-
-
 
     public void setOnPhonePresentListener(OnPhonePrsesentListener onPhonePresentListener) {
         this.phonePrsesentListener = onPhonePresentListener;

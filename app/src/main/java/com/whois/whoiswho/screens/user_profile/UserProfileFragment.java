@@ -127,10 +127,12 @@ public class UserProfileFragment extends Fragment {
 
         checkPhoneInContacts();
         checkPhoneIsBlocked();
+
     }
 
     public void displayUserInfo(GetRecordByNumberResponse findPhoneResponse) {
-        titleTextView.setText(findPhoneResponse.getData().getName());
+        if (isContactPresent == ContactsManager.DONT_PRESENT_IN_CONTACTS)
+            titleTextView.setText(findPhoneResponse.getData().getName());
         if (!TextUtils.isEmpty(findPhoneResponse.getData().getAvatar().getUrl()))
             Picasso.with(getActivity().getApplicationContext()).load(ApiInterface.SERVICE_ENDPOINT + findPhoneResponse.getData().getAvatar().getUrl()).into(avatarImageView);
 

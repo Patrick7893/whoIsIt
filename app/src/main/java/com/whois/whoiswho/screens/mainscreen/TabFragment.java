@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +36,9 @@ import butterknife.OnClick;
 public class TabFragment extends Fragment {
 
     @BindView(R.id.tabs) TabLayout tabLayout;
-    @BindView(R.id.viewpager)
-    ViewPager viewPager;
+    @BindView(R.id.viewpager) ViewPager viewPager;
+    private TabFragmentPresenter presenter;
+
 
 
     @Nullable
@@ -46,10 +48,12 @@ public class TabFragment extends Fragment {
         ButterKnife.bind(this, view);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-        final TabFragmentPresenter presenter = new TabFragmentPresenter(this);
+        presenter = new TabFragmentPresenter(this);
         ((MainActivityMethods)getActivity()).enableDrawer();
         ((MainActivity)getActivity()).getUserInfo();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        Log.d("fm", String.valueOf(getActivity().getFragmentManager().getBackStackEntryCount()));
 
         presenter.loadContatcs();
 
@@ -104,14 +108,14 @@ public class TabFragment extends Fragment {
         getActivity().getFragmentManager().beginTransaction().add(R.id.flContent, new FindContactsFragment()).addToBackStack(null).commit();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-    }
-
     @OnClick(R.id.menuButton)
     public void openDrawer() {
         ((MainActivityMethods)getActivity()).openDrawer();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.unsubsribe();
+    }
 }

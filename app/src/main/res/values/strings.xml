@@ -58,6 +58,9 @@
     <string name="contacts">Contacts</string>
     <string name="favorites">Favourites</string>
     <string name="arrow">←</string>
+    <string name="allowCalls">Please, give the permission to view the call log</string>
+    <string name="allowContacts">Please, give the permission to view the contacts list</string>
+    <string name="givePermission">Give permission</string>
 
     <!--sidebar-->
     <string name="buypro">Buy Pro-account</string>
@@ -104,6 +107,8 @@
 
     <string name="smsconfirm1">On number</string>
     <string name="smsconfirm2">was sent \nverefication code</string>
+    <string name="smsNotReceived">SMS does not come?</string>
+    <string name="dispatch">Dispatch...</string>
     <string name="confirm">CONFIRM</string>
     <string name="welcome">Welcome!\nPlease, fill your user profile :</string>
     <string name="firstname">Name</string>

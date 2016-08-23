@@ -7,13 +7,17 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.ApiFactory;
+import com.whois.whoiswho.api.FindPhoneResponse;
 import com.whois.whoiswho.api.GetSpammersResponse;
 import com.whois.whoiswho.model.Phone;
 import com.whois.whoiswho.model.Phone_Table;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
 
+import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -22,22 +26,18 @@ import rx.schedulers.Schedulers;
 public class SpamPresenter {
 
     private SpamFragment view;
+    private Subscription getSpammersSubscription;
 
     public SpamPresenter(SpamFragment view) {
         this.view = view;
     }
 
     public void getLocalSpammers() {
-        SQLite.select().from(Phone.class).where(Phone_Table.isBlocked.is(true)).and(Phone_Table.name.eq(view.getString(R.string.unknown_user))).async().queryResultCallback(new QueryTransaction.QueryResultCallback<Phone>() {
-            @Override
-            public void onQueryResult(QueryTransaction transaction, CursorResult<Phone> tResult) {
-                view.dispayLocalSpammers(tResult);
-            }
-        }).execute();
+        SQLite.select().from(Phone.class).where(Phone_Table.isBlocked.is(true)).and(Phone_Table.name.eq(view.getString(R.string.unknown_user))).async().queryResultCallback((transaction, tResult) -> view.dispayLocalSpammers(tResult)).execute();
     }
 
     public void getSpammers() {
-        ApiFactory.getInstance().getApiInterface().getSpammers(SharedPreferencesSaver.get().getToken()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetSpammersResponse>() {
+        getSpammersSubscription = ApiFactory.getInstance().getApiInterface().getSpammers(SharedPreferencesSaver.get().getToken()).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<GetSpammersResponse>() {
             @Override
             public void onCompleted() {
 
@@ -55,5 +55,10 @@ public class SpamPresenter {
                     view.displaySpammersFromServer(response);
             }
         });
+    }
+
+    public void unsubscribe() {
+        if (!getSpammersSubscription.isUnsubscribed())
+            getSpammersSubscription.unsubscribe();
     }
 }

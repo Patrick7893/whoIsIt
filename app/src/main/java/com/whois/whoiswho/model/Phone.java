@@ -20,7 +20,6 @@ public class Phone extends BaseModel {
     private String number;
     @Column
     private int typeOfNumber;
-
     @Column
     private String name;
     @Column

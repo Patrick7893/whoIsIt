@@ -84,7 +84,6 @@ public class UserProfilePresenter {
                 @Override
                 public void onError(Throwable e) {
                     Log.d("ERROR", e.getMessage());
-                  //  ApiFactory.checkConnection();
                 }
 
                 @Override
@@ -110,7 +109,6 @@ public class UserProfilePresenter {
                 @Override
                 public void onError(Throwable e) {
                     Log.d("ERROR", e.getMessage());
-                   // ApiFactory.checkConnection();
                 }
 
                 @Override

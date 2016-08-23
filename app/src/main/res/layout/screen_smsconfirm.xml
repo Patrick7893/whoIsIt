@@ -32,7 +32,6 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:gravity="center"
-
             android:tag="@string/roboroRegular"
             android:layout_marginBottom="30dp" />
 
@@ -137,6 +136,20 @@
                 android:padding="15dp" />
 
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/smsNotReceivedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/smsNotReceived"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:tag="@string/roboroRegular"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp" />
 
 
 

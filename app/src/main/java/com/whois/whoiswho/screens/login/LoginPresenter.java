@@ -1,5 +1,6 @@
 package com.whois.whoiswho.screens.login;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -58,7 +59,8 @@ public class LoginPresenter {
                     user.save();
                     SharedPreferencesSaver.get().saveToken(s.getToken());
                     //view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
-                    view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, new TabFragment()).addToBackStack("stack").commit();
+                    view.getActivity().getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    view.getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
                 }
                 else if (s.getError() == 1) {
                     Bundle bundle = new Bundle();
@@ -68,7 +70,7 @@ public class LoginPresenter {
                     SMSConfirmFragment smsConfirmFragment = new SMSConfirmFragment();
                     smsConfirmFragment.setArguments(bundle);
                   //  view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
-                    view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
+                    view.getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
                 }
             }
         });

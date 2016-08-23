@@ -72,13 +72,59 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/allowContactsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/phoneNumbersTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/allowContacts"
+            android:textColor="@color/searchTextColor"
+            android:textSize="16sp"
+            android:layout_margin="20dp"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/primary_color_gradient"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/givePermissionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/givePermission"
+                android:background="?android:attr/selectableItemBackground"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:tag="@string/robotoMedium"
+                android:textSize="16sp"
+                android:focusable="true"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contactsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:background="@color/background"
-        android:layout_below="@+id/appBar">
+        android:layout_below="@+id/appBar"
+        android:visibility="visible">
 
     </android.support.v7.widget.RecyclerView>
 

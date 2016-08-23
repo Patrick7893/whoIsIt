@@ -79,70 +79,53 @@ public class FindContactsFragment extends Fragment {
 
     private void initiallizeScreen() {
         //displayContacts();
-        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Contact>>() {
-            @Override
-            public void call(final ArrayList<Contact> contacts) {
-                autocompleteAdapter = new FindContactsAutocompliteAdapter(getActivity(), contacts, new FindContactsAutocompliteAdapter.OnContactsClickListener() {
-                    @Override
-                    public void infoClick(Contact item) {
-                        goToUserProfileScreen(item);
-                    }
-                });
-                layoutManager = new LinearLayoutManager(getActivity());
-                autocompleteAdapter.setEmptyAdapter();
-                findConatctsRecyclerView.setLayoutManager(layoutManager);
-                findConatctsRecyclerView.setAdapter(autocompleteAdapter);
+        presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(contacts -> {
+            autocompleteAdapter = new FindContactsAutocompliteAdapter(getActivity(), contacts, item -> goToUserProfileScreen(item));
+            layoutManager = new LinearLayoutManager(getActivity());
+            autocompleteAdapter.setEmptyAdapter();
+            findConatctsRecyclerView.setLayoutManager(layoutManager);
+            findConatctsRecyclerView.setAdapter(autocompleteAdapter);
 
-                findContactsEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            findContactsEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (s.toString().length() > 0) {
-                            findConatctsRecyclerView.setVisibility(View.VISIBLE);
-                            autocompleteAdapter.setFilter(presenter.filter(contacts, s.toString()));
-                        } else {
-                            findConatctsRecyclerView.setVisibility(View.GONE);
-                            autocompleteAdapter.setEmptyAdapter();
-                        }
-                    }
-                });
-                findContactsEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            if (!TextUtils.isEmpty(findContactsEditText.getText().toString()))
-                                presenter.find(findContactsEditText.getText().toString(), countryIso);
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    findContactsEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher("UA"));
                 }
-            }
 
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().length() > 0) {
+                        findConatctsRecyclerView.setVisibility(View.VISIBLE);
+                        autocompleteAdapter.setFilter(presenter.filter(contacts, s.toString()));
+                    } else {
+                        findConatctsRecyclerView.setVisibility(View.GONE);
+                        autocompleteAdapter.setEmptyAdapter();
+                    }
+                }
+            });
+            findContactsEditText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (!TextUtils.isEmpty(findContactsEditText.getText().toString()))
+                        presenter.find(findContactsEditText.getText().toString(), countryIso);
+                    return true;
+                }
+                return false;
+            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                findContactsEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher("UA"));
+            }
         });
 
     }
 
     public void displayPhones(FindPhoneResponse findPhoneResponse) {
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
-        Collections.sort(findPhoneResponse.getData(), new Comparator<Phone>() {
-            @Override
-            public int compare(Phone lhs, Phone rhs) {
-                return lhs.getName().compareTo(rhs.getName());
-            }
-        });
+        ArrayList<Contact> contacts = new ArrayList<>();
+        Collections.sort(findPhoneResponse.getData(), (lhs, rhs) -> lhs.getName().compareTo(rhs.getName()));
         for (Phone phone : findPhoneResponse.getData()) {
             contacts.add(new Contact().phoneToContact(phone));
         }

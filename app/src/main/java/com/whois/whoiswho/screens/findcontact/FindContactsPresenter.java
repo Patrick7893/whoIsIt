@@ -2,15 +2,25 @@ package com.whois.whoiswho.screens.findcontact;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.CursorResult;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.api.ApiFactory;
 import com.whois.whoiswho.api.FindPhoneResponse;
 import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.Contact;
+import com.whois.whoiswho.model.Database;
+import com.whois.whoiswho.model.Phone;
+import com.whois.whoiswho.model.Phone_Table;
 import com.whois.whoiswho.utils.PermissionManager;
 import com.whois.whoiswho.utils.PhoneFormatter;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
@@ -31,6 +41,7 @@ import rx.schedulers.Schedulers;
 public class FindContactsPresenter {
 
     private FindContactsFragment view;
+    private ArrayList<Phone> lastSearchedPhones = new ArrayList<>();
 
     public FindContactsPresenter(FindContactsFragment view) {
         this.view = view;
@@ -62,7 +73,37 @@ public class FindContactsPresenter {
         return filteredModelList;
     }
 
+    public void saveSearchedResults(ArrayList<Phone> phones) {
+        if ((lastSearchedPhones.size() + phones.size()) > 20) {
+            for (int i=0; i<(lastSearchedPhones.size() + phones.size()) - 20; i++) {
+                lastSearchedPhones.get(i).delete();
+            }
+        }
+        for (Phone phone : phones) {
+            ProcessModelTransaction<Phone> phoneProcessModelTransaction = new ProcessModelTransaction.Builder<>((ProcessModelTransaction.ProcessModel<Phone>) model -> {
+                phone.setIsSearched(1);
+                phone.save();
+            }).processListener((current, total, modifiedModel) -> {
 
+            }).addAll(phone).build();
+            Transaction transaction = FlowManager.getDatabase(Database.class).beginTransactionAsync(phoneProcessModelTransaction).build();
+            transaction.execute();
+        }
+
+    }
+
+    public void deleteLastSearchedPhones() {
+        for (Phone phone : lastSearchedPhones) {
+            phone.delete();
+        }
+    }
+
+    public void getLastSearchedPhonesFromDatabase() {
+        SQLite.select().from(Phone.class).where(Phone_Table.isSearched.is(1)).async().queryResultCallback((transaction, tResult) -> {
+            view.displayPhones(new ArrayList<>(tResult.toList()), false);
+            lastSearchedPhones = new ArrayList<>(tResult.toList());
+        }).execute();
+    }
 
     public void find(String query, String countryIso) {
         if (Character.isDigit(query.charAt(0)) || query.startsWith("+")) {
@@ -92,12 +133,17 @@ public class FindContactsPresenter {
             public void onNext(FindPhoneResponse findPhoneResponse) {
                 view.setProgressBarVisibility(View.GONE);
                 Log.d("FINDPHONE", String.valueOf(findPhoneResponse.getError()));
-                if (findPhoneResponse.getError() == 0)
-                    view.displayPhones(findPhoneResponse);
+                if (findPhoneResponse.getError() == 0) {
+                    view.displayPhones(findPhoneResponse.getData(), true);
+                    saveSearchedResults(findPhoneResponse.getData());
+                }
                 else
                     Toaster.toast(App.getContext(), R.string.firndNothind);
             }
         });
     }
 
+    public ArrayList<Phone> getLastSearchedPhones() {
+        return lastSearchedPhones;
+    }
 }

@@ -114,36 +114,90 @@
             android:layout_marginTop="10dp"
             android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/phoneNumbersTextView"
+        <LinearLayout
+            android:id="@+id/emptyListLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="190 000 000"
-            android:textColor="@color/searchTextColor"
-            android:textSize="20sp"
-            android:layout_centerInParent="true" />
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/numbersInBase"
-            android:textColor="@color/searchTextColor"
-            android:textSize="16sp"
-            android:layout_below="@+id/phoneNumbersTextView"
-            android:layout_centerHorizontal="true" />
+            <TextView
+                android:id="@+id/phoneNumbersTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="190 000 000"
+                android:textColor="@color/searchTextColor"
+                android:textSize="20sp"
+                android:layout_centerInParent="true" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/findList"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/numbersInBase"
+                android:textColor="@color/searchTextColor"
+                android:textSize="16sp"
+                android:layout_below="@+id/phoneNumbersTextView"
+                android:layout_centerHorizontal="true" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/resultsLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_below="@+id/progressBar">
 
-        </android.support.v7.widget.RecyclerView>
+            <RelativeLayout
+                android:id="@+id/lastResultsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lastResults"
+                    android:textSize="14sp"
+                    android:tag="@string/roboroRegular"
+                    android:visibility="visible"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:id="@+id/deleteLastResultsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_delete_white_24dp"
+                    android:layout_alignParentRight="true"
+                    android:padding="5dp"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+            </RelativeLayout>
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/findList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="visible"
+                android:layout_below="@+id/progressBar">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 

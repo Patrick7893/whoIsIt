@@ -71,6 +71,10 @@
     <string name="numbersInBase">čísel v databázi</string>
     <string name="firndNothind">Nebylo nic nalezeno</string>
     <string name="inputTheRightNumber">Zadejte číslo ve formátu 601 123 456</string>
+    <string name="lastResults">Nejnovější výsledky</string>
+    <string name="deleteLastResultsAlert">Odstraňte nejnovější výsledky?</string>
+    <string name="delete">Odstranit</string>
+    <string name="cancel">Zrušení</string>
 
     <!--User Profile screen-->
     <string name="callStory">Historie hovorů</string>

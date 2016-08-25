@@ -78,6 +78,10 @@
     <string name="numbersInBase">номеров в базе</string>
     <string name="firndNothind">Ничего не найдено</string>
     <string name="inputTheRightNumber">Введите номер в формате 050 123-45-67</string>
+    <string name="lastResults">ПОСЛЕДНИЕ РЕЗУЛЬТАТЫ ПОИСКА</string>
+    <string name="deleteLastResultsAlert">Удалить последние результаты поиска?</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
 
     <!--User Profile screen-->
     <string name="callStory">История вызовов</string>

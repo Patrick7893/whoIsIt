@@ -77,6 +77,10 @@
     <string name="numbersInBase">numbers in the database</string>
     <string name="firndNothind">Nothing was found</string>
     <string name="inputTheRightNumber">Input number with the operator code</string>
+    <string name="lastResults">LAST SEARCH RESULTS</string>
+    <string name="deleteLastResultsAlert">Delete the latest results?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 
     <!--User Profile screen-->
     <string name="callStory">Call history</string>

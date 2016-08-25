@@ -8,6 +8,6 @@ public class Database {
 
     public static final String NAME = "Who_is_it";
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 }
 

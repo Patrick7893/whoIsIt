@@ -33,6 +33,8 @@ public class Phone extends BaseModel {
     private boolean isBlocked;
     @Column
     private boolean isLiked;
+    @Column
+    private Integer isSearched = 0;
 
     public Phone() {}
 
@@ -133,5 +135,13 @@ public class Phone extends BaseModel {
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public Integer getIsSearched() {
+        return isSearched;
+    }
+
+    public void setIsSearched(Integer isSearched) {
+        this.isSearched = isSearched;
     }
 }

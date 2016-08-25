@@ -72,6 +72,7 @@ public class FindContactsAutocompliteAdapter extends RecyclerView.Adapter<FindCo
 
     public void setEmptyAdapter() {
         this.items = new ArrayList<>();
+        localContcatsSize = 0;
         notifyDataSetChanged();
     }
 

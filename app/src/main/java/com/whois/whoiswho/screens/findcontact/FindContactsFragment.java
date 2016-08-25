@@ -2,10 +2,12 @@ package com.whois.whoiswho.screens.findcontact;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -13,36 +15,31 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.activity.MainActivityMethods;
-import com.whois.whoiswho.api.FindPhoneResponse;
 import com.whois.whoiswho.model.Contact;
 import com.whois.whoiswho.model.Phone;
 import com.whois.whoiswho.screens.user_profile.UserProfileFragment;
 import com.whois.whoiswho.utils.KeyboardManager;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -53,16 +50,15 @@ public class FindContactsFragment extends Fragment {
     @BindView(R.id.findContactEditText) EditText findContactsEditText;
     @BindView(R.id.findList) RecyclerView findConatctsRecyclerView;
     @BindView(R.id.progressBar) CircularProgressView progressBar;
+    @BindView(R.id.lastResultsLayout) RelativeLayout lastResultsLayout;
 
     public static final String CONTACTINFO = "CONTACTINFO";
-    public static final String ADAPTERSTATE = "ADAPTERSTATE";
 
     private static FindContactsPresenter presenter;
     private String countryIso;
 
     FindContactsAutocompliteAdapter autocompleteAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private Parcelable adapterState;
 
     @Nullable
     @Override
@@ -78,7 +74,6 @@ public class FindContactsFragment extends Fragment {
     }
 
     private void initiallizeScreen() {
-        //displayContacts();
         presenter.getContacts.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(contacts -> {
             autocompleteAdapter = new FindContactsAutocompliteAdapter(getActivity(), contacts, item -> goToUserProfileScreen(item));
             layoutManager = new LinearLayoutManager(getActivity());
@@ -100,11 +95,12 @@ public class FindContactsFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.toString().length() > 0) {
+                        lastResultsLayout.setVisibility(View.GONE);
                         findConatctsRecyclerView.setVisibility(View.VISIBLE);
                         autocompleteAdapter.setFilter(presenter.filter(contacts, s.toString()));
                     } else {
-                        findConatctsRecyclerView.setVisibility(View.GONE);
-                        autocompleteAdapter.setEmptyAdapter();
+                       // autocompleteAdapter.setEmptyAdapter();
+                        presenter.getLastSearchedPhonesFromDatabase();
                     }
                 }
             });
@@ -119,14 +115,26 @@ public class FindContactsFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 findContactsEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher("UA"));
             }
+            presenter.getLastSearchedPhonesFromDatabase();
         });
 
     }
 
-    public void displayPhones(FindPhoneResponse findPhoneResponse) {
+    public void displayPhones(ArrayList<Phone> phones, boolean sortByName) {
+        if (sortByName)
+            lastResultsLayout.setVisibility(View.GONE);
+        else {
+            if (phones.size() > 0)
+                lastResultsLayout.setVisibility(View.VISIBLE);
+        }
+        findConatctsRecyclerView.setVisibility(View.VISIBLE);
+        autocompleteAdapter.setEmptyAdapter();
         ArrayList<Contact> contacts = new ArrayList<>();
-        Collections.sort(findPhoneResponse.getData(), (lhs, rhs) -> lhs.getName().compareTo(rhs.getName()));
-        for (Phone phone : findPhoneResponse.getData()) {
+        if (sortByName)
+            Collections.sort(phones, (lhs, rhs) -> lhs.getName().compareTo(rhs.getName()));
+        else
+            Collections.reverse(phones);
+        for (Phone phone : phones) {
             contacts.add(new Contact().phoneToContact(phone));
         }
         autocompleteAdapter.addContactsFromServer(contacts);
@@ -154,6 +162,23 @@ public class FindContactsFragment extends Fragment {
     public void back() {
         KeyboardManager.hideKeyboard(getActivity());
         ((MainActivityMethods)getActivity()).back();
+    }
+
+    @OnClick(R.id.deleteLastResultsButton)
+    public void deleteLastResults() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog alertDialog = builder.setMessage(R.string.deleteLastResultsAlert).setPositiveButton(R.string.delete, (dialogInterface, i) -> {
+            lastResultsLayout.setVisibility(View.GONE);
+            autocompleteAdapter.setEmptyAdapter();
+            presenter.deleteLastSearchedPhones();
+        }).setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+
+        }).create();
+        alertDialog.setOnShowListener(dialogInterface -> {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getActivity().getResources().getColor(R.color.colorPrimary));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getActivity().getResources().getColor(R.color.colorPrimary));
+        });
+        alertDialog.show();
     }
 
     public void setProgressBarVisibility(int visibility) {

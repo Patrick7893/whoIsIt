@@ -255,7 +255,11 @@ public class ContactslistFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        onContactsDetachListener.onDetachContacts(this.getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS));
+        Boolean isFavourite = getArguments().getBoolean(CallFragment.ISFAVOURITECONTACTS);
+        if (isFavourite != null)
+            onContactsDetachListener.onDetachContacts(isFavourite);
+        else
+            onContactsDetachListener.onDetachContacts(false);
     }
 
     @Override

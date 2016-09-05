@@ -158,9 +158,7 @@ public class MainActivity extends Activity implements MainActivityMethods, Navig
 
     public void getUserInfo() {
         presenter.getUserInfo();
-
     }
-
 
     @Override
     public void onBackPressed() {
@@ -169,8 +167,10 @@ public class MainActivity extends Activity implements MainActivityMethods, Navig
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            initActivity();
+        if  (grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initActivity();
+            }
         }
     }
 

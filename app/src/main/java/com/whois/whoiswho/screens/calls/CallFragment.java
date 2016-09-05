@@ -181,7 +181,8 @@ public class CallFragment extends Fragment implements NumpadFragment.OnPhonePrse
                 presenter.getCalls.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<Call>>() {
                     @Override
                     public void call(ArrayList<Call> calls) {
-                        callsAdapter.notify(calls);
+                        if ((callsAdapter != null) && (calls != null))
+                            callsAdapter.notify(calls);
                     }
                 });
             }

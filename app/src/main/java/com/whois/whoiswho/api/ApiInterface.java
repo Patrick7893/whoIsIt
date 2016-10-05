@@ -17,7 +17,7 @@ import rx.Observable;
  */
 public interface ApiInterface {
 
-    //String SERVICE_ENDPOINT = "http://10.0.1.11:3000";
+    //String SERVICE_ENDPOINT = "http://10.0.1.5:3000";
     String SERVICE_ENDPOINT = "http://truecaller.unteleported.com";
 
 

@@ -19,7 +19,6 @@ public class Contact {
     private ArrayList<ContactNumber> numbers = new ArrayList<>();
     private String title;
     private String avatar;
-    private boolean isLiked;
 
     public long getId() {
         return id;

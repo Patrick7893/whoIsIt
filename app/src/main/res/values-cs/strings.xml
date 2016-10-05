@@ -127,6 +127,8 @@
     <string name="changePhoto">Změnit fotku</string>
     <string name="exit">ODHLÁSIT</string>
     <string name="wrongNumber">Formát čísla musí být +420 601 123 456</string>
+    <string name="joinWhoIsWho">Přihlásit se Who is Who a hledat databáze více než</string>
+    <string name="numbers">telefonních čísel</string>
 
     <!--countries-->
 

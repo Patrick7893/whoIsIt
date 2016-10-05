@@ -13,43 +13,9 @@ import java.util.Map;
  */
 public class CountryManager {
 
-    public static String getIsoFromPhone(String phone) {
-        for (Map.Entry<String, String> entry : countryCodesMap.entrySet()) {
-            if (phone.startsWith(entry.getValue())) {
-                return entry.getKey();
-            }
-        }
-        return "UA";
-    }
-
-    public static String getCodeFromIso(String iso) {
-        for (Map.Entry<String, String> entry : countryCodesMap.entrySet()) {
-            if (iso.equals(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return "+1";
-    }
-
-    public static String getCountryNameFromIso(String iso) {
-        for (Map.Entry<String, String> entry : countryNamesMap.entrySet()) {
-            if (entry.getKey().equals(iso)) {
-                return entry.getValue();
-            }
-        }
-        return "Unknown";
-    }
-
-    public static String getCountryIsoFromName(String name) {
-        for (Map.Entry<String, String> entry : countryNamesMap.entrySet()) {
-            if (entry.getValue().equals(name)) {
-                return entry.getKey();
-            }
-        }
-        return "Unknown";
-    }
-
     private static Map<String, String> countryCodesMap = new HashMap<String, String>();
+    private static Map<String, String> countryNamesMap = new HashMap<String, String>();
+
     static {
 
         countryCodesMap.put("AF", "+93");
@@ -270,7 +236,6 @@ public class CountryManager {
         countryCodesMap.put("AI", "+1-264");
         countryCodesMap.put("BM", "+1-441");
         countryCodesMap.put("IO", "+246");
-        countryCodesMap.put("", "+357");
         countryCodesMap.put("VG", "+1-284");
         countryCodesMap.put("KY", "+1-345");
         countryCodesMap.put("FK", "+500");
@@ -302,9 +267,6 @@ public class CountryManager {
         countryCodesMap.put("EH", "+212");
     }
 
-
-
-    private static Map<String, String> countryNamesMap = new HashMap<String, String>();
     static {
         Context ctx = App.getContext();
         countryNamesMap.put("AF", "+93");
@@ -525,7 +487,6 @@ public class CountryManager {
         countryNamesMap.put("AI", "+1-264");
         countryNamesMap.put("BM", "+1-441");
         countryNamesMap.put("IO", "+246");
-        countryNamesMap.put("", "+357");
         countryNamesMap.put("VG", "+1-284");
         countryNamesMap.put("KY", "+1-345");
         countryNamesMap.put("FK", "+500");
@@ -555,5 +516,41 @@ public class CountryManager {
         countryNamesMap.put("CS", "+381");
         countryNamesMap.put("PS", "+970");
         countryNamesMap.put("EH", "+212");
+    }
+
+    public static String getIsoFromPhone(String phone) {
+        for (Map.Entry<String, String> entry : countryCodesMap.entrySet()) {
+            if (phone.startsWith(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return "UA";
+    }
+
+    public static String getCodeFromIso(String iso) {
+        for (Map.Entry<String, String> entry : countryCodesMap.entrySet()) {
+            if (iso.equals(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return "+1";
+    }
+
+    public static String getCountryNameFromIso(String iso) {
+        for (Map.Entry<String, String> entry : countryNamesMap.entrySet()) {
+            if (entry.getKey().equals(iso)) {
+                return entry.getValue();
+            }
+        }
+        return "Unknown";
+    }
+
+    public static String getCountryIsoFromName(String name) {
+        for (Map.Entry<String, String> entry : countryNamesMap.entrySet()) {
+            if (entry.getValue().equals(name)) {
+                return entry.getKey();
+            }
+        }
+        return "Unknown";
     }
 }

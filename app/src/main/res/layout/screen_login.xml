@@ -1,105 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_login">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logoText"
-        android:tag="futura.ttf"
-        android:textSize="34sp"
-        android:textColor="#3d3737"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/logoTopMargin" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_height="match_parent"
+        android:background="@drawable/login_background_gradient">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logoText"
+            android:tag="futura.ttf"
+            android:textSize="34sp"
+            android:textColor="#3d3737"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/logoTopMargin" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:background="@android:color/white"
-            android:layout_marginRight="20dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
 
-            <Spinner
-                android:id="@+id/countrySpinner"
+            <TextView
+                android:id="@+id/joinTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/joinWhoIsWho"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                style="@style/shadow_text"
+                android:tag="@string/robotoMedium"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@android:color/black"
-                android:tag="@string/robotoMedium"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:background="@android:color/white"
+                android:layout_marginRight="20dp">
+
+                <Spinner
+                    android:id="@+id/countrySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/black"
+                    android:tag="@string/robotoMedium"
+                    android:textSize="18sp"
+                    android:padding="15dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/phoneEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="+380"
+                android:background="@android:color/white"
+                android:tag="@string/roboroRegular"
                 android:textSize="18sp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:padding="15dp"
+                android:maxLength="16"
+                android:inputType="phone"
+                android:imeOptions="actionDone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/primary_color_gradient"
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
-            </Spinner>
+                <TextView
+                    android:id="@+id/okButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/letsGo"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:tag="@string/robotoMedium"
+                    android:textSize="16sp"
+                    android:focusable="true"
+                    android:padding="15dp" />
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/phoneEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="+380"
-            android:background="@android:color/white"
-            android:tag="@string/roboroRegular"
-            android:textSize="18sp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:padding="15dp"
-            android:inputType="phone"
-            android:imeOptions="actionDone"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/primary_color_gradient"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
 
             <TextView
-                android:id="@+id/okButton"
+                android:id="@+id/conditionsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/letsGo"
-                android:background="?android:attr/selectableItemBackground"
-                android:textColor="@android:color/white"
+                android:text="@string/conditions"
+                android:textColor="#c7c7c7"
+                android:textSize="10sp"
                 android:gravity="center"
-                android:tag="@string/robotoMedium"
-                android:textSize="16sp"
-                android:focusable="true"
-                android:padding="15dp" />
+                android:tag="@string/roboroRegular"
+                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
 
 
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/conditionsTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/conditions"
-            android:textColor="#c2c2c2"
-            android:textSize="10sp"
-            android:gravity="center"
-            android:tag="@string/roboroRegular"
-            android:layout_marginBottom="20dp" />
-
-    </LinearLayout>
 
 
 </RelativeLayout>

@@ -63,6 +63,9 @@ public class ContactsManager {
             if (!TextUtils.isEmpty(photo))
                 contact.setAvatar(photo);
 
+            if (TextUtils.isEmpty(phoneNumber))
+                continue;
+
             ContactNumber contactNumber = new ContactNumber(phoneNumber, type);
             if (phoneNumber.startsWith("+"))
                 contactNumber.setCountryIso(CountryManager.getIsoFromPhone(phoneNumber));

@@ -135,6 +135,9 @@
     <string name="changePhoto">Изменить фото</string>
     <string name="exit">ВЫХОД</string>
     <string name="wrongNumber">Номер должен быть в формате +380 50 123 45 67</string>
+    <string name="joinWhoIsWho">Подключайтесь к Who is who и ищите по базе из более чем</string>
+    <string name="numbers">номеров</string>
+
 
 
     <!--countries-->

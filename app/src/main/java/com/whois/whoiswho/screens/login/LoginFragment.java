@@ -23,6 +23,9 @@ import com.whois.whoiswho.utils.FontManager;
 import com.whois.whoiswho.utils.PhoneFormatter;
 import com.whois.whoiswho.utils.Toaster;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -37,6 +40,7 @@ public class LoginFragment extends Fragment {
     @BindView(R.id.phoneEditText) EditText phoneEditText;
     @BindView(R.id.countrySpinner) Spinner countrySpinner;
     @BindView(R.id.okButton) TextView okButton;
+    @BindView(R.id.joinTextView) TextView joinTextView;
 
     private static LoginPresenter presenter;
     private String countryIso;
@@ -54,6 +58,7 @@ public class LoginFragment extends Fragment {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.countryList, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        joinTextView.setText(getString(R.string.joinWhoIsWho) + " " + formatNumber(presenter.generateNumberCount()) + " " + getString(R.string.numbers));
         countrySpinner.setAdapter(adapter);
         final String countryLocale = getResources().getConfiguration().locale.getCountry();
         if (countryLocale.equals("CZ"))
@@ -91,7 +96,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean valdatePhone(String phone) {
-        if ((phone.startsWith(countryCode)) && (PhoneFormatter.removeAllNonNumeric(phone).length() >= 13))
+        if ((phone.startsWith(countryCode)) && (PhoneFormatter.removeAllNonNumeric(phone).length() >= 12))
             return true;
         else
             return false;
@@ -103,6 +108,15 @@ public class LoginFragment extends Fragment {
         bundle.putString(FirebaseAnalytics.Param.VALUE, value);
         mFirebaseAnalytics.logEvent(event, bundle);
     }
+
+    public String formatNumber (Integer bd) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+        formatter.setDecimalFormatSymbols(symbols);
+        return formatter.format(bd);
+    }
+
 
 
 }

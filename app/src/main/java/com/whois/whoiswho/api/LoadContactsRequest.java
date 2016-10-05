@@ -17,5 +17,4 @@ public class LoadContactsRequest {
         this.phones = phones;
     }
 
-
 }

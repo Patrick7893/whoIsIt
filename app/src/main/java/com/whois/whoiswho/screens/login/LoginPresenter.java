@@ -4,6 +4,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,6 +18,11 @@ import com.whois.whoiswho.model.User;
 import com.whois.whoiswho.screens.mainscreen.TabFragment;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -26,9 +33,13 @@ public class LoginPresenter {
 
 
     private LoginFragment view;
+    private Calendar staticCalendar;
+    private final int beginNumbersCount = 70000000;
 
     public LoginPresenter(LoginFragment view) {
         this.view = view;
+        staticCalendar = Calendar.getInstance();
+        staticCalendar.set(2016, Calendar.SEPTEMBER, 8);
     }
 
 
@@ -74,5 +85,15 @@ public class LoginPresenter {
                 }
             }
         });
+    }
+
+
+    public int generateNumberCount() {
+        Long diffInDays = (System.currentTimeMillis() - staticCalendar.getTimeInMillis())/(24*60*60*1000);
+        if (diffInDays < 0)
+            return beginNumbersCount;
+        Random rand = new Random();
+        int randomNum = rand.nextInt((1200  - 800) + 1) + 800;
+        return beginNumbersCount + (int) (diffInDays * randomNum);
     }
 }

@@ -134,6 +134,8 @@
     <string name="changePhoto">Change photo</string>
     <string name="exit">EXIT</string>
     <string name="wrongNumber">Number should be with the country code</string>
+    <string name="joinWhoIsWho">Join Who is Who to search database of more than</string>
+    <string name="numbers">numbers</string>
 
 
     <!--countries-->

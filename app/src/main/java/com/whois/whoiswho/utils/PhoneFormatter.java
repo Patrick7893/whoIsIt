@@ -8,4 +8,9 @@ public class PhoneFormatter {
     public static String removeAllNonNumeric(String number) {
         return number.replaceAll("[^0-9+]", "");
     }
+
+    public static String removeAllNonNumericIncludePlus(String number) {
+        return number.replaceAll("[^0-9]", "");
+    }
+
 }

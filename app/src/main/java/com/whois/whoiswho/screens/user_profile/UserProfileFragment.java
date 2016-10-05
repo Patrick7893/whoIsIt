@@ -125,9 +125,10 @@ public class UserProfileFragment extends Fragment {
             Picasso.with(getActivity().getApplicationContext()).load(contact.getAvatar()).into(avatarImageView);
 
 
-        checkPhoneInContacts();
-        checkPhoneIsBlocked();
-
+        if (!TextUtils.isEmpty(contact.getNumbers().get(0).getNumber())) {
+            checkPhoneInContacts();
+            checkPhoneIsBlocked();
+        }
     }
 
     public void displayUserInfo(GetRecordByNumberResponse findPhoneResponse) {

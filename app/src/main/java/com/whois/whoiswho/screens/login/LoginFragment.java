@@ -18,6 +18,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.whois.whoiswho.R;
 import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.Phone;
+import com.whois.whoiswho.screens.mainscreen.TabFragment;
 import com.whois.whoiswho.utils.CountryManager;
 import com.whois.whoiswho.utils.FontManager;
 import com.whois.whoiswho.utils.PhoneFormatter;
@@ -39,7 +40,6 @@ public class LoginFragment extends Fragment {
 
     @BindView(R.id.phoneEditText) EditText phoneEditText;
     @BindView(R.id.countrySpinner) Spinner countrySpinner;
-    @BindView(R.id.okButton) TextView okButton;
     @BindView(R.id.joinTextView) TextView joinTextView;
 
     private static LoginPresenter presenter;
@@ -95,6 +95,11 @@ public class LoginFragment extends Fragment {
             Toaster.toast(getActivity(), R.string.wrongNumber);
     }
 
+    @OnClick(R.id.conditionsTextView)
+    public void showTermsOfConditions() {
+        this.getActivity().getFragmentManager().beginTransaction().add(R.id.flContent, new TermsOfConditionsFragment()).addToBackStack(null).commit();
+    }
+
     private boolean valdatePhone(String phone) {
         if ((phone.startsWith(countryCode)) && (PhoneFormatter.removeAllNonNumeric(phone).length() >= 12))
             return true;
@@ -107,6 +112,21 @@ public class LoginFragment extends Fragment {
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, key);
         bundle.putString(FirebaseAnalytics.Param.VALUE, value);
         mFirebaseAnalytics.logEvent(event, bundle);
+    }
+
+    void goToSmsScreen(Integer sms, String number) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(SMSConfirmFragment.SMS, sms.intValue());
+        bundle.putString(NewUserFragment.PHONE, number);
+        bundle.putString(NewUserFragment.COUNTRY, this.countryIso);
+        SMSConfirmFragment smsConfirmFragment = new SMSConfirmFragment();
+        smsConfirmFragment.setArguments(bundle);
+        getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
+    }
+
+    void goToMainScreen() {
+        getActivity().getFragmentManager().popBackStack(null, 1);
+        getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
     }
 
     public String formatNumber (Integer bd) {

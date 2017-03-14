@@ -105,7 +105,7 @@ public class SMSConfirmFragment extends Fragment {
     public void okButton() {
         if (!TextUtils.isEmpty(sms1EditText.getText()) && !TextUtils.isEmpty(sms2EditText.getText()) && !TextUtils.isEmpty(sms3EditText.getText()) && !TextUtils.isEmpty(sms4EditText.getText())) {
             String smsString = sms1EditText.getText().toString() + sms2EditText.getText().toString() + sms3EditText.getText().toString() + sms4EditText.getText().toString();
-            presenter.smsConfirm(this.getArguments().getString(NewUserFragment.PHONE), smsString);
+            presenter.smsConfirm(this.getArguments().getString(NewUserFragment.PHONE), getArguments().getString(NewUserFragment.COUNTRY), smsString);
             sendLogToFirebase("ConfirmSMS", "sms", smsString);
         }
         else {

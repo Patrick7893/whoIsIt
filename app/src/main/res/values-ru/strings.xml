@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Who Is Who</string>
-    <string name="logoText">WHO\nIS WHO</string>
+    <string name="app_name">Nomer</string>
+    <string name="logoText">NOMER</string>
     <!-- App -->
     <string name="checkConnection">Отсутствует подключение к интернету</string>
     <string name="serverError">Ошибка соединения</string>
@@ -135,8 +135,9 @@
     <string name="changePhoto">Изменить фото</string>
     <string name="exit">ВЫХОД</string>
     <string name="wrongNumber">Номер должен быть в формате +380 50 123 45 67</string>
-    <string name="joinWhoIsWho">Подключайтесь к Who is who и ищите по базе из более чем</string>
+    <string name="joinWhoIsWho">Подключайтесь к Nomer и ищите по базе из более чем</string>
     <string name="numbers">номеров</string>
+    <string name="wrongEmail">Неверно введен e-mail</string>
 
 
 

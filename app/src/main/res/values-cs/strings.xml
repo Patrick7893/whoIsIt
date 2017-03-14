@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Who Is Who</string>
-    <string name="logoText">WHO\nIS WHO</string><!-- App --><string name="checkConnection">Žádné připojení k internetu</string>
+    <string name="app_name">Nomer</string>
+    <string name="logoText">NOMER</string>
+    <!-- App -->
+    <string name="checkConnection">Žádné připojení k internetu</string>
     <string name="serverError">Chyba připojení</string><!--Fonts--><string name="robotoMedium">Roboto-Medium.ttf</string>
     <string name="roboroRegular">Roboto-Regular.ttf</string>
     <string name="bebas">bebas_neue.ttf</string>
@@ -127,8 +129,9 @@
     <string name="changePhoto">Změnit fotku</string>
     <string name="exit">ODHLÁSIT</string>
     <string name="wrongNumber">Formát čísla musí být +420 601 123 456</string>
-    <string name="joinWhoIsWho">Přihlásit se Who is Who a hledat databáze více než</string>
+    <string name="joinWhoIsWho">Přihlásit se Nomer a hledat databáze více než</string>
     <string name="numbers">telefonních čísel</string>
+    <string name="wrongEmail">Nesprávně zadaná e-mailová</string>
 
     <!--countries-->
 

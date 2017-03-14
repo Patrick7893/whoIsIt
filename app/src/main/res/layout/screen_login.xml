@@ -25,7 +25,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:id="@+id/joinTextView"
@@ -109,10 +111,12 @@
 
             <TextView
                 android:id="@+id/conditionsTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/conditions"
+                android:layout_gravity="center_horizontal"
                 android:textColor="#c7c7c7"
+                android:padding="3dp"
                 android:textSize="10sp"
                 android:gravity="center"
                 android:tag="@string/roboroRegular"

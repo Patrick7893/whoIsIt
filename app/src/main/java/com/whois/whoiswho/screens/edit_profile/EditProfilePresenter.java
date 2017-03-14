@@ -12,13 +12,17 @@ import com.whois.whoiswho.api.RegistrationResponse;
 import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.User;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
+import com.whois.whoiswho.utils.Toaster;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import retrofit.mime.TypedFile;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,6 +33,7 @@ import rx.schedulers.Schedulers;
  */
 public class EditProfilePresenter {
 
+    private String countryIso;
     private EditProfileFragment view;
     private User user;
 
@@ -39,67 +44,66 @@ public class EditProfilePresenter {
     public void getUserInfo() throws IOException {
         user = new Select().from(User.class).querySingle();
         if (user != null) {
+            this.countryIso = user.getCountyIso();
             view.displayUserInfo(user);
         }
     }
 
-    public void updateUser(int id, String firstname, String surname, String phone, String email, final File avatar) throws IOException {
+    void updateUser(int id, String firstname, String surname, String phone, String email, File avatar) throws IOException {
+        Observable<Response<RegistrationResponse>> updateUserObservable;
         User user = new User(id, firstname, surname, phone, email, avatar);
-        final Observable<RegistrationResponse> updateUserObservable;
-        if (user.getAvatar() == null) {
-            updateUserObservable = ApiFactory.getInstance().getApiInterface().updateUser(user.getServerId(), user.getFirstname(), user.getSurname(), user.getEmail(), null);
+        RequestBody firstNameBody = RequestBody.create(MediaType.parse("multipart/form-data"), firstname);
+        RequestBody surnameBody = RequestBody.create(MediaType.parse("multipart/form-data"), surname);
+        RequestBody emailBody = RequestBody.create(MediaType.parse("multipart/form-data"), email);
+        if (user.getAvatarFile() == null) {
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().updateUser(user.getServerId(), firstNameBody, surnameBody, emailBody, null);
+        } else {
+            updateUserObservable = ApiFactory.getInstance().getApiInterface().updateUser(user.getServerId(), firstNameBody, surnameBody, emailBody, MultipartBody.Part.createFormData("avatar", avatar.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), avatar)));
         }
-        else {
-            updateUserObservable = ApiFactory.getInstance().getApiInterface().updateUser(user.getServerId(), user.getFirstname(), user.getSurname(), user.getEmail(), new TypedFile("multipart/form-data", user.getAvatar()));
-        }
-        final ProgressDialog pd = new ProgressDialog(view.getActivity());
+        ProgressDialog pd = new ProgressDialog(this.view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.loadingData));
         pd.show();
-        updateUserObservable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<RegistrationResponse>() {
-                    @Override
-                    public void onCompleted() {
+        updateUserObservable.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Response<RegistrationResponse>>() {
+            @Override
+            public void onCompleted() {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        ApiFactory.checkConnection();
-                        pd.dismiss();
-                    }
+            @Override
+            public void onError(Throwable e) {
 
-                    @Override
-                    public void onNext(RegistrationResponse registrationResponse) {
-                        pd.dismiss();
-                        if (registrationResponse.getError() == 0) {
-                            SharedPreferencesSaver.get().saveToken(registrationResponse.getToken());
-                            User user = registrationResponse.getData();
-                            if (!TextUtils.isEmpty(registrationResponse.getAvatarPath()))
-                                user.setAvatarPath(ApiInterface.SERVICE_ENDPOINT + registrationResponse.getAvatarPath());
-                            user.setAvatar(avatar);
-                            user.save();
-                            view.updateSideBarUserInfo();
-                            view.back();
-                        }
+            }
+
+            @Override
+            public void onNext(Response<RegistrationResponse> registrationResponse) {
+                pd.dismiss();
+                if (registrationResponse.code() == 403) {
+                    Toaster.toast(App.getContext(), (int) R.string.wrongEmail);
+                } else if (registrationResponse.body().getError() == 0) {
+                    SharedPreferencesSaver.get().saveToken(registrationResponse.body().getData().getToken());
+                    User user = registrationResponse.body().getData();
+                    if (!TextUtils.isEmpty(registrationResponse.body().getData().getAvatarPath())) {
+                        user.setAvatarPath(ApiInterface.SERVER_DOMAIN + registrationResponse.body().getData().getAvatarPath());
                     }
-                });
+                    user.setAvatarFile(avatar);
+                    user.setCountyIso(countryIso);
+                    user.save();
+                    EditProfilePresenter.this.view.updateSideBarUserInfo();
+                    EditProfilePresenter.this.view.back();
+                }
+            }
+        });
     }
 
-
-    public File convertBitmapToFile(Bitmap bitmap) throws IOException {
+    File convertBitmapToFile(Bitmap bitmap) throws IOException {
         if (bitmap == null) {
             return null;
         }
-        File f = new File(view.getActivity().getCacheDir(), "avatar");
+        File f = new File(this.view.getActivity().getCacheDir(), "avatar");
         f.createNewFile();
-
-
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
         byte[] bitmapdata = bos.toByteArray();
-
-
         FileOutputStream fos = new FileOutputStream(f);
         fos.write(bitmapdata);
         fos.flush();

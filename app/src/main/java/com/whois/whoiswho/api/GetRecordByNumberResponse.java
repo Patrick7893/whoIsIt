@@ -2,19 +2,15 @@ package com.whois.whoiswho.api;
 
 import com.whois.whoiswho.model.Phone;
 
-/**
- * Created by stasenkopavel on 6/15/16.
- */
 public class GetRecordByNumberResponse {
-
-    private int error;
     private Phone data;
+    private int error;
 
     public int getError() {
-        return error;
+        return this.error;
     }
 
     public Phone getData() {
-        return data;
+        return this.data;
     }
 }

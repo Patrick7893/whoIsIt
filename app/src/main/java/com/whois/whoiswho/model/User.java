@@ -27,11 +27,15 @@ public class User extends BaseModel {
     private String number;
     @Column
     private String email;
-    private File avatar;
     @Column
     private String countyIso;
     @Column
+    @SerializedName("avatar_url")
     private String avatarPath;
+    @Column
+    private String token;
+
+    private File avatarFile;
 
     public User() {
 
@@ -43,7 +47,7 @@ public class User extends BaseModel {
         this.surname = surname;
         this.number = phone;
         this.email = email;
-        this.avatar = avatar;
+        this.avatarFile = avatar;
     }
 
     public int getServerId() {
@@ -70,10 +74,6 @@ public class User extends BaseModel {
         this.surname = surname;
     }
 
-    public File getAvatar() {
-        return avatar;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -88,10 +88,6 @@ public class User extends BaseModel {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setAvatar(File avatar) {
-        this.avatar = avatar;
     }
 
     public String getAvatarPath() {
@@ -109,5 +105,21 @@ public class User extends BaseModel {
 
     public void setCountyIso(String countyIso) {
         this.countyIso = countyIso;
+    }
+
+    public File getAvatarFile() {
+        return avatarFile;
+    }
+
+    public void setAvatarFile(File avatarFile) {
+        this.avatarFile = avatarFile;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

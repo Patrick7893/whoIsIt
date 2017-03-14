@@ -3,26 +3,22 @@ package com.whois.whoiswho.api;
 import com.google.gson.annotations.SerializedName;
 import com.whois.whoiswho.model.User;
 
-/**
- * Created by stasenkopavel on 4/26/16.
- */
 public class RegistrationResponse {
-
-    @SerializedName("error")
-    private int error;
-    @SerializedName("token")
-    private String token;
-    @SerializedName("id")
-    private int id;
-    @SerializedName("data")
-    private User data;
-    @SerializedName("sms")
-    private int sms;
     @SerializedName("avatarPath")
     private String avatarPath;
+    @SerializedName("data")
+    private User data;
+    @SerializedName("error")
+    private int error;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("sms")
+    private int sms;
+    @SerializedName("token")
+    private String token;
 
     public int getError() {
-        return error;
+        return this.error;
     }
 
     public void setError(int error) {
@@ -30,7 +26,7 @@ public class RegistrationResponse {
     }
 
     public String getToken() {
-        return token;
+        return this.token;
     }
 
     public void setToken(String token) {
@@ -38,7 +34,7 @@ public class RegistrationResponse {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -46,7 +42,7 @@ public class RegistrationResponse {
     }
 
     public User getData() {
-        return data;
+        return this.data;
     }
 
     public void setData(User data) {
@@ -54,7 +50,7 @@ public class RegistrationResponse {
     }
 
     public int getSms() {
-        return sms;
+        return this.sms;
     }
 
     public void setSms(int sms) {
@@ -62,7 +58,7 @@ public class RegistrationResponse {
     }
 
     public String getAvatarPath() {
-        return avatarPath;
+        return this.avatarPath;
     }
 
     public void setAvatarPath(String avatarPath) {

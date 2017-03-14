@@ -103,14 +103,14 @@ public class TabFragmentPresenter {
             @Override
             public void onNext(ArrayList<Phone> phones) {
                 if (phones.size() > 0) {
-                    ApiFactory.getInstance().getApiInterface().loadContacts(new LoadContactsRequest(SharedPreferencesSaver.get().getToken(), phones)).observeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+                    ApiFactory.getInstance().getApiInterface().loadContacts(new LoadContactsRequest(SharedPreferencesSaver.get().getToken(), phones)).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
                         @Override
                         public void onCompleted() {
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            Log.d("loadContacts", e.getMessage());
+                             Log.d("loadContacts", e.getMessage());
                         }
 
                         @Override

@@ -1,60 +1,60 @@
 package com.whois.whoiswho.api;
 
-
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.Multipart;
-import retrofit.http.POST;
-import retrofit.http.PUT;
-import retrofit.http.Part;
-import retrofit.http.Path;
-import retrofit.http.Query;
-import retrofit.mime.TypedFile;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
-/**
- * Created by stasenkopavel on 4/25/16.
- */
 public interface ApiInterface {
+    String SERVER_DOMAIN = "https://truecaller.unteleported.com";
+    String SERVICE_ENDPOINT = "https://truecaller.unteleported.com/api/v1/";
 
-    //String SERVICE_ENDPOINT = "http://10.0.1.5:3000";
-    String SERVICE_ENDPOINT = "http://truecaller.unteleported.com";
+//    String SERVER_DOMAIN = "http://10.0.1.141:3000";
+//    String SERVICE_ENDPOINT = "http://10.0.1.141:3000/api/v1/";
 
+    @FormUrlEncoded
+    @PUT("phones/{id}/block.json")
+    Observable<BaseResponse> blockUser(@Path("id") long j, @Field("token") String str, @Field("user_id") long j2);
 
+    @POST("users/registration.json")
     @Multipart
-    @POST("/users/login")
-    Observable<RegistrationResponse> login(@Part("number") String number);
+    Observable<Response<RegistrationResponse>> createUser(@Part("number") RequestBody requestBody, @Part("country_iso") RequestBody requestBody2, @Part("firstname") RequestBody requestBody3, @Part("surname") RequestBody requestBody4, @Part("email") RequestBody requestBody5, @Part("device") RequestBody requestBody6, @Part MultipartBody.Part part);
 
-    @Multipart
-    @POST("/users/smsconfirm")
-    Observable<RegistrationResponse> smsConfirm(@Part("number") String number, @Part("sms") String sms);
+    @GET("phones/search.json")
+    Observable<FindPhoneResponse> findPhone(@Query("token") String str, @Query("query") String str2, @Query("user_locale") String str3);
 
-    @Multipart
-    @POST("/users")
-    Observable<RegistrationResponse> createUser(@Part("number") String number, @Part("countryIso") String countryIso, @Part("firstname") String firstname, @Part("surname") String surname, @Part("email") String email, @Part("device") String device, @Part("avatar") TypedFile avatar);
+    @GET("phones/fetch_by_number.json")
+    Observable<GetRecordByNumberResponse> getPhoneRecord(@Query("token") String str, @Query("number") String str2, @Query("country_iso") String str3);
 
-    @Multipart
-    @PUT("/users/{id}")
-    Observable<RegistrationResponse> updateUser(@Path("id") int id, @Part("firstname") String firstname, @Part("surname") String surname, @Part("email") String email, @Part("avatar") TypedFile avatar);
+    @GET("phones/get_spammers.json")
+    Observable<GetSpammersResponse> getSpammers(@Query("token") String str);
 
-    @POST("/phones")
+    @POST("phones.json")
     Observable<RegistrationResponse> loadContacts(@Body LoadContactsRequest loadContactsRequest);
 
-    @GET("/phones/search")
-    Observable<FindPhoneResponse> findPhone(@Query("token") String token, @Query("query") String query, @Query("user_locale") String locale);
+    @FormUrlEncoded
+    @POST("users/login.json")
+    Observable<Response<RegistrationResponse>> login(@Field("number") String str, @Field("country_iso") String str2);
 
-    @GET("/phones/getRecordByNumber")
-    Observable<GetRecordByNumberResponse> getPhoneRecord(@Query("token") String token, @Query("number") String number, @Query("countryIso") String countryIso);
+    @FormUrlEncoded
+    @POST("users/verify.json")
+    Observable<RegistrationResponse> smsConfirm(@Field("number") String str, @Field("country_iso") String str2, @Field("pin") String str3);
 
-    @GET("/phones/get_spammers")
-    Observable<GetSpammersResponse> getSpammers(@Query("token") String token);
+    @FormUrlEncoded
+    @PUT("phones/{id}/unblock.json")
+    Observable<BaseResponse> unblockUser(@Path("id") long j, @Field("token") String str, @Field("user_id") long j2);
 
+    @PUT("users/{id}.json")
     @Multipart
-    @PUT("/phones/{id}/block")
-    Observable<BaseResponse> blockUser(@Path("id") long id, @Part("token") String token,  @Part("user_id") long userId);
-
-    @Multipart
-    @PUT("/phones/{id}/unblock")
-    Observable<BaseResponse> unblockUser(@Path("id") long id, @Part("token") String token, @Part("user_id") long userId);
-
+    Observable<Response<RegistrationResponse>> updateUser(@Path("id") int i, @Part("firstname") RequestBody requestBody, @Part("surname") RequestBody requestBody2, @Part("email") RequestBody requestBody3, @Part MultipartBody.Part part);
 }

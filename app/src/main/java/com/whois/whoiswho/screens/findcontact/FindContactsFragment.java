@@ -15,6 +15,7 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
@@ -32,6 +34,7 @@ import com.whois.whoiswho.model.Contact;
 import com.whois.whoiswho.model.Phone;
 import com.whois.whoiswho.screens.user_profile.UserProfileFragment;
 import com.whois.whoiswho.utils.KeyboardManager;
+import com.whois.whoiswho.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,13 +107,16 @@ public class FindContactsFragment extends Fragment {
                     }
                 }
             });
-            findContactsEditText.setOnEditorActionListener((v, actionId, event) -> {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (!TextUtils.isEmpty(findContactsEditText.getText().toString()))
-                        presenter.find(findContactsEditText.getText().toString(), countryIso);
-                    return true;
+            findContactsEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        if (!TextUtils.isEmpty(findContactsEditText.getText().toString()))
+                            presenter.find(findContactsEditText.getText().toString(), countryIso);
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             });
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 findContactsEditText.addTextChangedListener(new PhoneNumberFormattingTextWatcher("UA"));

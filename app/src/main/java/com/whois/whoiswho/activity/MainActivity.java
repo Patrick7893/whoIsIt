@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -194,15 +196,23 @@ public class MainActivity extends Activity implements MainActivityMethods, Navig
             startActivity(sendIntent);
         }
         else if (id == R.id.help_sidebar) {
-            Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-            sendIntent.setType("plain/text");
-            sendIntent.setData(Uri.parse("whoiswhoapp@gmail.com"));
-            sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
-            sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "whoiswhoapp@gmail.com" });
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, "WhoIsWhoApp support");
-            try {
-                startActivity(sendIntent);
-            } catch (ActivityNotFoundException e) {
+            Intent intent = new Intent("android.intent.action.SEND");
+            intent.setType("text/html");
+            ResolveInfo best = null;
+            for (ResolveInfo info : getPackageManager().queryIntentActivities(intent, 0)) {
+                if (!info.activityInfo.packageName.endsWith(".gm")) {
+                    if (info.activityInfo.name.toLowerCase().contains("gmail")) {
+                    }
+                }
+                best = info;
+                break;
+            }
+            if (best != null) {
+                intent.setClassName(best.activityInfo.packageName, best.activityInfo.name);
+                intent.putExtra("android.intent.extra.EMAIL", new String[]{"whoiswhoapp@gmail.com"});
+                intent.putExtra("android.intent.extra.SUBJECT", "WhoIsWhoApp support");
+                startActivity(intent);
+            } else {
                 Toaster.toast(this, R.string.youhaveNoGmail);
             }
         }

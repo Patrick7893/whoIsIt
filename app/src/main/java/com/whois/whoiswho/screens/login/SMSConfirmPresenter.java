@@ -18,6 +18,7 @@ import com.whois.whoiswho.utils.FirebaseLogManager;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
 import com.whois.whoiswho.utils.Toaster;
 
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -33,11 +34,11 @@ public class SMSConfirmPresenter {
         this.view = view;
     }
 
-    public void smsConfirm(String number, String sms) {
+    public void smsConfirm(String number, String countryIso, String sms) {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.checkSms));
         pd.show();
-        ApiFactory.getInstance().getApiInterface().smsConfirm(number, sms).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+        ApiFactory.getInstance().getApiInterface().smsConfirm(number, countryIso, sms).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
             @Override
             public void onCompleted() {
 
@@ -46,18 +47,13 @@ public class SMSConfirmPresenter {
             @Override
             public void onError(Throwable e) {
                 pd.dismiss();
-                Toaster.toast(view.getActivity(), R.string.wrongSms);
-                Bundle bundle = new Bundle();
-                bundle.getString(FirebaseAnalytics.Param.ITEM_ID, "ID");
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "SMS confirm failed");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, e.getMessage());
-                view.mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                Toaster.toast(SMSConfirmPresenter.this.view.getActivity(), R.string.wrongSms);
             }
 
             @Override
             public void onNext(RegistrationResponse registrationResponse) {
                 pd.dismiss();
-                view.goToNewUserScreen(registrationResponse);
+                SMSConfirmPresenter.this.view.goToNewUserScreen(registrationResponse);
             }
         });
     }
@@ -66,7 +62,7 @@ public class SMSConfirmPresenter {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.dispatch));
         pd.show();
-        ApiFactory.getInstance().getApiInterface().login(number).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+        ApiFactory.getInstance().getApiInterface().login(number, countryIso).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Response<RegistrationResponse>>() {
             @Override
             public void onCompleted() {
 
@@ -74,22 +70,22 @@ public class SMSConfirmPresenter {
 
             @Override
             public void onError(Throwable e) {
-                Log.d("ERROR", e.getMessage());
-                ApiFactory.checkConnection();
-                pd.dismiss();
+
             }
 
             @Override
-            public void onNext(RegistrationResponse s) {
+            public void onNext(Response<RegistrationResponse> registrationResponseResponse) {
                 pd.dismiss();
-                if (s.getError() == 0) {
-                    User user = s.getData();
-                    if (!TextUtils.isEmpty(s.getAvatarPath()))
-                        user.setAvatarPath(ApiInterface.SERVICE_ENDPOINT + s.getAvatarPath());
+                if ((registrationResponseResponse.body()).getError() == 0) {
+                    User user = registrationResponseResponse.body().getData();
+                    if (!TextUtils.isEmpty(registrationResponseResponse.body().getAvatarPath())) {
+                        user.setAvatarPath(ApiInterface.SERVICE_ENDPOINT + registrationResponseResponse.body().getAvatarPath());
+                    }
                     user.save();
-                    SharedPreferencesSaver.get().saveToken(s.getToken());
-                    //view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
-                    view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
+                    SharedPreferencesSaver.get().saveToken(registrationResponseResponse.body().getToken());
+                    SMSConfirmPresenter.this.view.getActivity().getFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
+                } else if (registrationResponseResponse.body().getError() == 1) {
+                    Toaster.toast(App.getContext(), (int) R.string.wrongSms);
                 }
             }
         });

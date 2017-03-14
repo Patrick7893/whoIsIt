@@ -17,14 +17,17 @@ import com.whois.whoiswho.app.App;
 import com.whois.whoiswho.model.User;
 import com.whois.whoiswho.screens.mainscreen.TabFragment;
 import com.whois.whoiswho.utils.SharedPreferencesSaver;
+import com.whois.whoiswho.utils.Toaster;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by stasenkopavel on 4/28/16.
@@ -47,7 +50,7 @@ public class LoginPresenter {
         final ProgressDialog pd = new ProgressDialog(view.getActivity());
         pd.setMessage(App.getContext().getString(R.string.enter));
         pd.show();
-        ApiFactory.getInstance().getApiInterface().login(number).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<RegistrationResponse>() {
+        ApiFactory.getInstance().getApiInterface().login(number, countryIso).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Response<RegistrationResponse>>() {
             @Override
             public void onCompleted() {
 
@@ -55,33 +58,27 @@ public class LoginPresenter {
 
             @Override
             public void onError(Throwable e) {
-                Log.d("ERROR", e.getMessage());
-                ApiFactory.checkConnection();
-                pd.dismiss();
+
             }
 
             @Override
-            public void onNext(RegistrationResponse s) {
+            public void onNext(Response<RegistrationResponse> registrationResponseResponse) {
+                RegistrationResponse response = registrationResponseResponse.body();
                 pd.dismiss();
-                if (s.getError() == 0) {
-                    User user = s.getData();
-                    if (!TextUtils.isEmpty(s.getAvatarPath()))
-                        user.setAvatarPath(ApiInterface.SERVICE_ENDPOINT + s.getAvatarPath());
+                Log.d("ERROR", String.valueOf(response.getError()));
+                if (response.getError() == 0) {
+                    User user = response.getData();
+                    user.setCountyIso(countryIso);
+                    if (!TextUtils.isEmpty(user.getAvatarPath())) {
+                        user.setAvatarPath(ApiInterface.SERVER_DOMAIN + user.getAvatarPath());
+                    }
                     user.save();
-                    SharedPreferencesSaver.get().saveToken(s.getToken());
-                    //view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
-                    view.getActivity().getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    view.getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, new TabFragment()).addToBackStack(null).commit();
-                }
-                else if (s.getError() == 1) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(SMSConfirmFragment.SMS, s.getSms());
-                    bundle.putString(NewUserFragment.PHONE, number);
-                    bundle.putString(NewUserFragment.COUNTRY, countryIso);
-                    SMSConfirmFragment smsConfirmFragment = new SMSConfirmFragment();
-                    smsConfirmFragment.setArguments(bundle);
-                  //  view.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
-                    view.getActivity().getFragmentManager().beginTransaction().replace(R.id.flContent, smsConfirmFragment).addToBackStack(null).commit();
+                    SharedPreferencesSaver.get().saveToken(response.getData().getToken());
+                    view.goToMainScreen();
+                } else if (response.getError() == 1) {
+                    view.goToSmsScreen(Integer.valueOf(response.getSms()), number);
+                } else if (response.getError() == 2) {
+                    Toaster.toast(App.getContext(), App.getContext().getString(R.string.wrongNumber));
                 }
             }
         });

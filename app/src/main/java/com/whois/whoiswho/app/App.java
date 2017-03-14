@@ -25,7 +25,6 @@ public class App extends Application {
         Fabric.with(this, new Crashlytics());
         FlowManager.init(new FlowConfig.Builder(this).build());
         Picasso.Builder builder = new Picasso.Builder(this);
-        builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
     }
 
     public static Context getContext() {
